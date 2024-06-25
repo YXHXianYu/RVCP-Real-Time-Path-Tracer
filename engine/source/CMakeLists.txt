@@ -15,10 +15,20 @@ endif()
 # Include file
 target_include_directories(${TARGET_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
+target_include_directories(
+  ${TARGET_NAME}
+  PUBLIC $<BUILD_INTERFACE:${vulkan_include}>
+)
+target_include_directories(
+  ${TARGET_NAME} 
+  PUBLIC $<BUILD_INTERFACE:${THIRD_PARTY_DIR}/vulkanmemoryallocator/include>
+)
+
 # Link
 target_link_libraries(${TARGET_NAME} PUBLIC glfw)
 target_link_libraries(${TARGET_NAME} PUBLIC glm)
 target_link_libraries(${TARGET_NAME} PUBLIC stb)
+target_link_libraries(${TARGET_NAME} PUBLIC ${vulkan_lib})
 
 # Add Shader Dependency
 add_dependencies(${TARGET_NAME} ${SHADER_COMPILE_TARGET})
