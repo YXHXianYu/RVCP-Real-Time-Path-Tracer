@@ -5,6 +5,7 @@ My Vulkan Learning Repo. The target is to build a real-time ray tracer using vul
 ## Build
 
 * Build Framework is originally from [BJTU Game Engine](https://github.com/YXHXianYu/BJTU-Game-Engine).
+* If you also want to learn Vulkan from scratch, you can checkout commit `16df84c83d9a4b40a605e66fdaaf0a0c199f9634` to get a clean and convenient start.
 
 ## Learning Materials
 
