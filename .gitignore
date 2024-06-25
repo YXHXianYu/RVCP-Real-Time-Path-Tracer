@@ -1,0 +1,13 @@
+bin/
+build/
+
+.ccls-cache/
+.cache/
+.DS_Store
+.vscode/
+**/.VSCodeCounter/
+.direnv/
+
+.idea/
+CMakeFiles/
+cmake-build-debug/
