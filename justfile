@@ -17,6 +17,8 @@ generate:
 build: generate
     cmake --build build -j8
 
+
+
 # run the built binary
 run:
     ./bin/BJTU-Game-Engine
