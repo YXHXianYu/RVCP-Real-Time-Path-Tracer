@@ -3,7 +3,7 @@ BasedOnStyle: LLVM
 
 
 PointerAlignment: Left
-ColumnLimit: 80
+ColumnLimit: 100
 
 AccessModifierOffset: -4
 

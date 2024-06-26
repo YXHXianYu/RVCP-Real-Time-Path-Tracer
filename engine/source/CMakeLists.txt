@@ -25,6 +25,7 @@ target_include_directories(
 )
 
 # Link
+target_link_libraries(${TARGET_NAME} PUBLIC fmt::fmt)
 target_link_libraries(${TARGET_NAME} PUBLIC glfw)
 target_link_libraries(${TARGET_NAME} PUBLIC glm)
 target_link_libraries(${TARGET_NAME} PUBLIC stb)

@@ -1,6 +1,10 @@
 # Force to produce static libraries
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 
+if (NOT TARGET fmt)
+    add_subdirectory(fmt-10.2.0)
+endif()
+
 if (NOT TARGET glfw)
     option(GLFW_BUILD_EXAMPLES "" OFF)
     option(GLFW_BUILD_TESTS "" OFF)
