@@ -42,12 +42,10 @@ if __name__ == '__main__':
             relpath = os.path.relpath(srcpath, shaders_root)
 
             dstpath = os.path.normpath(os.path.join(output_dir, relpath))
+            dstpath = f"{dstpath}.spv"
             dstdir = os.path.dirname(dstpath)
             print(f'processing {relpath} to {os.path.relpath(dstpath, shaders_root)}...')
 
-            dstpath = f"{dstpath}.spv"
-            print('dstpath:', dstpath)
-            print('dstdir:', dstdir)
 
             if not os.path.exists(dstdir):
                 os.makedirs(dstdir)

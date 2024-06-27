@@ -161,6 +161,8 @@ private:
             glfwPollEvents();
             drawFrame();
         }
+
+        vkDeviceWaitIdle(m_device);
     }
 
     void cleanup() {
