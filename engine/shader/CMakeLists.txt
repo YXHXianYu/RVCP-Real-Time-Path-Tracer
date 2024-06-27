@@ -11,7 +11,7 @@ endif()
 
 file(GLOB_RECURSE SHADER_FILES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/build/glsl/*.vert" "${CMAKE_CURRENT_SOURCE_DIR}/build/glsl/*.frag")
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/shader_compile_glsl.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/shader_compile.cmake)
 compile_shader(
     "${SHADER_FILES}"
     "${TARGET_NAME}"
