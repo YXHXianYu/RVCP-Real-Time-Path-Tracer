@@ -26,7 +26,7 @@ set(BINARY_ROOT_DIR "${ROOT_DIR}/bin")
 set(CMAKE_INSTALL_PREFIX "${ROOT_DIR}/bin")
 
 set(THIRD_PARTY_DIR "${ENGINE_ROOT_DIR}/3rdparty")
-set(ENGINE_ASSET_DIR "/asset")
+set(ENGINE_ASSET_DIR "asset")
 
 # Is Not DEBUG
 # add_definitions(-DNDEBUG)

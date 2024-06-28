@@ -1,6 +1,7 @@
 import os
 import re
 import subprocess
+import platform
 
 INCLUDE_RE = re.compile(r'^#include "(.*?)".*$')
 
@@ -12,8 +13,14 @@ class CompileError(Exception):
 cache = {}
 
 # Vulkan GLSL preprocessor
-# D:\Programs\Vulkan\Bin\glslc.exe
-glslc_path = 'D:/Programs/Vulkan/Bin/glslc.exe'
+os_name = platform.system()
+if platform == "Windows":
+    # D:\Programs\Vulkan\Bin\glslc.exe
+    glslc_path = 'D:/Programs/Vulkan/Bin/glslc.exe'
+elif os_name == "Linux":
+    glslc_path = '/usr/bin/glslc'
+else:
+    assert False, "Platform isn't supported."
 
 
 # !!! this is the root of shaders relative to this script
@@ -42,7 +49,7 @@ if __name__ == '__main__':
             relpath = os.path.relpath(srcpath, shaders_root)
 
             dstpath = os.path.normpath(os.path.join(output_dir, relpath))
-            dstpath = f"{dstpath}.spv"
+            # dstpath = f"{dstpath}.spv"
             dstdir = os.path.dirname(dstpath)
             print(f'processing {relpath} to {os.path.relpath(dstpath, shaders_root)}...')
 
