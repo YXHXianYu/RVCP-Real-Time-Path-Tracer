@@ -4,6 +4,7 @@
 #include <fmt/color.h>
 #include <fmt/core.h>
 #include <fmt/ostream.h>
+#include <glm/glm.hpp>
 
 #include <algorithm>
 #include <cstdint>
@@ -15,6 +16,7 @@
 #include <stdexcept>
 #include <vector>
 #include <chrono>
+#include <array>
 
 #include <shader_frag.h>
 #include <shader_vert.h>
@@ -50,6 +52,47 @@ template <typename... Args> void logInfo(const char* format, Args... args) {
 template <typename... Args> void logDebug(const char* format, Args... args) {
     fmt::print(stdout, fg(fmt::color::azure), format, args...);
 }
+
+// ===== Vertex data =====
+struct Vertex {
+    glm::vec2 pos;
+    glm::vec3 color;
+
+    static VkVertexInputBindingDescription getBindingDescription() {
+        VkVertexInputBindingDescription bindingDescription{
+            .binding = 0,
+            .stride = sizeof(Vertex),
+            .inputRate = VK_VERTEX_INPUT_RATE_VERTEX,
+        };
+
+        return bindingDescription;
+    }
+
+    static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions() {
+        std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions{
+            VkVertexInputAttributeDescription{
+                .location = 0,
+                .binding = 0,
+                .format = VK_FORMAT_R32G32_SFLOAT,
+                .offset = offsetof(Vertex, pos),
+            },
+            VkVertexInputAttributeDescription{
+                .location = 1,
+                .binding = 0,
+                .format = VK_FORMAT_R32G32B32_SFLOAT,
+                .offset = offsetof(Vertex, color),
+            },
+        };
+
+        return attributeDescriptions;
+    }
+};
+
+const std::vector<Vertex> vertices = {
+    {{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+    {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
+    {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
+};
 
 // ===== Proxy function =====
 VkResult CreateDebugUtilsMessengerEXT(VkInstance                                instance,
@@ -135,6 +178,8 @@ private:
 
     uint32_t m_currentFrame = 0;
 
+    VkBuffer m_vertexBuffer;
+
     // 1 level
     void initWindow() {
         glfwInit();
@@ -164,6 +209,7 @@ private:
         initGraphicsPipeline();
         initFramebuffers();
         initCommandPool();
+        initVertexBuffer();
         initCommandBuffers();
         initSyncObjects();
     }
@@ -219,6 +265,9 @@ private:
     void cleanup() {
         // framebuffer, imageView, swapchain
         cleanupSwapchain();
+
+        // vertex buffer
+        vkDestroyBuffer(m_device, m_vertexBuffer, nullptr);
 
         // pipeline, renderPass
         vkDestroyPipeline(m_device, m_graphicsPipeline, nullptr);
@@ -751,12 +800,14 @@ private:
         };
 
         // Vertex input
+        auto bindingDescription = Vertex::getBindingDescription();
+        auto attributeDescriptions = Vertex::getAttributeDescriptions();
         VkPipelineVertexInputStateCreateInfo vertexInputInfo{
             .sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
-            .vertexBindingDescriptionCount   = 0,
-            .pVertexBindingDescriptions      = nullptr,
-            .vertexAttributeDescriptionCount = 0,
-            .pVertexAttributeDescriptions    = nullptr,
+            .vertexBindingDescriptionCount   = 1,
+            .pVertexBindingDescriptions      = &bindingDescription,
+            .vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size()),
+            .pVertexAttributeDescriptions    = attributeDescriptions.data(),
         };
 
         // Input assembly
@@ -917,6 +968,28 @@ private:
         if (vkCreateCommandPool(m_device, &poolInfo, nullptr, &m_commandPool) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create command pool!");
         }
+    }
+
+    void initVertexBuffer() {
+        VkBufferCreateInfo bufferInfo{
+            .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
+            .size = sizeof(vertices[0]) * vertices.size(),
+            .usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+            .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
+        };
+
+        if (vkCreateBuffer(m_device, &bufferInfo, nullptr, &m_vertexBuffer) != VK_SUCCESS) {
+            throw std::runtime_error("Failed to create vertex buffer!");
+        }
+        
+        VkMemoryRequirements memRequirements;
+        vkGetBufferMemoryRequirements(m_device, m_vertexBuffer, &memRequirements);
+    }
+
+    uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags  properties) {
+        VkPhysicalDeviceMemoryProperties memProperties;
+        vkGetPhysicalDeviceMemoryProperties(m_physicalDevice, &memProperties);
+        // TODO ============
     }
 
     void initCommandBuffers() {
