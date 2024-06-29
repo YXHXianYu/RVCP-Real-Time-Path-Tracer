@@ -14,7 +14,7 @@ cache = {}
 
 # Vulkan GLSL preprocessor
 os_name = platform.system()
-if platform == "Windows":
+if os_name == "Windows":
     # D:\Programs\Vulkan\Bin\glslc.exe
     glslc_path = 'D:/Programs/Vulkan/Bin/glslc.exe'
 elif os_name == "Linux":
