@@ -29,6 +29,7 @@ target_link_libraries(${TARGET_NAME} PUBLIC fmt::fmt)
 target_link_libraries(${TARGET_NAME} PUBLIC glfw)
 target_link_libraries(${TARGET_NAME} PUBLIC glm)
 target_link_libraries(${TARGET_NAME} PUBLIC stb)
+target_link_libraries(${TARGET_NAME} PUBLIC tinyobjloader)
 target_link_libraries(${TARGET_NAME} PUBLIC ${vulkan_lib})
 
 # Add Shader Dependency

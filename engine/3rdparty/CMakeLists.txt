@@ -20,3 +20,7 @@ endif()
 if (NOT TARGET stb)
     include(stb.cmake)
 endif()
+
+if (NOT TARGET tinyobjloader)
+    include(tinyobjloader.cmake)
+endif()
