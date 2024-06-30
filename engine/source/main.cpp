@@ -3,8 +3,10 @@
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/hash.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -26,6 +28,7 @@
 #include <optional>
 #include <set>
 #include <stdexcept>
+#include <unordered_map>
 #include <vector>
 
 #include <shader_frag.h>
@@ -74,6 +77,10 @@ struct Vertex {
     glm::vec3 color;
     glm::vec2 texCoord;
 
+    bool operator==(const Vertex& other) const {
+        return pos == other.pos && color == other.color && texCoord == other.texCoord;
+    }
+
     static VkVertexInputBindingDescription getBindingDescription() {
         VkVertexInputBindingDescription bindingDescription{
             .binding   = 0,
@@ -109,6 +116,17 @@ struct Vertex {
         return attributeDescriptions;
     }
 };
+
+namespace std {
+
+template <> struct hash<Vertex> {
+    size_t operator()(Vertex const& vertex) const {
+        return ((hash<glm::vec3>()(vertex.pos) ^ (hash<glm::vec3>()(vertex.color) << 1)) >> 1) ^
+               (hash<glm::vec2>()(vertex.texCoord) << 1);
+    }
+};
+
+} // namespace std
 
 struct UniformBufferObject {
     alignas(16) glm::mat4 model;
@@ -1223,6 +1241,7 @@ private:
 
         if (!isSuccessful) { throw std::runtime_error(warn + err); }
 
+        std::unordered_map<Vertex, uint32_t> uniqueVertices{};
         for (const auto& shape : shapes) {
             for (const auto& index : shape.mesh.indices) {
                 Vertex vertex{};
@@ -1236,10 +1255,17 @@ private:
 
                 vertex.color = {1.0f, 1.0f, 1.0f};
 
-                m_vertices.push_back(vertex);
-                m_indices.push_back(m_indices.size());
+                if (uniqueVertices.count(vertex) == 0) {
+                    uniqueVertices[vertex] = static_cast<uint32_t>(m_vertices.size());
+                    m_vertices.push_back(vertex);
+                }
+
+                m_indices.push_back(uniqueVertices[vertex]);
             }
         }
+
+        logDebug("Loaded model with {} vertices and {} indices\n", m_vertices.size(),
+                 m_indices.size());
     }
 
     void initVertexBuffer() {
