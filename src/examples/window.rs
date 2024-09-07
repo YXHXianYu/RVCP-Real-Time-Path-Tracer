@@ -118,6 +118,8 @@ fn create_graphics_pipeline(
         PipelineShaderStageCreateInfo::new(fs),
     ];
 
+    std::fs::write("graphics_pipeline_stage.txt", format!("{:#?}", stages)).unwrap();
+
     let layout = PipelineLayout::new(
         device.clone(),
         PipelineDescriptorSetLayoutCreateInfo::from_stages(&stages)
@@ -241,6 +243,9 @@ pub fn example_window(
 
     let render_pass = create_render_pass(device.clone(), &swapchain);
     let framebuffers = create_framebuffers(&images, &render_pass);
+
+    println!("Swapchain Format: {:?}", swapchain.image_format());
+    println!("Image Format: {:?}", images[0].format());
 
     // shader
     let vertexes = [

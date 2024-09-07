@@ -106,6 +106,11 @@ pub fn create_compute_pipeline(
             .into_pipeline_layout_create_info(device.clone())
             .unwrap(),
     ).unwrap();
+
+    // println!("PipelineDescriptorSetLayoutCreateInfo: {:#?}", 
+    //     PipelineDescriptorSetLayoutCreateInfo::from_stages([&compute_pipeline_stage])
+    // );
+
     ComputePipeline::new(
         device.clone(),
         None,

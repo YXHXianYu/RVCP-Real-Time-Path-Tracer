@@ -1,0 +1,88 @@
+Image {
+    inner: RawImage {
+        handle: 0x1ed44603380,
+        device: 0x1ed3f72ce40 (instance: 0x1ed3e9e2270),
+        id: 4,
+        flags: empty(),
+        image_type: Dim2d,
+        format: R8G8B8A8_UNORM,
+        format_features: SAMPLED_IMAGE | STORAGE_IMAGE | STORAGE_READ_WITHOUT_FORMAT | STORAGE_WRITE_WITHOUT_FORMAT | COLOR_ATTACHMENT | COLOR_ATTACHMENT_BLEND | TRANSFER_SRC | TRANSFER_DST | BLIT_SRC | BLIT_DST | SAMPLED_IMAGE_FILTER_LINEAR | SAMPLED_IMAGE_FILTER_MINMAX,
+        view_formats: [],
+        extent: [
+            800,
+            600,
+            1,
+        ],
+        array_layers: 1,
+        mip_levels: 1,
+        samples: Sample1,
+        tiling: Optimal,
+        usage: STORAGE,
+        stencil_usage: None,
+        sharing: Exclusive,
+        initial_layout: Undefined,
+        drm_format_modifier: None,
+        external_memory_handle_types: empty(),
+        memory_requirements: [
+            MemoryRequirements {
+                layout: DeviceLayout {
+                    size: 2048000,
+                    alignment: 1024 (1 << 10),
+                },
+                memory_type_bits: 3,
+                prefers_dedicated_allocation: false,
+                requires_dedicated_allocation: false,
+            },
+        ],
+        needs_destruction: true,
+        subresource_layout: OnceCache {
+            inner: RwLock {
+                data: {},
+            },
+        },
+    },
+    memory: Normal(
+        [
+            ResourceMemory {
+                device_memory: ManuallyDrop {
+                    value: 0x1ed445f6570 (device: 0x1ed3f72ce40),
+                },
+                offset: 0,
+                size: 2048000,
+                allocation_type: NonLinear,
+                allocation_handle: AllocationHandle(
+                    0x000001ed445e5850,
+                ),
+                suballocation_handle: Some(
+                    AllocationHandle(
+                        0x0000000000000001,
+                    ),
+                ),
+                allocator: Some(
+                    MemoryAllocator { .. },
+                ),
+            },
+        ],
+    ),
+    aspect_list: [
+        Color,
+    ],
+    aspect_size: 1,
+    mip_level_size: 1,
+    range_size: 1,
+    state: Mutex {
+        data: ImageState {
+            ranges: {
+                0..1: ImageRangeState {
+                    current_access: Shared {
+                        cpu_reads: 0,
+                        gpu_reads: 0,
+                    },
+                    layout: Undefined,
+                },
+            },
+        },
+    },
+    layout: General,
+    is_layout_initialized: false,
+}

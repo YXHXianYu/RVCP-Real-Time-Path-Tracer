@@ -9,7 +9,7 @@ use vulkano::memory::allocator::{AllocationCreateInfo, MemoryTypeFilter, Standar
 use vulkano::pipeline::{Pipeline, PipelineBindPoint};
 use vulkano::sync::{self, GpuFuture};
 
-use crate::common::*;
+use crate::examples::common::*;
 
 mod cs_multiple {
     vulkano_shaders::shader!{

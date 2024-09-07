@@ -1,0 +1,1628 @@
+[
+    PipelineShaderStageCreateInfo {
+        flags: empty(),
+        entry_point: EntryPoint {
+            module: SpecializedShaderModule {
+                base_module: ShaderModule {
+                    handle: 0x20fb5358680,
+                    device: 0x20f9043bc70 (instance: 0x20f8f6e3380),
+                    id: 77,
+                    spirv: Spirv {
+                        version: 1.0.0,
+                        bound: 27,
+                        ids: {
+                            Id(
+                                26,
+                            ): IdInfo {
+                                instruction: AccessChain {
+                                    result_type_id: Id(
+                                        25,
+                                    ),
+                                    result_id: Id(
+                                        26,
+                                    ),
+                                    base: Id(
+                                        13,
+                                    ),
+                                    indexes: [
+                                        Id(
+                                            15,
+                                        ),
+                                    ],
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                24,
+                            ): IdInfo {
+                                instruction: CompositeConstruct {
+                                    result_type_id: Id(
+                                        7,
+                                    ),
+                                    result_id: Id(
+                                        24,
+                                    ),
+                                    constituents: [
+                                        Id(
+                                            22,
+                                        ),
+                                        Id(
+                                            23,
+                                        ),
+                                        Id(
+                                            20,
+                                        ),
+                                        Id(
+                                            21,
+                                        ),
+                                    ],
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                8,
+                            ): IdInfo {
+                                instruction: TypeInt {
+                                    result_id: Id(
+                                        8,
+                                    ),
+                                    width: 32,
+                                    signedness: 0,
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                14,
+                            ): IdInfo {
+                                instruction: TypeInt {
+                                    result_id: Id(
+                                        14,
+                                    ),
+                                    width: 32,
+                                    signedness: 1,
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                15,
+                            ): IdInfo {
+                                instruction: Constant {
+                                    result_type_id: Id(
+                                        14,
+                                    ),
+                                    result_id: Id(
+                                        15,
+                                    ),
+                                    value: [
+                                        0,
+                                    ],
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                18,
+                            ): IdInfo {
+                                instruction: Variable {
+                                    result_type_id: Id(
+                                        17,
+                                    ),
+                                    result_id: Id(
+                                        18,
+                                    ),
+                                    storage_class: Input,
+                                    initializer: None,
+                                },
+                                names: [
+                                    Name {
+                                        target: Id(
+                                            18,
+                                        ),
+                                        name: "position",
+                                    },
+                                ],
+                                decorations: [
+                                    Decorate {
+                                        target: Id(
+                                            18,
+                                        ),
+                                        decoration: Location {
+                                            location: 0,
+                                        },
+                                    },
+                                ],
+                                members: [],
+                            },
+                            Id(
+                                16,
+                            ): IdInfo {
+                                instruction: TypeVector {
+                                    result_id: Id(
+                                        16,
+                                    ),
+                                    component_type: Id(
+                                        6,
+                                    ),
+                                    component_count: 2,
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                25,
+                            ): IdInfo {
+                                instruction: TypePointer {
+                                    result_id: Id(
+                                        25,
+                                    ),
+                                    storage_class: Output,
+                                    ty: Id(
+                                        7,
+                                    ),
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                5,
+                            ): IdInfo {
+                                instruction: Label {
+                                    result_id: Id(
+                                        5,
+                                    ),
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                20,
+                            ): IdInfo {
+                                instruction: Constant {
+                                    result_type_id: Id(
+                                        6,
+                                    ),
+                                    result_id: Id(
+                                        20,
+                                    ),
+                                    value: [
+                                        0,
+                                    ],
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                11,
+                            ): IdInfo {
+                                instruction: TypeStruct {
+                                    result_id: Id(
+                                        11,
+                                    ),
+                                    member_types: [
+                                        Id(
+                                            7,
+                                        ),
+                                        Id(
+                                            6,
+                                        ),
+                                        Id(
+                                            10,
+                                        ),
+                                        Id(
+                                            10,
+                                        ),
+                                    ],
+                                },
+                                names: [
+                                    Name {
+                                        target: Id(
+                                            11,
+                                        ),
+                                        name: "gl_PerVertex",
+                                    },
+                                ],
+                                decorations: [
+                                    Decorate {
+                                        target: Id(
+                                            11,
+                                        ),
+                                        decoration: Block,
+                                    },
+                                ],
+                                members: [
+                                    StructMemberInfo {
+                                        names: [
+                                            MemberName {
+                                                ty: Id(
+                                                    11,
+                                                ),
+                                                member: 0,
+                                                name: "gl_Position",
+                                            },
+                                        ],
+                                        decorations: [
+                                            MemberDecorate {
+                                                structure_type: Id(
+                                                    11,
+                                                ),
+                                                member: 0,
+                                                decoration: BuiltIn {
+                                                    built_in: Position,
+                                                },
+                                            },
+                                        ],
+                                    },
+                                    StructMemberInfo {
+                                        names: [
+                                            MemberName {
+                                                ty: Id(
+                                                    11,
+                                                ),
+                                                member: 1,
+                                                name: "gl_PointSize",
+                                            },
+                                        ],
+                                        decorations: [
+                                            MemberDecorate {
+                                                structure_type: Id(
+                                                    11,
+                                                ),
+                                                member: 1,
+                                                decoration: BuiltIn {
+                                                    built_in: PointSize,
+                                                },
+                                            },
+                                        ],
+                                    },
+                                    StructMemberInfo {
+                                        names: [
+                                            MemberName {
+                                                ty: Id(
+                                                    11,
+                                                ),
+                                                member: 2,
+                                                name: "gl_ClipDistance",
+                                            },
+                                        ],
+                                        decorations: [
+                                            MemberDecorate {
+                                                structure_type: Id(
+                                                    11,
+                                                ),
+                                                member: 2,
+                                                decoration: BuiltIn {
+                                                    built_in: ClipDistance,
+                                                },
+                                            },
+                                        ],
+                                    },
+                                    StructMemberInfo {
+                                        names: [
+                                            MemberName {
+                                                ty: Id(
+                                                    11,
+                                                ),
+                                                member: 3,
+                                                name: "gl_CullDistance",
+                                            },
+                                        ],
+                                        decorations: [
+                                            MemberDecorate {
+                                                structure_type: Id(
+                                                    11,
+                                                ),
+                                                member: 3,
+                                                decoration: BuiltIn {
+                                                    built_in: CullDistance,
+                                                },
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
+                            Id(
+                                2,
+                            ): IdInfo {
+                                instruction: TypeVoid {
+                                    result_id: Id(
+                                        2,
+                                    ),
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                17,
+                            ): IdInfo {
+                                instruction: TypePointer {
+                                    result_id: Id(
+                                        17,
+                                    ),
+                                    storage_class: Input,
+                                    ty: Id(
+                                        16,
+                                    ),
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                21,
+                            ): IdInfo {
+                                instruction: Constant {
+                                    result_type_id: Id(
+                                        6,
+                                    ),
+                                    result_id: Id(
+                                        21,
+                                    ),
+                                    value: [
+                                        1065353216,
+                                    ],
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                6,
+                            ): IdInfo {
+                                instruction: TypeFloat {
+                                    result_id: Id(
+                                        6,
+                                    ),
+                                    width: 32,
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                10,
+                            ): IdInfo {
+                                instruction: TypeArray {
+                                    result_id: Id(
+                                        10,
+                                    ),
+                                    element_type: Id(
+                                        6,
+                                    ),
+                                    length: Id(
+                                        9,
+                                    ),
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                4,
+                            ): IdInfo {
+                                instruction: Function {
+                                    result_type_id: Id(
+                                        2,
+                                    ),
+                                    result_id: Id(
+                                        4,
+                                    ),
+                                    function_control: FunctionControl {
+                                        inline: false,
+                                        dont_inline: false,
+                                        pure: false,
+                                        constant: false,
+                                        opt_none_intel: false,
+                                    },
+                                    function_type: Id(
+                                        3,
+                                    ),
+                                },
+                                names: [
+                                    Name {
+                                        target: Id(
+                                            4,
+                                        ),
+                                        name: "main",
+                                    },
+                                ],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                22,
+                            ): IdInfo {
+                                instruction: CompositeExtract {
+                                    result_type_id: Id(
+                                        6,
+                                    ),
+                                    result_id: Id(
+                                        22,
+                                    ),
+                                    composite: Id(
+                                        19,
+                                    ),
+                                    indexes: [
+                                        0,
+                                    ],
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                23,
+                            ): IdInfo {
+                                instruction: CompositeExtract {
+                                    result_type_id: Id(
+                                        6,
+                                    ),
+                                    result_id: Id(
+                                        23,
+                                    ),
+                                    composite: Id(
+                                        19,
+                                    ),
+                                    indexes: [
+                                        1,
+                                    ],
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                7,
+                            ): IdInfo {
+                                instruction: TypeVector {
+                                    result_id: Id(
+                                        7,
+                                    ),
+                                    component_type: Id(
+                                        6,
+                                    ),
+                                    component_count: 4,
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                1,
+                            ): IdInfo {
+                                instruction: ExtInstImport {
+                                    result_id: Id(
+                                        1,
+                                    ),
+                                    name: "GLSL.std.450",
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                9,
+                            ): IdInfo {
+                                instruction: Constant {
+                                    result_type_id: Id(
+                                        8,
+                                    ),
+                                    result_id: Id(
+                                        9,
+                                    ),
+                                    value: [
+                                        1,
+                                    ],
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                12,
+                            ): IdInfo {
+                                instruction: TypePointer {
+                                    result_id: Id(
+                                        12,
+                                    ),
+                                    storage_class: Output,
+                                    ty: Id(
+                                        11,
+                                    ),
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                13,
+                            ): IdInfo {
+                                instruction: Variable {
+                                    result_type_id: Id(
+                                        12,
+                                    ),
+                                    result_id: Id(
+                                        13,
+                                    ),
+                                    storage_class: Output,
+                                    initializer: None,
+                                },
+                                names: [
+                                    Name {
+                                        target: Id(
+                                            13,
+                                        ),
+                                        name: "",
+                                    },
+                                ],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                19,
+                            ): IdInfo {
+                                instruction: Load {
+                                    result_type_id: Id(
+                                        16,
+                                    ),
+                                    result_id: Id(
+                                        19,
+                                    ),
+                                    pointer: Id(
+                                        18,
+                                    ),
+                                    memory_access: None,
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                3,
+                            ): IdInfo {
+                                instruction: TypeFunction {
+                                    result_id: Id(
+                                        3,
+                                    ),
+                                    return_type: Id(
+                                        2,
+                                    ),
+                                    parameter_types: [],
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                        },
+                        instructions_capability: [
+                            Capability {
+                                capability: Shader,
+                            },
+                        ],
+                        instructions_extension: [],
+                        instructions_ext_inst_import: [
+                            ExtInstImport {
+                                result_id: Id(
+                                    1,
+                                ),
+                                name: "GLSL.std.450",
+                            },
+                        ],
+                        instruction_memory_model: MemoryModel {
+                            addressing_model: Logical,
+                            memory_model: GLSL450,
+                        },
+                        instructions_entry_point: [
+                            EntryPoint {
+                                execution_model: Vertex,
+                                entry_point: Id(
+                                    4,
+                                ),
+                                name: "main",
+                                interface: [
+                                    Id(
+                                        13,
+                                    ),
+                                    Id(
+                                        18,
+                                    ),
+                                ],
+                            },
+                        ],
+                        instructions_execution_mode: [],
+                        instructions_name: [
+                            Name {
+                                target: Id(
+                                    4,
+                                ),
+                                name: "main",
+                            },
+                            Name {
+                                target: Id(
+                                    11,
+                                ),
+                                name: "gl_PerVertex",
+                            },
+                            MemberName {
+                                ty: Id(
+                                    11,
+                                ),
+                                member: 0,
+                                name: "gl_Position",
+                            },
+                            MemberName {
+                                ty: Id(
+                                    11,
+                                ),
+                                member: 1,
+                                name: "gl_PointSize",
+                            },
+                            MemberName {
+                                ty: Id(
+                                    11,
+                                ),
+                                member: 2,
+                                name: "gl_ClipDistance",
+                            },
+                            MemberName {
+                                ty: Id(
+                                    11,
+                                ),
+                                member: 3,
+                                name: "gl_CullDistance",
+                            },
+                            Name {
+                                target: Id(
+                                    13,
+                                ),
+                                name: "",
+                            },
+                            Name {
+                                target: Id(
+                                    18,
+                                ),
+                                name: "position",
+                            },
+                        ],
+                        instructions_decoration: [
+                            MemberDecorate {
+                                structure_type: Id(
+                                    11,
+                                ),
+                                member: 0,
+                                decoration: BuiltIn {
+                                    built_in: Position,
+                                },
+                            },
+                            MemberDecorate {
+                                structure_type: Id(
+                                    11,
+                                ),
+                                member: 1,
+                                decoration: BuiltIn {
+                                    built_in: PointSize,
+                                },
+                            },
+                            MemberDecorate {
+                                structure_type: Id(
+                                    11,
+                                ),
+                                member: 2,
+                                decoration: BuiltIn {
+                                    built_in: ClipDistance,
+                                },
+                            },
+                            MemberDecorate {
+                                structure_type: Id(
+                                    11,
+                                ),
+                                member: 3,
+                                decoration: BuiltIn {
+                                    built_in: CullDistance,
+                                },
+                            },
+                            Decorate {
+                                target: Id(
+                                    11,
+                                ),
+                                decoration: Block,
+                            },
+                            Decorate {
+                                target: Id(
+                                    18,
+                                ),
+                                decoration: Location {
+                                    location: 0,
+                                },
+                            },
+                        ],
+                        instructions_global: [
+                            TypeVoid {
+                                result_id: Id(
+                                    2,
+                                ),
+                            },
+                            TypeFunction {
+                                result_id: Id(
+                                    3,
+                                ),
+                                return_type: Id(
+                                    2,
+                                ),
+                                parameter_types: [],
+                            },
+                            TypeFloat {
+                                result_id: Id(
+                                    6,
+                                ),
+                                width: 32,
+                            },
+                            TypeVector {
+                                result_id: Id(
+                                    7,
+                                ),
+                                component_type: Id(
+                                    6,
+                                ),
+                                component_count: 4,
+                            },
+                            TypeInt {
+                                result_id: Id(
+                                    8,
+                                ),
+                                width: 32,
+                                signedness: 0,
+                            },
+                            Constant {
+                                result_type_id: Id(
+                                    8,
+                                ),
+                                result_id: Id(
+                                    9,
+                                ),
+                                value: [
+                                    1,
+                                ],
+                            },
+                            TypeArray {
+                                result_id: Id(
+                                    10,
+                                ),
+                                element_type: Id(
+                                    6,
+                                ),
+                                length: Id(
+                                    9,
+                                ),
+                            },
+                            TypeStruct {
+                                result_id: Id(
+                                    11,
+                                ),
+                                member_types: [
+                                    Id(
+                                        7,
+                                    ),
+                                    Id(
+                                        6,
+                                    ),
+                                    Id(
+                                        10,
+                                    ),
+                                    Id(
+                                        10,
+                                    ),
+                                ],
+                            },
+                            TypePointer {
+                                result_id: Id(
+                                    12,
+                                ),
+                                storage_class: Output,
+                                ty: Id(
+                                    11,
+                                ),
+                            },
+                            Variable {
+                                result_type_id: Id(
+                                    12,
+                                ),
+                                result_id: Id(
+                                    13,
+                                ),
+                                storage_class: Output,
+                                initializer: None,
+                            },
+                            TypeInt {
+                                result_id: Id(
+                                    14,
+                                ),
+                                width: 32,
+                                signedness: 1,
+                            },
+                            Constant {
+                                result_type_id: Id(
+                                    14,
+                                ),
+                                result_id: Id(
+                                    15,
+                                ),
+                                value: [
+                                    0,
+                                ],
+                            },
+                            TypeVector {
+                                result_id: Id(
+                                    16,
+                                ),
+                                component_type: Id(
+                                    6,
+                                ),
+                                component_count: 2,
+                            },
+                            TypePointer {
+                                result_id: Id(
+                                    17,
+                                ),
+                                storage_class: Input,
+                                ty: Id(
+                                    16,
+                                ),
+                            },
+                            Variable {
+                                result_type_id: Id(
+                                    17,
+                                ),
+                                result_id: Id(
+                                    18,
+                                ),
+                                storage_class: Input,
+                                initializer: None,
+                            },
+                            Constant {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    20,
+                                ),
+                                value: [
+                                    0,
+                                ],
+                            },
+                            Constant {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    21,
+                                ),
+                                value: [
+                                    1065353216,
+                                ],
+                            },
+                            TypePointer {
+                                result_id: Id(
+                                    25,
+                                ),
+                                storage_class: Output,
+                                ty: Id(
+                                    7,
+                                ),
+                            },
+                        ],
+                        functions: {
+                            Id(
+                                4,
+                            ): FunctionInfo {
+                                instructions: [
+                                    Function {
+                                        result_type_id: Id(
+                                            2,
+                                        ),
+                                        result_id: Id(
+                                            4,
+                                        ),
+                                        function_control: FunctionControl {
+                                            inline: false,
+                                            dont_inline: false,
+                                            pure: false,
+                                            constant: false,
+                                            opt_none_intel: false,
+                                        },
+                                        function_type: Id(
+                                            3,
+                                        ),
+                                    },
+                                    Label {
+                                        result_id: Id(
+                                            5,
+                                        ),
+                                    },
+                                    Load {
+                                        result_type_id: Id(
+                                            16,
+                                        ),
+                                        result_id: Id(
+                                            19,
+                                        ),
+                                        pointer: Id(
+                                            18,
+                                        ),
+                                        memory_access: None,
+                                    },
+                                    CompositeExtract {
+                                        result_type_id: Id(
+                                            6,
+                                        ),
+                                        result_id: Id(
+                                            22,
+                                        ),
+                                        composite: Id(
+                                            19,
+                                        ),
+                                        indexes: [
+                                            0,
+                                        ],
+                                    },
+                                    CompositeExtract {
+                                        result_type_id: Id(
+                                            6,
+                                        ),
+                                        result_id: Id(
+                                            23,
+                                        ),
+                                        composite: Id(
+                                            19,
+                                        ),
+                                        indexes: [
+                                            1,
+                                        ],
+                                    },
+                                    CompositeConstruct {
+                                        result_type_id: Id(
+                                            7,
+                                        ),
+                                        result_id: Id(
+                                            24,
+                                        ),
+                                        constituents: [
+                                            Id(
+                                                22,
+                                            ),
+                                            Id(
+                                                23,
+                                            ),
+                                            Id(
+                                                20,
+                                            ),
+                                            Id(
+                                                21,
+                                            ),
+                                        ],
+                                    },
+                                    AccessChain {
+                                        result_type_id: Id(
+                                            25,
+                                        ),
+                                        result_id: Id(
+                                            26,
+                                        ),
+                                        base: Id(
+                                            13,
+                                        ),
+                                        indexes: [
+                                            Id(
+                                                15,
+                                            ),
+                                        ],
+                                    },
+                                    Store {
+                                        pointer: Id(
+                                            26,
+                                        ),
+                                        object: Id(
+                                            24,
+                                        ),
+                                        memory_access: None,
+                                    },
+                                    Return,
+                                    FunctionEnd,
+                                ],
+                                entry_point: Some(
+                                    EntryPoint {
+                                        execution_model: Vertex,
+                                        entry_point: Id(
+                                            4,
+                                        ),
+                                        name: "main",
+                                        interface: [
+                                            Id(
+                                                13,
+                                            ),
+                                            Id(
+                                                18,
+                                            ),
+                                        ],
+                                    },
+                                ),
+                                execution_modes: [],
+                            },
+                        },
+                    },
+                    specialization_constants: {},
+                },
+                specialization_info: {},
+                spirv: None,
+                entry_point_infos: [
+                    (
+                        Id(
+                            4,
+                        ),
+                        EntryPointInfo {
+                            name: "main",
+                            execution_model: Vertex,
+                            descriptor_binding_requirements: {},
+                            push_constant_requirements: None,
+                            input_interface: ShaderInterface {
+                                elements: [
+                                    ShaderInterfaceEntry {
+                                        location: 0,
+                                        index: 0,
+                                        component: 0,
+                                        name: Some(
+                                            "position",
+                                        ),
+                                        ty: ShaderInterfaceEntryType {
+                                            base_type: Float,
+                                            num_components: 2,
+                                            num_elements: 1,
+                                            is_64bit: false,
+                                        },
+                                    },
+                                ],
+                            },
+                            output_interface: ShaderInterface {
+                                elements: [],
+                            },
+                        },
+                    ),
+                ],
+            },
+            id: Id(
+                4,
+            ),
+            info_index: 0,
+        },
+        required_subgroup_size: None,
+        _ne: NonExhaustive(
+            (),
+        ),
+    },
+    PipelineShaderStageCreateInfo {
+        flags: empty(),
+        entry_point: EntryPoint {
+            module: SpecializedShaderModule {
+                base_module: ShaderModule {
+                    handle: 0x20fb5357c60,
+                    device: 0x20f9043bc70 (instance: 0x20f8f6e3380),
+                    id: 78,
+                    spirv: Spirv {
+                        version: 1.0.0,
+                        bound: 13,
+                        ids: {
+                            Id(
+                                2,
+                            ): IdInfo {
+                                instruction: TypeVoid {
+                                    result_id: Id(
+                                        2,
+                                    ),
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                11,
+                            ): IdInfo {
+                                instruction: Constant {
+                                    result_type_id: Id(
+                                        6,
+                                    ),
+                                    result_id: Id(
+                                        11,
+                                    ),
+                                    value: [
+                                        0,
+                                    ],
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                9,
+                            ): IdInfo {
+                                instruction: Variable {
+                                    result_type_id: Id(
+                                        8,
+                                    ),
+                                    result_id: Id(
+                                        9,
+                                    ),
+                                    storage_class: Output,
+                                    initializer: None,
+                                },
+                                names: [
+                                    Name {
+                                        target: Id(
+                                            9,
+                                        ),
+                                        name: "f_color",
+                                    },
+                                ],
+                                decorations: [
+                                    Decorate {
+                                        target: Id(
+                                            9,
+                                        ),
+                                        decoration: Location {
+                                            location: 0,
+                                        },
+                                    },
+                                ],
+                                members: [],
+                            },
+                            Id(
+                                3,
+                            ): IdInfo {
+                                instruction: TypeFunction {
+                                    result_id: Id(
+                                        3,
+                                    ),
+                                    return_type: Id(
+                                        2,
+                                    ),
+                                    parameter_types: [],
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                8,
+                            ): IdInfo {
+                                instruction: TypePointer {
+                                    result_id: Id(
+                                        8,
+                                    ),
+                                    storage_class: Output,
+                                    ty: Id(
+                                        7,
+                                    ),
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                7,
+                            ): IdInfo {
+                                instruction: TypeVector {
+                                    result_id: Id(
+                                        7,
+                                    ),
+                                    component_type: Id(
+                                        6,
+                                    ),
+                                    component_count: 4,
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                6,
+                            ): IdInfo {
+                                instruction: TypeFloat {
+                                    result_id: Id(
+                                        6,
+                                    ),
+                                    width: 32,
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                10,
+                            ): IdInfo {
+                                instruction: Constant {
+                                    result_type_id: Id(
+                                        6,
+                                    ),
+                                    result_id: Id(
+                                        10,
+                                    ),
+                                    value: [
+                                        1065353216,
+                                    ],
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                12,
+                            ): IdInfo {
+                                instruction: ConstantComposite {
+                                    result_type_id: Id(
+                                        7,
+                                    ),
+                                    result_id: Id(
+                                        12,
+                                    ),
+                                    constituents: [
+                                        Id(
+                                            10,
+                                        ),
+                                        Id(
+                                            11,
+                                        ),
+                                        Id(
+                                            11,
+                                        ),
+                                        Id(
+                                            10,
+                                        ),
+                                    ],
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                4,
+                            ): IdInfo {
+                                instruction: Function {
+                                    result_type_id: Id(
+                                        2,
+                                    ),
+                                    result_id: Id(
+                                        4,
+                                    ),
+                                    function_control: FunctionControl {
+                                        inline: false,
+                                        dont_inline: false,
+                                        pure: false,
+                                        constant: false,
+                                        opt_none_intel: false,
+                                    },
+                                    function_type: Id(
+                                        3,
+                                    ),
+                                },
+                                names: [
+                                    Name {
+                                        target: Id(
+                                            4,
+                                        ),
+                                        name: "main",
+                                    },
+                                ],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                1,
+                            ): IdInfo {
+                                instruction: ExtInstImport {
+                                    result_id: Id(
+                                        1,
+                                    ),
+                                    name: "GLSL.std.450",
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                            Id(
+                                5,
+                            ): IdInfo {
+                                instruction: Label {
+                                    result_id: Id(
+                                        5,
+                                    ),
+                                },
+                                names: [],
+                                decorations: [],
+                                members: [],
+                            },
+                        },
+                        instructions_capability: [
+                            Capability {
+                                capability: Shader,
+                            },
+                        ],
+                        instructions_extension: [],
+                        instructions_ext_inst_import: [
+                            ExtInstImport {
+                                result_id: Id(
+                                    1,
+                                ),
+                                name: "GLSL.std.450",
+                            },
+                        ],
+                        instruction_memory_model: MemoryModel {
+                            addressing_model: Logical,
+                            memory_model: GLSL450,
+                        },
+                        instructions_entry_point: [
+                            EntryPoint {
+                                execution_model: Fragment,
+                                entry_point: Id(
+                                    4,
+                                ),
+                                name: "main",
+                                interface: [
+                                    Id(
+                                        9,
+                                    ),
+                                ],
+                            },
+                        ],
+                        instructions_execution_mode: [
+                            ExecutionMode {
+                                entry_point: Id(
+                                    4,
+                                ),
+                                mode: OriginUpperLeft,
+                            },
+                        ],
+                        instructions_name: [
+                            Name {
+                                target: Id(
+                                    4,
+                                ),
+                                name: "main",
+                            },
+                            Name {
+                                target: Id(
+                                    9,
+                                ),
+                                name: "f_color",
+                            },
+                        ],
+                        instructions_decoration: [
+                            Decorate {
+                                target: Id(
+                                    9,
+                                ),
+                                decoration: Location {
+                                    location: 0,
+                                },
+                            },
+                        ],
+                        instructions_global: [
+                            TypeVoid {
+                                result_id: Id(
+                                    2,
+                                ),
+                            },
+                            TypeFunction {
+                                result_id: Id(
+                                    3,
+                                ),
+                                return_type: Id(
+                                    2,
+                                ),
+                                parameter_types: [],
+                            },
+                            TypeFloat {
+                                result_id: Id(
+                                    6,
+                                ),
+                                width: 32,
+                            },
+                            TypeVector {
+                                result_id: Id(
+                                    7,
+                                ),
+                                component_type: Id(
+                                    6,
+                                ),
+                                component_count: 4,
+                            },
+                            TypePointer {
+                                result_id: Id(
+                                    8,
+                                ),
+                                storage_class: Output,
+                                ty: Id(
+                                    7,
+                                ),
+                            },
+                            Variable {
+                                result_type_id: Id(
+                                    8,
+                                ),
+                                result_id: Id(
+                                    9,
+                                ),
+                                storage_class: Output,
+                                initializer: None,
+                            },
+                            Constant {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    10,
+                                ),
+                                value: [
+                                    1065353216,
+                                ],
+                            },
+                            Constant {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    11,
+                                ),
+                                value: [
+                                    0,
+                                ],
+                            },
+                            ConstantComposite {
+                                result_type_id: Id(
+                                    7,
+                                ),
+                                result_id: Id(
+                                    12,
+                                ),
+                                constituents: [
+                                    Id(
+                                        10,
+                                    ),
+                                    Id(
+                                        11,
+                                    ),
+                                    Id(
+                                        11,
+                                    ),
+                                    Id(
+                                        10,
+                                    ),
+                                ],
+                            },
+                        ],
+                        functions: {
+                            Id(
+                                4,
+                            ): FunctionInfo {
+                                instructions: [
+                                    Function {
+                                        result_type_id: Id(
+                                            2,
+                                        ),
+                                        result_id: Id(
+                                            4,
+                                        ),
+                                        function_control: FunctionControl {
+                                            inline: false,
+                                            dont_inline: false,
+                                            pure: false,
+                                            constant: false,
+                                            opt_none_intel: false,
+                                        },
+                                        function_type: Id(
+                                            3,
+                                        ),
+                                    },
+                                    Label {
+                                        result_id: Id(
+                                            5,
+                                        ),
+                                    },
+                                    Store {
+                                        pointer: Id(
+                                            9,
+                                        ),
+                                        object: Id(
+                                            12,
+                                        ),
+                                        memory_access: None,
+                                    },
+                                    Return,
+                                    FunctionEnd,
+                                ],
+                                entry_point: Some(
+                                    EntryPoint {
+                                        execution_model: Fragment,
+                                        entry_point: Id(
+                                            4,
+                                        ),
+                                        name: "main",
+                                        interface: [
+                                            Id(
+                                                9,
+                                            ),
+                                        ],
+                                    },
+                                ),
+                                execution_modes: [
+                                    ExecutionMode {
+                                        entry_point: Id(
+                                            4,
+                                        ),
+                                        mode: OriginUpperLeft,
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                    specialization_constants: {},
+                },
+                specialization_info: {},
+                spirv: None,
+                entry_point_infos: [
+                    (
+                        Id(
+                            4,
+                        ),
+                        EntryPointInfo {
+                            name: "main",
+                            execution_model: Fragment,
+                            descriptor_binding_requirements: {},
+                            push_constant_requirements: None,
+                            input_interface: ShaderInterface {
+                                elements: [],
+                            },
+                            output_interface: ShaderInterface {
+                                elements: [
+                                    ShaderInterfaceEntry {
+                                        location: 0,
+                                        index: 0,
+                                        component: 0,
+                                        name: Some(
+                                            "f_color",
+                                        ),
+                                        ty: ShaderInterfaceEntryType {
+                                            base_type: Float,
+                                            num_components: 4,
+                                            num_elements: 1,
+                                            is_64bit: false,
+                                        },
+                                    },
+                                ],
+                            },
+                        },
+                    ),
+                ],
+            },
+            id: Id(
+                4,
+            ),
+            info_index: 0,
+        },
+        required_subgroup_size: None,
+        _ne: NonExhaustive(
+            (),
+        ),
+    },
+]

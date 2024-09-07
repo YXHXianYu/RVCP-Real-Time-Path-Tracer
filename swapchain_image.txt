@@ -1,0 +1,104 @@
+Image {
+    inner: RawImage {
+        handle: 0x1ed446059c0,
+        device: 0x1ed3f72ce40 (instance: 0x1ed3e9e2270),
+        id: 1,
+        flags: empty(),
+        image_type: Dim2d,
+        format: B8G8R8A8_UNORM,
+        format_features: SAMPLED_IMAGE | STORAGE_IMAGE | STORAGE_READ_WITHOUT_FORMAT | STORAGE_WRITE_WITHOUT_FORMAT | COLOR_ATTACHMENT | COLOR_ATTACHMENT_BLEND | TRANSFER_SRC | TRANSFER_DST | BLIT_SRC | BLIT_DST | SAMPLED_IMAGE_FILTER_LINEAR | SAMPLED_IMAGE_FILTER_MINMAX | OPTICAL_FLOW_IMAGE,
+        view_formats: [],
+        extent: [
+            800,
+            600,
+            1,
+        ],
+        array_layers: 1,
+        mip_levels: 1,
+        samples: Sample1,
+        tiling: Optimal,
+        usage: STORAGE,
+        stencil_usage: None,
+        sharing: Exclusive,
+        initial_layout: Undefined,
+        drm_format_modifier: None,
+        external_memory_handle_types: empty(),
+        memory_requirements: [],
+        needs_destruction: false,
+        subresource_layout: OnceCache {
+            inner: RwLock {
+                data: {},
+            },
+        },
+    },
+    memory: Swapchain {
+        swapchain: Swapchain {
+            handle: 0x1ed42237d90,
+            device: 0x1ed3f72ce40 (instance: 0x1ed3e9e2270),
+            surface: 0x1ed3f842150 (instance: 0x1ed3e9e2270),
+            id: 1,
+            flags: empty(),
+            min_image_count: 3,
+            image_format: B8G8R8A8_UNORM,
+            image_view_formats: [],
+            image_color_space: SrgbNonLinear,
+            image_extent: [
+                800,
+                600,
+            ],
+            image_array_layers: 1,
+            image_usage: STORAGE,
+            image_sharing: Exclusive,
+            pre_transform: Identity,
+            composite_alpha: Opaque,
+            present_mode: Fifo,
+            present_modes: [],
+            clipped: true,
+            scaling_behavior: None,
+            present_gravity: None,
+            full_screen_exclusive: Default,
+            win32_monitor: None,
+            prev_present_id: 0,
+            full_screen_exclusive_held: false,
+            images: [
+                ImageEntry {
+                    handle: 0x1ed446059c0,
+                    layout_initialized: false,
+                },
+                ImageEntry {
+                    handle: 0x1ed44605e60,
+                    layout_initialized: false,
+                },
+                ImageEntry {
+                    handle: 0x1ed44606300,
+                    layout_initialized: false,
+                },
+            ],
+            is_retired: Mutex {
+                data: false,
+            },
+        },
+        image_index: 0,
+    },
+    aspect_list: [
+        Color,
+    ],
+    aspect_size: 1,
+    mip_level_size: 1,
+    range_size: 1,
+    state: Mutex {
+        data: ImageState {
+            ranges: {
+                0..1: ImageRangeState {
+                    current_access: Shared {
+                        cpu_reads: 0,
+                        gpu_reads: 0,
+                    },
+                    layout: Undefined,
+                },
+            },
+        },
+    },
+    layout: PresentSrc,
+    is_layout_initialized: false,
+}

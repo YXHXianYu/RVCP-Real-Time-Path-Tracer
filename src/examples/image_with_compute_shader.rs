@@ -14,7 +14,7 @@ use vulkano::memory::allocator::{AllocationCreateInfo, MemoryTypeFilter, Standar
 use vulkano::pipeline::{Pipeline, PipelineBindPoint};
 use vulkano::sync::{self, GpuFuture};
 
-use crate::common::*;
+use crate::examples::common::*;
 
 mod cs_fractal {
     vulkano_shaders::shader!{
@@ -61,7 +61,7 @@ pub fn example_image_with_computer_shader(
     const PICTURE_SIZE: [u32; 3] = [1024, 1024, 1];
     const WORK_GROUP_SIZE: [u32; 3] = [PICTURE_SIZE[0]/8, PICTURE_SIZE[1]/8, PICTURE_SIZE[2]/1];
     
-    // image (input)
+    // image (input / output)
     let image = Image::new(
         memory_allocator.clone(),
         ImageCreateInfo {
@@ -77,6 +77,8 @@ pub fn example_image_with_computer_shader(
         },
     ).unwrap();
     let image_view = ImageView::new_default(image.clone()).unwrap();
+
+    println!("Image View Format: {:?}", image_view.format());
 
     // buffer (output)
     let buf = Buffer::from_iter(

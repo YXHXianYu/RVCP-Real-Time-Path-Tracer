@@ -9,6 +9,19 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
 * Fractal (Refer to https://vulkano.rs/05-images/04-mandelbrot.html)
   * ![fractal](./README/fractal.png)
 
+## 笔记：二阶段
+
+* 实现一个基于Compute Shader的Ray Tracing
+
+### 第一步：实现一个能在屏幕上绘制颜色的Compute Shader
+
+* Compute Pipeline vs. Graphics Pipeline
+  * 区别蛮大的
+* 一个bug，找了两个小时
+  * ![image-20240907203838722](./README/image-20240907203838722.png)
+  * **操蛋啊！！！！**
+* 
+
 ## 笔记
 
 ### Queue & QueueFamily
@@ -102,5 +115,6 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
 * Physical Device依赖于Instance选择（从Instance访问机器上所有GPU）
 * Device依赖Physical Device中取出的Queue Family Index
 * 最后，Swapchain依赖Device和Surface
-* 
+
+
 

@@ -21,7 +21,7 @@ use vulkano::pipeline::{GraphicsPipeline, PipelineLayout, PipelineShaderStageCre
 use vulkano::render_pass::{Framebuffer, FramebufferCreateInfo, Subpass};
 use vulkano::sync::{self, GpuFuture};
 
-use crate::common::*;
+use crate::examples::common::*;
 
 mod vs {
     vulkano_shaders::shader!{

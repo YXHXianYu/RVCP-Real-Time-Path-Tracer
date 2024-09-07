@@ -7,7 +7,7 @@ use vulkano::device::{Device, Queue};
 use vulkano::memory::allocator::{AllocationCreateInfo, MemoryTypeFilter, StandardMemoryAllocator};
 use vulkano::sync::{self, GpuFuture};
 
-use crate::common::*;
+use crate::examples::common::*;
 
 pub fn example_copy_buffer(
     device: Arc<Device>,
