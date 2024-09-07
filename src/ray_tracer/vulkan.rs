@@ -1,11 +1,16 @@
 
+use std::cmp::max;
+use std::collections::HashMap;
 use std::sync::Arc;
-
-use vulkano::{command_buffer::{self, allocator::{StandardCommandBufferAllocator, StandardCommandBufferAllocatorCreateInfo}, AutoCommandBufferBuilder, CommandBufferUsage, PrimaryAutoCommandBuffer}, descriptor_set::layout::{DescriptorSetLayoutBinding, DescriptorSetLayoutCreateFlags, DescriptorSetLayoutCreateInfo, DescriptorType}, image::{ImageCreateInfo, ImageType}, memory::allocator::{AllocationCreateInfo, MemoryTypeFilter}, pipeline::layout::{PipelineLayoutCreateFlags, PushConstantRange}, NonExhaustive};
-use vulkano::descriptor_set::{allocator::StandardDescriptorSetAllocator, PersistentDescriptorSet, WriteDescriptorSet};
-use vulkano::device::{physical::PhysicalDevice, Device, DeviceCreateInfo, DeviceExtensions, Queue, QueueCreateInfo, QueueFlags};
+use vulkano::command_buffer::allocator::{StandardCommandBufferAllocator, StandardCommandBufferAllocatorCreateInfo};
+use vulkano::command_buffer::{AutoCommandBufferBuilder, CommandBufferUsage, PrimaryAutoCommandBuffer};
+use vulkano::descriptor_set::allocator::StandardDescriptorSetAllocator;
+use vulkano::descriptor_set::{PersistentDescriptorSet, WriteDescriptorSet};
+use vulkano::device::physical::PhysicalDevice;
+use vulkano::device::{Device, DeviceCreateInfo, DeviceExtensions, Queue, QueueCreateInfo, QueueFlags};
 use vulkano::format::Format;
-use vulkano::image::{view::ImageView, Image, ImageUsage};
+use vulkano::image::view::ImageView;
+use vulkano::image::{Image, ImageUsage};
 use vulkano::instance::{Instance, InstanceCreateInfo};
 use vulkano::memory::allocator::StandardMemoryAllocator;
 use vulkano::pipeline::{compute::ComputePipelineCreateInfo, layout::PipelineDescriptorSetLayoutCreateInfo, ComputePipeline, Pipeline, PipelineBindPoint, PipelineLayout, PipelineShaderStageCreateInfo};
@@ -13,8 +18,12 @@ use vulkano::shader::ShaderModule;
 use vulkano::swapchain::{self, Surface, Swapchain, SwapchainCreateInfo, SwapchainPresentInfo};
 use vulkano::sync::{self, future::FenceSignalFuture, GpuFuture};
 use vulkano::{Validated, VulkanError, VulkanLibrary};
-use winit::{dpi::PhysicalSize, event::{Event, WindowEvent}, event_loop::{ControlFlow, EventLoop}, window::{Window, WindowBuilder}};
+use winit::dpi::PhysicalSize;
+use winit::event::{ElementState, Event, KeyboardInput, VirtualKeyCode, WindowEvent};
+use winit::event_loop::{ControlFlow, EventLoop};
+use winit::window::{Window, WindowBuilder};
 
+use super::config::Config;
 use super::shader::*;
 
 #[allow(dead_code)]
@@ -42,13 +51,14 @@ pub struct Vk {
     pub compute_pipeline: Arc<ComputePipeline>,
     pub images: Vec<Arc<Image>>,
     pub image_format: Format,
-
     pub command_buffers: Vec<Arc<PrimaryAutoCommandBuffer>>,
 
+    // config
+    pub config: Config,
 }
 
 impl Vk {
-    pub fn new() -> Vk {
+    pub fn new(mut config: Config) -> Vk {
         let event_loop = EventLoop::new();
 
         // basic
@@ -156,6 +166,7 @@ impl Vk {
             &compute_pipeline,
             &images,
             [window_size.width / 8, window_size.height / 8, 1],
+            &config
         );
 
         Vk {
@@ -179,6 +190,8 @@ impl Vk {
             images,
             image_format,
             command_buffers,
+
+            config,
         }
     }
 
@@ -186,6 +199,7 @@ impl Vk {
 
         let mut window_resized = false;
         let mut recreate_swapchain = false;
+        let mut new_push_constants = false; // TODO
     
         let frames_in_flight = self.images.len();
         let mut fences: Vec<Option<Arc<FenceSignalFuture<_>>>> = vec![None; frames_in_flight];
@@ -194,6 +208,9 @@ impl Vk {
         let mut last_time = std::time::Instant::now();
         let mut frame_count = 0;
         const TIME_INTERVAL: std::time::Duration = std::time::Duration::from_secs(1);
+
+        let mut last_tick_time = std::time::Instant::now();
+        let mut keyboard_is_pressing: HashMap<VirtualKeyCode, bool> = HashMap::new();
 
         self.event_loop.run(move |event, _, control_flow| {
             match event {
@@ -209,6 +226,21 @@ impl Vk {
                 } => {
                     window_resized = true;
                 },
+                Event::WindowEvent {
+                    event: WindowEvent::KeyboardInput {
+                        input:
+                            KeyboardInput {
+                                virtual_keycode: Some(key),
+                                state,
+                                ..
+                            },
+                        ..
+                    },
+                    ..
+                } => {
+                    let is_pressed = state == ElementState::Pressed;
+                    keyboard_is_pressing.insert(key, is_pressed);
+                }
                 Event::MainEventsCleared => {
                     frame_count += 1;
                     let now = std::time::Instant::now();
@@ -218,37 +250,50 @@ impl Vk {
                         last_time = now;
                     }
 
+                    let delta_time = (std::time::Instant::now() - last_tick_time).as_secs_f64() as f32;
+                    last_tick_time = now; // for other events
+
+                    Vk::update_keyboard_state(
+                        &mut keyboard_is_pressing,
+                        &mut self.config,
+                        &mut new_push_constants,
+                        delta_time,
+                    );
+
                     if window_resized || recreate_swapchain {
                         let new_window_size = self.window.inner_size();
                         if new_window_size.width == 0 || new_window_size.height == 0 {
                             return;
-                        } 
+                        }
+
+                        self.window_size = new_window_size;
 
                         recreate_swapchain = false;
 
                         let (new_swapchain, new_images) = self.swapchain
                             .recreate(SwapchainCreateInfo {
-                                image_extent: new_window_size.into(),
+                                image_extent: self.window_size.into(),
                                 ..self.swapchain.create_info()
                             })
                             .unwrap();
                         self.swapchain = new_swapchain;
                         self.images = new_images;
+                    }
 
-                        if window_resized {
-                            window_resized = false;
-                            
-                            let new_command_buffers = Vk::create_command_buffers(
-                                &self.descriptor_set_allocator,
-                                &self.command_buffer_allocator,
-                                &self.queue,
-                                &self.compute_pipeline,
-                                &self.images,
-                                [new_window_size.width / 8, new_window_size.height / 8, 1]
-                            );
-                            self.command_buffers = new_command_buffers;
-                        }
-
+                    if window_resized || new_push_constants {
+                        window_resized = false;
+                        new_push_constants = false;
+                        
+                        let new_command_buffers = Vk::create_command_buffers(
+                            &self.descriptor_set_allocator,
+                            &self.command_buffer_allocator,
+                            &self.queue,
+                            &self.compute_pipeline,
+                            &self.images,
+                            [self.window_size.width / 8, self.window_size.height / 8, 1],
+                            &self.config,
+                        );
+                        self.command_buffers = new_command_buffers;
                     }
 
                     let (current_idx, suboptimal, acquire_future)
@@ -318,6 +363,7 @@ impl Vk {
         compute_pipeline: &Arc<ComputePipeline>,
         images: &Vec<Arc<Image>>,
         work_group: [u32; 3],
+        config: &Config,
     ) -> Vec<Arc<PrimaryAutoCommandBuffer>> {
         images
             .iter()
@@ -329,10 +375,6 @@ impl Vk {
                 let descriptor_set_layout 
                     = compute_pipeline.layout().set_layouts().get(0).unwrap();
                 
-                let descriptor_binding = descriptor_set_layout.bindings().get(&0).unwrap();
-
-                // println!("Descriptor binding: {:#?}", descriptor_binding);
-
                 let descriptor_set = PersistentDescriptorSet::new(
                     descriptor_set_allocator,
                     descriptor_set_layout.clone(),
@@ -346,6 +388,12 @@ impl Vk {
                     CommandBufferUsage::MultipleSubmit,
                 ).unwrap();
 
+                let push_constants = test_shader::CameraData {
+                    position: config.camera_position,
+                    scale: config.camera_scale,
+                };
+                println!("Push contants (scale): {:#?}", push_constants.scale);
+
                 builder
                     .bind_pipeline_compute(compute_pipeline.clone())
                     .unwrap()
@@ -354,6 +402,12 @@ impl Vk {
                         compute_pipeline.layout().clone(),
                         0,
                         descriptor_set,
+                    )
+                    .unwrap()
+                    .push_constants(
+                        compute_pipeline.layout().clone(),
+                        0,
+                        push_constants,
                     )
                     .unwrap()
                     .dispatch(work_group)
@@ -387,5 +441,39 @@ impl Vk {
             None,
             ComputePipelineCreateInfo::stage_layout(compute_pipeline_stage, compute_pipeline_layout)
         ).unwrap()
+    }
+
+    fn update_keyboard_state(
+        keyboard_is_pressing: &mut HashMap<VirtualKeyCode, bool>,
+        config: &mut Config,
+        new_push_constants: &mut bool,
+        delta_time: f32,
+    ) {
+        macro_rules! f {
+            ($key:expr, $stmt:stmt) => {
+                if keyboard_is_pressing.get(&$key).is_some_and(|x| *x) {
+                    *new_push_constants = true;
+                    $stmt
+                }
+            };
+        }
+
+        let g = |x: f32| {
+            x.powf(1.2).max(1.0)
+        };
+
+        let h = |x| {
+            1.0_f32 / x
+        };
+
+        let pos_v = h(config.camera_scale.abs()) * config.camera_move_speed * delta_time;
+        let scale_v = g(config.camera_scale.abs()) * config.camera_move_speed * delta_time;
+
+        f!(VirtualKeyCode::A, config.camera_position[0] -= pos_v);
+        f!(VirtualKeyCode::D, config.camera_position[0] += pos_v);
+        f!(VirtualKeyCode::W, config.camera_position[1] -= pos_v);
+        f!(VirtualKeyCode::S, config.camera_position[1] += pos_v);
+        f!(VirtualKeyCode::Q, config.camera_scale -= scale_v);
+        f!(VirtualKeyCode::E, config.camera_scale += scale_v);
     }
 }
