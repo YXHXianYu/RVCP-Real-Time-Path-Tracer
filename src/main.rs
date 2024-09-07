@@ -1,8 +1,10 @@
 
 mod examples;
 mod ray_tracer;
+mod mandelbrot;
 
 fn main() {
     // examples::examples();
-    ray_tracer::run();
+    mandelbrot::run();
+    // ray_tracer::run();
 }
