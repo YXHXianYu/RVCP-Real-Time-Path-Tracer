@@ -86,11 +86,21 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
 
 * Framebuffer的创建依赖RenderPass和ImageView
   * 【Framebuffer的attachments信息，是否要和RenderPass的attachments信息一致？】
+  * ImageView有两种创建方式
+    1. 从Swapchain中获取Image
+    2. 自己创建Image
 
 ### RenderPass
 
 * 获取Subpass需要从RenderPass中得到
   * 类似Queue和QueueFamily、Layout和SetLayouts的关系
 
+### Swapchain
 
+* Instance依赖Vulkan Library
+* Surface依赖Instance和Window（Window需要由winit等库创建）
+* Physical Device依赖于Instance选择（从Instance访问机器上所有GPU）
+* Device依赖Physical Device中取出的Queue Family Index
+* 最后，Swapchain依赖Device和Surface
+* 
 

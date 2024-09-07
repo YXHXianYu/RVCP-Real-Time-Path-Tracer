@@ -13,6 +13,7 @@ fn main() {
         command_buffer_allocator,
         event_loop,
         instance,
+        physical_device,
     ) = create_device_etc();
 
     examples::example_copy_buffer(
@@ -50,12 +51,14 @@ fn main() {
         &command_buffer_allocator,
     );
 
+    // all borrowed here
     examples::example_window(
-        device.clone(),
-        memory_allocator.clone(),
-        queue.clone(),
-        &command_buffer_allocator,
+        device,
+        memory_allocator,
+        queue,
+        command_buffer_allocator,
         event_loop,
-        instance.clone(),
-    )
+        instance,
+        physical_device,
+    );
 }

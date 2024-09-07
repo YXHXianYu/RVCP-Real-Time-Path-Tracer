@@ -3,7 +3,8 @@ use std::sync::Arc;
 use image::{ImageBuffer, Rgba};
 use vulkano::command_buffer::allocator::{StandardCommandBufferAllocator, StandardCommandBufferAllocatorCreateInfo};
 use vulkano::command_buffer::{AutoCommandBufferBuilder, CommandBufferUsage, PrimaryAutoCommandBuffer};
-use vulkano::device::{Device, DeviceCreateInfo, Queue, QueueCreateInfo, QueueFlags};
+use vulkano::device::physical::PhysicalDevice;
+use vulkano::device::{Device, DeviceCreateInfo, DeviceExtensions, Queue, QueueCreateInfo, QueueFlags};
 use vulkano::memory::allocator::StandardMemoryAllocator;
 use vulkano::pipeline::compute::ComputePipelineCreateInfo;
 use vulkano::pipeline::layout::PipelineDescriptorSetLayoutCreateInfo;
@@ -21,6 +22,7 @@ pub fn create_device_etc() -> (
     StandardCommandBufferAllocator,
     EventLoop<()>,
     Arc<Instance>,
+    Arc<PhysicalDevice>,
 ) {
     let event_loop = EventLoop::new();
 
@@ -53,12 +55,16 @@ pub fn create_device_etc() -> (
     // println!("Found a graphics queue family at index {}.", queue_family_index);
 
     let (device, mut queues) = Device::new(
-        physical_device,
+        physical_device.clone(),
         DeviceCreateInfo {
             queue_create_infos: vec![QueueCreateInfo {
                 queue_family_index,
                 ..Default::default()
             }],
+            enabled_extensions: DeviceExtensions {
+                khr_swapchain: true,
+                ..DeviceExtensions::empty()
+            },
             ..Default::default()
         }
     ).unwrap();
@@ -74,7 +80,7 @@ pub fn create_device_etc() -> (
         StandardCommandBufferAllocatorCreateInfo::default(),
     );
 
-    (device, memory_allocator, queue, command_buffer_allocator, event_loop, instance)
+    (device, memory_allocator, queue, command_buffer_allocator, event_loop, instance, physical_device)
 }
 
 pub fn create_command_buffer_builder(
