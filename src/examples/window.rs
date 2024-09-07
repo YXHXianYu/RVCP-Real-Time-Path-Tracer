@@ -21,6 +21,7 @@ use vulkano::pipeline::{GraphicsPipeline, PipelineLayout, PipelineShaderStageCre
 use vulkano::render_pass::{Framebuffer, FramebufferCreateInfo, RenderPass, Subpass};
 use vulkano::shader::ShaderModule;
 use vulkano::swapchain::{self, Surface, Swapchain, SwapchainCreateInfo, SwapchainPresentInfo};
+use vulkano::sync::future::FenceSignalFuture;
 use vulkano::sync::{self, GpuFuture};
 use vulkano::{Validated, VulkanError};
 use winit::event::{Event, WindowEvent};
@@ -287,6 +288,14 @@ pub fn example_window(
     let mut window_resized = false;
     let mut recreate_swapchain = false;
 
+    let frames_in_flight = images.len();
+    let mut fences: Vec<Option<Arc<FenceSignalFuture<_>>>> = vec![None; frames_in_flight];
+    let mut previous_fence_idx = 0;
+
+    let mut last_time = std::time::Instant::now();
+    let mut frame_count = 0;
+    const TIME_INTERVAL: std::time::Duration = std::time::Duration::from_secs(1);
+
     event_loop.run(move |event, _, control_flow| {
         match event {
             Event::WindowEvent {
@@ -302,10 +311,23 @@ pub fn example_window(
                 window_resized = true;
             },
             Event::MainEventsCleared => {
+
+                frame_count += 1;
+                let now = std::time::Instant::now();
+                if now - last_time >= TIME_INTERVAL {
+                    println!("Rendering FPS: {}", frame_count);
+                    frame_count = 0;
+                    last_time = now;
+                }
+
                 if window_resized || recreate_swapchain {
-                    recreate_swapchain = false;
 
                     let new_dimensions = window.inner_size();
+                    if new_dimensions.width == 0 || new_dimensions.height == 0 {
+                        return;
+                    }
+
+                    recreate_swapchain = false;
 
                     let (new_swapchain, new_images) = swapchain
                         .recreate(SwapchainCreateInfo {
@@ -354,7 +376,21 @@ pub fn example_window(
                     recreate_swapchain = true;
                 }
 
-                let execution = sync::now(device.clone())
+                if let Some(image_fence) = &fences[image_idx as usize] {
+                    image_fence.wait(None).unwrap();
+                }
+
+                let previous_future = match fences[previous_fence_idx as usize].clone() {
+                    None => {
+                        let mut now = sync::now(device.clone());
+                        now.cleanup_finished();
+
+                        now.boxed()
+                    }
+                    Some(fence) => fence.boxed(),
+                };
+
+                let future = previous_future
                     .join(acquire_future)
                     .then_execute(queue.clone(), command_buffers[image_idx as usize].clone())
                     .unwrap()
@@ -363,18 +399,20 @@ pub fn example_window(
                         SwapchainPresentInfo::swapchain_image_index(swapchain.clone(), image_idx),
                     )
                     .then_signal_fence_and_flush();
-                    
-                match execution.map_err(Validated::unwrap) {
-                    Ok(future) => {
-                        future.wait(None).unwrap();
-                    }
+
+                fences[image_idx as usize] = match future.map_err(Validated::unwrap) {
+                    Ok(value) => Some(Arc::new(value)),
                     Err(VulkanError::OutOfDate) => {
                         recreate_swapchain = true;
-                    }
+                        None
+                    },
                     Err(e) => {
-                        println!("Failed to flush future: {e}")
+                        println!("Failed to flush future: {e}");
+                        None
                     }
                 };
+
+                previous_fence_idx = image_idx;
             },
             _ => (),
         }
