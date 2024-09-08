@@ -8,6 +8,7 @@ vulkano = "0.34.0"
 vulkano-shaders = "0.34.0"
 image = "0.24"
 winit = "0.28.0"
+glam = "0.29.0"
 
 [profile.dev]
 opt-level = 1

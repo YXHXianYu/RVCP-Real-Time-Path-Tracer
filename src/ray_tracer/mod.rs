@@ -1,12 +1,7 @@
-use config::Config;
-use vulkan::Vk;
-
 mod vulkan;
 mod shader;
 mod config;
+mod camera;
+mod main;
 
-pub fn run() {
-    println!("Running ray tracer");
-    let vk = Vk::new(Config::default());
-    vk.run();
-}
+pub use main::run;
