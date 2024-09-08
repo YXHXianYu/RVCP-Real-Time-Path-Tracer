@@ -1,5 +1,4 @@
 
-use std::cmp::max;
 use std::collections::HashMap;
 use std::sync::Arc;
 use vulkano::command_buffer::allocator::{StandardCommandBufferAllocator, StandardCommandBufferAllocatorCreateInfo};
@@ -58,7 +57,7 @@ pub struct Vk {
 }
 
 impl Vk {
-    pub fn new(mut config: Config) -> Vk {
+    pub fn new(config: Config) -> Vk {
         let event_loop = EventLoop::new();
 
         // basic

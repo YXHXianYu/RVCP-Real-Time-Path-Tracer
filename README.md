@@ -20,7 +20,25 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
 * 一个bug，找了两个小时
   * ![image-20240907203838722](./README/image-20240907203838722.png)
   * **操蛋啊！！！！**
-* 
+* 搞定
+
+### 第二步：设计Compute Shader光线追踪数据结构
+
+* CPU端
+* GPU端
+  * 输入Buffer：Shapes、Material、Light
+  * 输出Buffer：画布
+  * PushConstants
+    * 摄像机数据：按照MoerLite实现
+      * Transform（Position、Up、LookAt）, t_near, t_far, vertical_f........
+* 光线追踪流程
+  * Camera：相机生成光线（Moer-Lite在一个像素点处进行多次采用，我们这里进行简化，直接根据像素中心点采样）—— 通过PushConstants传递数据，光线生成在shader中硬编码
+  * Sampler：采样器 —— 在shader中硬编码
+  * Integrator：积分器 —— 在shader中硬编码
+  * Shape：几何体 —— 通过Buffer传输
+  * Acceleration：加速结构 —— 先不考虑
+  * Light：光源 —— 通过Buffer传输
+  * Material：材质 —— 通过Buffer传输
 
 ## 笔记
 
