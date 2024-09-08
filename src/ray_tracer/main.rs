@@ -7,6 +7,14 @@ use winit::event_loop::{ControlFlow, EventLoop};
 use super::config::Config;
 use super::vulkan::{RuntimeInfo, Vk};
 
+/**
+ * TODO: 
+ * 下一步重构：vk和info合并；
+ * ===> Camera数据完毕
+ * 开始准备Shape, Material, Light数据
+ */
+
+
 pub fn run() {
     println!("Running ray tracer");
     let (vk, info, event_loop) = Vk::new(Config::default());
