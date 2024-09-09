@@ -170,8 +170,6 @@ vec3 trace_ray(
 // MARK: Main
 
 void main() {
-    // TODO: SPP
-
     // 1. Sample Ray
     vec2 window_size = vec2(imageSize(img));
     vec2 uv = (gl_GlobalInvocationID.xy + vec2(0.5)) / window_size;
@@ -181,15 +179,11 @@ void main() {
     float r = spheres.sphere[0].radius;
     vec3 pos = point_lights.point_light[0].position;
 
-    // vec3 color = vec3(0.0);
-    // for (uint i = 0; i < SPP; i++) {
-    //     color += trace_ray(ray);
-    // }
-    // color /= float(SPP);
-
-    vec3 color = trace_ray(ray);
-
-    // vec3 color = vec3(ray.direction.x, ray.direction.y, 0.0);
+    vec3 color = vec3(0.0);
+    for (uint i = 0; i < SPP; i++) {
+        color += trace_ray(ray);
+    }
+    color /= float(SPP);
 
     imageStore(img, ivec2(gl_GlobalInvocationID.xy), vec4(color, 1.0));
 }
