@@ -1,0 +1,4584 @@
+EntryPoint {
+    module: SpecializedShaderModule {
+        base_module: ShaderModule {
+            handle: 0x26b4ce222b0,
+            device: 0x26b4a379630 (instance: 0x26b49551de0),
+            id: 2,
+            spirv: Spirv {
+                version: 1.0.0,
+                bound: 117,
+                ids: {
+                    Id(
+                        42,
+                    ): IdInfo {
+                        instruction: Constant {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                42,
+                            ),
+                            value: [
+                                1073741824,
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        9,
+                    ): IdInfo {
+                        instruction: Variable {
+                            result_type_id: Id(
+                                8,
+                            ),
+                            result_id: Id(
+                                9,
+                            ),
+                            storage_class: Function,
+                            initializer: None,
+                        },
+                        names: [
+                            Name {
+                                target: Id(
+                                    9,
+                                ),
+                                name: "norm_coordinates",
+                            },
+                        ],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        92,
+                    ): IdInfo {
+                        instruction: FAdd {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                92,
+                            ),
+                            operand1: Id(
+                                89,
+                            ),
+                            operand2: Id(
+                                91,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        40,
+                    ): IdInfo {
+                        instruction: Load {
+                            result_type_id: Id(
+                                7,
+                            ),
+                            result_id: Id(
+                                40,
+                            ),
+                            pointer: Id(
+                                9,
+                            ),
+                            memory_access: None,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        110,
+                    ): IdInfo {
+                        instruction: CompositeExtract {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                110,
+                            ),
+                            composite: Id(
+                                109,
+                            ),
+                            indexes: [
+                                0,
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        104,
+                    ): IdInfo {
+                        instruction: TypeVector {
+                            result_id: Id(
+                                104,
+                            ),
+                            component_type: Id(
+                                6,
+                            ),
+                            component_count: 4,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        47,
+                    ): IdInfo {
+                        instruction: Constant {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                47,
+                            ),
+                            value: [
+                                0,
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        65,
+                    ): IdInfo {
+                        instruction: Load {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                65,
+                            ),
+                            pointer: Id(
+                                64,
+                            ),
+                            memory_access: None,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        24,
+                    ): IdInfo {
+                        instruction: ImageQuerySize {
+                            result_type_id: Id(
+                                17,
+                            ),
+                            result_id: Id(
+                                24,
+                            ),
+                            image: Id(
+                                23,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        58,
+                    ): IdInfo {
+                        instruction: Label {
+                            result_id: Id(
+                                58,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        60,
+                    ): IdInfo {
+                        instruction: TypeBool {
+                            result_id: Id(
+                                60,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        59,
+                    ): IdInfo {
+                        instruction: Load {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                59,
+                            ),
+                            pointer: Id(
+                                53,
+                            ),
+                            memory_access: None,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        108,
+                    ): IdInfo {
+                        instruction: TypeVector {
+                            result_id: Id(
+                                108,
+                            ),
+                            component_type: Id(
+                                6,
+                            ),
+                            component_count: 3,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        101,
+                    ): IdInfo {
+                        instruction: Constant {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                101,
+                            ),
+                            value: [
+                                1000593162,
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        80,
+                    ): IdInfo {
+                        instruction: Load {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                80,
+                            ),
+                            pointer: Id(
+                                79,
+                            ),
+                            memory_access: None,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        66,
+                    ): IdInfo {
+                        instruction: AccessChain {
+                            result_type_id: Id(
+                                52,
+                            ),
+                            result_id: Id(
+                                66,
+                            ),
+                            base: Id(
+                                50,
+                            ),
+                            indexes: [
+                                Id(
+                                    63,
+                                ),
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        1,
+                    ): IdInfo {
+                        instruction: ExtInstImport {
+                            result_id: Id(
+                                1,
+                            ),
+                            name: "GLSL.std.450",
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        20,
+                    ): IdInfo {
+                        instruction: FDiv {
+                            result_type_id: Id(
+                                7,
+                            ),
+                            result_id: Id(
+                                20,
+                            ),
+                            operand1: Id(
+                                11,
+                            ),
+                            operand2: Id(
+                                19,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        73,
+                    ): IdInfo {
+                        instruction: Load {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                73,
+                            ),
+                            pointer: Id(
+                                72,
+                            ),
+                            memory_access: None,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        41,
+                    ): IdInfo {
+                        instruction: FSub {
+                            result_type_id: Id(
+                                7,
+                            ),
+                            result_id: Id(
+                                41,
+                            ),
+                            operand1: Id(
+                                40,
+                            ),
+                            operand2: Id(
+                                11,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        90,
+                    ): IdInfo {
+                        instruction: AccessChain {
+                            result_type_id: Id(
+                                52,
+                            ),
+                            result_id: Id(
+                                90,
+                            ),
+                            base: Id(
+                                44,
+                            ),
+                            indexes: [
+                                Id(
+                                    69,
+                                ),
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        57,
+                    ): IdInfo {
+                        instruction: Label {
+                            result_id: Id(
+                                57,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        12,
+                    ): IdInfo {
+                        instruction: TypeImage {
+                            result_id: Id(
+                                12,
+                            ),
+                            sampled_type: Id(
+                                6,
+                            ),
+                            dim: Dim2D,
+                            depth: 0,
+                            arrayed: 0,
+                            ms: 0,
+                            sampled: 2,
+                            image_format: Unknown,
+                            access_qualifier: None,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        48,
+                    ): IdInfo {
+                        instruction: ConstantComposite {
+                            result_type_id: Id(
+                                7,
+                            ),
+                            result_id: Id(
+                                48,
+                            ),
+                            constituents: [
+                                Id(
+                                    46,
+                                ),
+                                Id(
+                                    47,
+                                ),
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        14,
+                    ): IdInfo {
+                        instruction: Variable {
+                            result_type_id: Id(
+                                13,
+                            ),
+                            result_id: Id(
+                                14,
+                            ),
+                            storage_class: UniformConstant,
+                            initializer: None,
+                        },
+                        names: [
+                            Name {
+                                target: Id(
+                                    14,
+                                ),
+                                name: "img",
+                            },
+                        ],
+                        decorations: [
+                            Decorate {
+                                target: Id(
+                                    14,
+                                ),
+                                decoration: DescriptorSet {
+                                    descriptor_set: 0,
+                                },
+                            },
+                            Decorate {
+                                target: Id(
+                                    14,
+                                ),
+                                decoration: Binding {
+                                    binding_point: 0,
+                                },
+                            },
+                            Decorate {
+                                target: Id(
+                                    14,
+                                ),
+                                decoration: NonReadable,
+                            },
+                        ],
+                        members: [],
+                    },
+                    Id(
+                        68,
+                    ): IdInfo {
+                        instruction: FMul {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                68,
+                            ),
+                            operand1: Id(
+                                65,
+                            ),
+                            operand2: Id(
+                                67,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        50,
+                    ): IdInfo {
+                        instruction: Variable {
+                            result_type_id: Id(
+                                8,
+                            ),
+                            result_id: Id(
+                                50,
+                            ),
+                            storage_class: Function,
+                            initializer: None,
+                        },
+                        names: [
+                            Name {
+                                target: Id(
+                                    50,
+                                ),
+                                name: "z",
+                            },
+                        ],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        105,
+                    ): IdInfo {
+                        instruction: TypePointer {
+                            result_id: Id(
+                                105,
+                            ),
+                            storage_class: Function,
+                            ty: Id(
+                                104,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        87,
+                    ): IdInfo {
+                        instruction: Load {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                87,
+                            ),
+                            pointer: Id(
+                                86,
+                            ),
+                            memory_access: None,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        62,
+                    ): IdInfo {
+                        instruction: TypeInt {
+                            result_id: Id(
+                                62,
+                            ),
+                            width: 32,
+                            signedness: 0,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        72,
+                    ): IdInfo {
+                        instruction: AccessChain {
+                            result_type_id: Id(
+                                52,
+                            ),
+                            result_id: Id(
+                                72,
+                            ),
+                            base: Id(
+                                50,
+                            ),
+                            indexes: [
+                                Id(
+                                    69,
+                                ),
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        46,
+                    ): IdInfo {
+                        instruction: Constant {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                46,
+                            ),
+                            value: [
+                                1065353216,
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        56,
+                    ): IdInfo {
+                        instruction: Label {
+                            result_id: Id(
+                                56,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        34,
+                    ): IdInfo {
+                        instruction: Variable {
+                            result_type_id: Id(
+                                13,
+                            ),
+                            result_id: Id(
+                                34,
+                            ),
+                            storage_class: UniformConstant,
+                            initializer: None,
+                        },
+                        names: [
+                            Name {
+                                target: Id(
+                                    34,
+                                ),
+                                name: "img3",
+                            },
+                        ],
+                        decorations: [
+                            Decorate {
+                                target: Id(
+                                    34,
+                                ),
+                                decoration: DescriptorSet {
+                                    descriptor_set: 0,
+                                },
+                            },
+                            Decorate {
+                                target: Id(
+                                    34,
+                                ),
+                                decoration: Binding {
+                                    binding_point: 3,
+                                },
+                            },
+                            Decorate {
+                                target: Id(
+                                    34,
+                                ),
+                                decoration: NonReadable,
+                            },
+                        ],
+                        members: [],
+                    },
+                    Id(
+                        15,
+                    ): IdInfo {
+                        instruction: Load {
+                            result_type_id: Id(
+                                12,
+                            ),
+                            result_id: Id(
+                                15,
+                            ),
+                            pointer: Id(
+                                14,
+                            ),
+                            memory_access: None,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        61,
+                    ): IdInfo {
+                        instruction: FOrdLessThan {
+                            result_type_id: Id(
+                                60,
+                            ),
+                            result_id: Id(
+                                61,
+                            ),
+                            operand1: Id(
+                                59,
+                            ),
+                            operand2: Id(
+                                46,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        102,
+                    ): IdInfo {
+                        instruction: Load {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                102,
+                            ),
+                            pointer: Id(
+                                53,
+                            ),
+                            memory_access: None,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        103,
+                    ): IdInfo {
+                        instruction: FAdd {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                103,
+                            ),
+                            operand1: Id(
+                                102,
+                            ),
+                            operand2: Id(
+                                101,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        17,
+                    ): IdInfo {
+                        instruction: TypeVector {
+                            result_id: Id(
+                                17,
+                            ),
+                            component_type: Id(
+                                16,
+                            ),
+                            component_count: 2,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        74,
+                    ): IdInfo {
+                        instruction: FMul {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                74,
+                            ),
+                            operand1: Id(
+                                71,
+                            ),
+                            operand2: Id(
+                                73,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        107,
+                    ): IdInfo {
+                        instruction: Load {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                107,
+                            ),
+                            pointer: Id(
+                                53,
+                            ),
+                            memory_access: None,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        27,
+                    ): IdInfo {
+                        instruction: Variable {
+                            result_type_id: Id(
+                                8,
+                            ),
+                            result_id: Id(
+                                27,
+                            ),
+                            storage_class: Function,
+                            initializer: None,
+                        },
+                        names: [
+                            Name {
+                                target: Id(
+                                    27,
+                                ),
+                                name: "norm_coordinates2",
+                            },
+                        ],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        39,
+                    ): IdInfo {
+                        instruction: Variable {
+                            result_type_id: Id(
+                                8,
+                            ),
+                            result_id: Id(
+                                39,
+                            ),
+                            storage_class: Function,
+                            initializer: None,
+                        },
+                        names: [
+                            Name {
+                                target: Id(
+                                    39,
+                                ),
+                                name: "c_pre",
+                            },
+                        ],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        2,
+                    ): IdInfo {
+                        instruction: TypeVoid {
+                            result_id: Id(
+                                2,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        86,
+                    ): IdInfo {
+                        instruction: AccessChain {
+                            result_type_id: Id(
+                                52,
+                            ),
+                            result_id: Id(
+                                86,
+                            ),
+                            base: Id(
+                                50,
+                            ),
+                            indexes: [
+                                Id(
+                                    69,
+                                ),
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        6,
+                    ): IdInfo {
+                        instruction: TypeFloat {
+                            result_id: Id(
+                                6,
+                            ),
+                            width: 32,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        63,
+                    ): IdInfo {
+                        instruction: Constant {
+                            result_type_id: Id(
+                                62,
+                            ),
+                            result_id: Id(
+                                63,
+                            ),
+                            value: [
+                                0,
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        13,
+                    ): IdInfo {
+                        instruction: TypePointer {
+                            result_id: Id(
+                                13,
+                            ),
+                            storage_class: UniformConstant,
+                            ty: Id(
+                                12,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        30,
+                    ): IdInfo {
+                        instruction: ImageQuerySize {
+                            result_type_id: Id(
+                                17,
+                            ),
+                            result_id: Id(
+                                30,
+                            ),
+                            image: Id(
+                                29,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        54,
+                    ): IdInfo {
+                        instruction: Label {
+                            result_id: Id(
+                                54,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        45,
+                    ): IdInfo {
+                        instruction: Load {
+                            result_type_id: Id(
+                                7,
+                            ),
+                            result_id: Id(
+                                45,
+                            ),
+                            pointer: Id(
+                                39,
+                            ),
+                            memory_access: None,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        55,
+                    ): IdInfo {
+                        instruction: Label {
+                            result_id: Id(
+                                55,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        44,
+                    ): IdInfo {
+                        instruction: Variable {
+                            result_type_id: Id(
+                                8,
+                            ),
+                            result_id: Id(
+                                44,
+                            ),
+                            storage_class: Function,
+                            initializer: None,
+                        },
+                        names: [
+                            Name {
+                                target: Id(
+                                    44,
+                                ),
+                                name: "c",
+                            },
+                        ],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        94,
+                    ): IdInfo {
+                        instruction: Load {
+                            result_type_id: Id(
+                                7,
+                            ),
+                            result_id: Id(
+                                94,
+                            ),
+                            pointer: Id(
+                                50,
+                            ),
+                            memory_access: None,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        36,
+                    ): IdInfo {
+                        instruction: ImageQuerySize {
+                            result_type_id: Id(
+                                17,
+                            ),
+                            result_id: Id(
+                                36,
+                            ),
+                            image: Id(
+                                35,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        106,
+                    ): IdInfo {
+                        instruction: Variable {
+                            result_type_id: Id(
+                                105,
+                            ),
+                            result_id: Id(
+                                106,
+                            ),
+                            storage_class: Function,
+                            initializer: None,
+                        },
+                        names: [
+                            Name {
+                                target: Id(
+                                    106,
+                                ),
+                                name: "to_write",
+                            },
+                        ],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        95,
+                    ): IdInfo {
+                        instruction: ExtInst {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                95,
+                            ),
+                            set: Id(
+                                1,
+                            ),
+                            instruction: 66,
+                            operands: [
+                                Id(
+                                    94,
+                                ),
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        49,
+                    ): IdInfo {
+                        instruction: FSub {
+                            result_type_id: Id(
+                                7,
+                            ),
+                            result_id: Id(
+                                49,
+                            ),
+                            operand1: Id(
+                                45,
+                            ),
+                            operand2: Id(
+                                48,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        35,
+                    ): IdInfo {
+                        instruction: Load {
+                            result_type_id: Id(
+                                12,
+                            ),
+                            result_id: Id(
+                                35,
+                            ),
+                            pointer: Id(
+                                34,
+                            ),
+                            memory_access: None,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        115,
+                    ): IdInfo {
+                        instruction: TypePointer {
+                            result_id: Id(
+                                115,
+                            ),
+                            storage_class: PushConstant,
+                            ty: Id(
+                                114,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        31,
+                    ): IdInfo {
+                        instruction: ConvertSToF {
+                            result_type_id: Id(
+                                7,
+                            ),
+                            result_id: Id(
+                                31,
+                            ),
+                            signed_value: Id(
+                                30,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        78,
+                    ): IdInfo {
+                        instruction: FAdd {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                78,
+                            ),
+                            operand1: Id(
+                                75,
+                            ),
+                            operand2: Id(
+                                77,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        16,
+                    ): IdInfo {
+                        instruction: TypeInt {
+                            result_id: Id(
+                                16,
+                            ),
+                            width: 32,
+                            signedness: 1,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        18,
+                    ): IdInfo {
+                        instruction: ImageQuerySize {
+                            result_type_id: Id(
+                                17,
+                            ),
+                            result_id: Id(
+                                18,
+                            ),
+                            image: Id(
+                                15,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        113,
+                    ): IdInfo {
+                        instruction: CompositeConstruct {
+                            result_type_id: Id(
+                                104,
+                            ),
+                            result_id: Id(
+                                113,
+                            ),
+                            constituents: [
+                                Id(
+                                    110,
+                                ),
+                                Id(
+                                    111,
+                                ),
+                                Id(
+                                    112,
+                                ),
+                                Id(
+                                    46,
+                                ),
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        116,
+                    ): IdInfo {
+                        instruction: Variable {
+                            result_type_id: Id(
+                                115,
+                            ),
+                            result_id: Id(
+                                116,
+                            ),
+                            storage_class: PushConstant,
+                            initializer: None,
+                        },
+                        names: [
+                            Name {
+                                target: Id(
+                                    116,
+                                ),
+                                name: "camera",
+                            },
+                        ],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        11,
+                    ): IdInfo {
+                        instruction: ConstantComposite {
+                            result_type_id: Id(
+                                7,
+                            ),
+                            result_id: Id(
+                                11,
+                            ),
+                            constituents: [
+                                Id(
+                                    10,
+                                ),
+                                Id(
+                                    10,
+                                ),
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        88,
+                    ): IdInfo {
+                        instruction: FMul {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                88,
+                            ),
+                            operand1: Id(
+                                85,
+                            ),
+                            operand2: Id(
+                                87,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        77,
+                    ): IdInfo {
+                        instruction: Load {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                77,
+                            ),
+                            pointer: Id(
+                                76,
+                            ),
+                            memory_access: None,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        4,
+                    ): IdInfo {
+                        instruction: Function {
+                            result_type_id: Id(
+                                2,
+                            ),
+                            result_id: Id(
+                                4,
+                            ),
+                            function_control: FunctionControl {
+                                inline: false,
+                                dont_inline: false,
+                                pure: false,
+                                constant: false,
+                                opt_none_intel: false,
+                            },
+                            function_type: Id(
+                                3,
+                            ),
+                        },
+                        names: [
+                            Name {
+                                target: Id(
+                                    4,
+                                ),
+                                name: "main",
+                            },
+                        ],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        81,
+                    ): IdInfo {
+                        instruction: AccessChain {
+                            result_type_id: Id(
+                                52,
+                            ),
+                            result_id: Id(
+                                81,
+                            ),
+                            base: Id(
+                                50,
+                            ),
+                            indexes: [
+                                Id(
+                                    63,
+                                ),
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        43,
+                    ): IdInfo {
+                        instruction: VectorTimesScalar {
+                            result_type_id: Id(
+                                7,
+                            ),
+                            result_id: Id(
+                                43,
+                            ),
+                            vector: Id(
+                                41,
+                            ),
+                            scalar: Id(
+                                42,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        22,
+                    ): IdInfo {
+                        instruction: Variable {
+                            result_type_id: Id(
+                                13,
+                            ),
+                            result_id: Id(
+                                22,
+                            ),
+                            storage_class: UniformConstant,
+                            initializer: None,
+                        },
+                        names: [
+                            Name {
+                                target: Id(
+                                    22,
+                                ),
+                                name: "img1",
+                            },
+                        ],
+                        decorations: [
+                            Decorate {
+                                target: Id(
+                                    22,
+                                ),
+                                decoration: DescriptorSet {
+                                    descriptor_set: 0,
+                                },
+                            },
+                            Decorate {
+                                target: Id(
+                                    22,
+                                ),
+                                decoration: Binding {
+                                    binding_point: 1,
+                                },
+                            },
+                            Decorate {
+                                target: Id(
+                                    22,
+                                ),
+                                decoration: NonReadable,
+                            },
+                        ],
+                        members: [],
+                    },
+                    Id(
+                        114,
+                    ): IdInfo {
+                        instruction: TypeStruct {
+                            result_id: Id(
+                                114,
+                            ),
+                            member_types: [
+                                Id(
+                                    108,
+                                ),
+                                Id(
+                                    108,
+                                ),
+                                Id(
+                                    108,
+                                ),
+                                Id(
+                                    6,
+                                ),
+                                Id(
+                                    6,
+                                ),
+                                Id(
+                                    6,
+                                ),
+                                Id(
+                                    7,
+                                ),
+                            ],
+                        },
+                        names: [
+                            Name {
+                                target: Id(
+                                    114,
+                                ),
+                                name: "Camera",
+                            },
+                        ],
+                        decorations: [
+                            Decorate {
+                                target: Id(
+                                    114,
+                                ),
+                                decoration: Block,
+                            },
+                        ],
+                        members: [
+                            StructMemberInfo {
+                                names: [
+                                    MemberName {
+                                        ty: Id(
+                                            114,
+                                        ),
+                                        member: 0,
+                                        name: "position",
+                                    },
+                                ],
+                                decorations: [
+                                    MemberDecorate {
+                                        structure_type: Id(
+                                            114,
+                                        ),
+                                        member: 0,
+                                        decoration: Offset {
+                                            byte_offset: 0,
+                                        },
+                                    },
+                                ],
+                            },
+                            StructMemberInfo {
+                                names: [
+                                    MemberName {
+                                        ty: Id(
+                                            114,
+                                        ),
+                                        member: 1,
+                                        name: "up",
+                                    },
+                                ],
+                                decorations: [
+                                    MemberDecorate {
+                                        structure_type: Id(
+                                            114,
+                                        ),
+                                        member: 1,
+                                        decoration: Offset {
+                                            byte_offset: 16,
+                                        },
+                                    },
+                                ],
+                            },
+                            StructMemberInfo {
+                                names: [
+                                    MemberName {
+                                        ty: Id(
+                                            114,
+                                        ),
+                                        member: 2,
+                                        name: "look_at",
+                                    },
+                                ],
+                                decorations: [
+                                    MemberDecorate {
+                                        structure_type: Id(
+                                            114,
+                                        ),
+                                        member: 2,
+                                        decoration: Offset {
+                                            byte_offset: 32,
+                                        },
+                                    },
+                                ],
+                            },
+                            StructMemberInfo {
+                                names: [
+                                    MemberName {
+                                        ty: Id(
+                                            114,
+                                        ),
+                                        member: 3,
+                                        name: "t_near",
+                                    },
+                                ],
+                                decorations: [
+                                    MemberDecorate {
+                                        structure_type: Id(
+                                            114,
+                                        ),
+                                        member: 3,
+                                        decoration: Offset {
+                                            byte_offset: 44,
+                                        },
+                                    },
+                                ],
+                            },
+                            StructMemberInfo {
+                                names: [
+                                    MemberName {
+                                        ty: Id(
+                                            114,
+                                        ),
+                                        member: 4,
+                                        name: "t_far",
+                                    },
+                                ],
+                                decorations: [
+                                    MemberDecorate {
+                                        structure_type: Id(
+                                            114,
+                                        ),
+                                        member: 4,
+                                        decoration: Offset {
+                                            byte_offset: 48,
+                                        },
+                                    },
+                                ],
+                            },
+                            StructMemberInfo {
+                                names: [
+                                    MemberName {
+                                        ty: Id(
+                                            114,
+                                        ),
+                                        member: 5,
+                                        name: "vertical_fov",
+                                    },
+                                ],
+                                decorations: [
+                                    MemberDecorate {
+                                        structure_type: Id(
+                                            114,
+                                        ),
+                                        member: 5,
+                                        decoration: Offset {
+                                            byte_offset: 52,
+                                        },
+                                    },
+                                ],
+                            },
+                            StructMemberInfo {
+                                names: [
+                                    MemberName {
+                                        ty: Id(
+                                            114,
+                                        ),
+                                        member: 6,
+                                        name: "size",
+                                    },
+                                ],
+                                decorations: [
+                                    MemberDecorate {
+                                        structure_type: Id(
+                                            114,
+                                        ),
+                                        member: 6,
+                                        decoration: Offset {
+                                            byte_offset: 56,
+                                        },
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                    Id(
+                        32,
+                    ): IdInfo {
+                        instruction: FDiv {
+                            result_type_id: Id(
+                                7,
+                            ),
+                            result_id: Id(
+                                32,
+                            ),
+                            operand1: Id(
+                                11,
+                            ),
+                            operand2: Id(
+                                31,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        67,
+                    ): IdInfo {
+                        instruction: Load {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                67,
+                            ),
+                            pointer: Id(
+                                66,
+                            ),
+                            memory_access: None,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        7,
+                    ): IdInfo {
+                        instruction: TypeVector {
+                            result_id: Id(
+                                7,
+                            ),
+                            component_type: Id(
+                                6,
+                            ),
+                            component_count: 2,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        96,
+                    ): IdInfo {
+                        instruction: Constant {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                96,
+                            ),
+                            value: [
+                                1082130432,
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        37,
+                    ): IdInfo {
+                        instruction: ConvertSToF {
+                            result_type_id: Id(
+                                7,
+                            ),
+                            result_id: Id(
+                                37,
+                            ),
+                            signed_value: Id(
+                                36,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        51,
+                    ): IdInfo {
+                        instruction: ConstantComposite {
+                            result_type_id: Id(
+                                7,
+                            ),
+                            result_id: Id(
+                                51,
+                            ),
+                            constituents: [
+                                Id(
+                                    47,
+                                ),
+                                Id(
+                                    47,
+                                ),
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        23,
+                    ): IdInfo {
+                        instruction: Load {
+                            result_type_id: Id(
+                                12,
+                            ),
+                            result_id: Id(
+                                23,
+                            ),
+                            pointer: Id(
+                                22,
+                            ),
+                            memory_access: None,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        97,
+                    ): IdInfo {
+                        instruction: FOrdGreaterThan {
+                            result_type_id: Id(
+                                60,
+                            ),
+                            result_id: Id(
+                                97,
+                            ),
+                            operand1: Id(
+                                95,
+                            ),
+                            operand2: Id(
+                                96,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        75,
+                    ): IdInfo {
+                        instruction: FSub {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                75,
+                            ),
+                            operand1: Id(
+                                68,
+                            ),
+                            operand2: Id(
+                                74,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        85,
+                    ): IdInfo {
+                        instruction: Load {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                85,
+                            ),
+                            pointer: Id(
+                                84,
+                            ),
+                            memory_access: None,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        19,
+                    ): IdInfo {
+                        instruction: ConvertSToF {
+                            result_type_id: Id(
+                                7,
+                            ),
+                            result_id: Id(
+                                19,
+                            ),
+                            signed_value: Id(
+                                18,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        71,
+                    ): IdInfo {
+                        instruction: Load {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                71,
+                            ),
+                            pointer: Id(
+                                70,
+                            ),
+                            memory_access: None,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        25,
+                    ): IdInfo {
+                        instruction: ConvertSToF {
+                            result_type_id: Id(
+                                7,
+                            ),
+                            result_id: Id(
+                                25,
+                            ),
+                            signed_value: Id(
+                                24,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        98,
+                    ): IdInfo {
+                        instruction: Label {
+                            result_id: Id(
+                                98,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        112,
+                    ): IdInfo {
+                        instruction: CompositeExtract {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                112,
+                            ),
+                            composite: Id(
+                                109,
+                            ),
+                            indexes: [
+                                2,
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        38,
+                    ): IdInfo {
+                        instruction: FDiv {
+                            result_type_id: Id(
+                                7,
+                            ),
+                            result_id: Id(
+                                38,
+                            ),
+                            operand1: Id(
+                                11,
+                            ),
+                            operand2: Id(
+                                37,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        99,
+                    ): IdInfo {
+                        instruction: Label {
+                            result_id: Id(
+                                99,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        26,
+                    ): IdInfo {
+                        instruction: FDiv {
+                            result_type_id: Id(
+                                7,
+                            ),
+                            result_id: Id(
+                                26,
+                            ),
+                            operand1: Id(
+                                11,
+                            ),
+                            operand2: Id(
+                                25,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        84,
+                    ): IdInfo {
+                        instruction: AccessChain {
+                            result_type_id: Id(
+                                52,
+                            ),
+                            result_id: Id(
+                                84,
+                            ),
+                            base: Id(
+                                50,
+                            ),
+                            indexes: [
+                                Id(
+                                    63,
+                                ),
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        82,
+                    ): IdInfo {
+                        instruction: Load {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                82,
+                            ),
+                            pointer: Id(
+                                81,
+                            ),
+                            memory_access: None,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        21,
+                    ): IdInfo {
+                        instruction: Variable {
+                            result_type_id: Id(
+                                8,
+                            ),
+                            result_id: Id(
+                                21,
+                            ),
+                            storage_class: Function,
+                            initializer: None,
+                        },
+                        names: [
+                            Name {
+                                target: Id(
+                                    21,
+                                ),
+                                name: "norm_coordinates1",
+                            },
+                        ],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        52,
+                    ): IdInfo {
+                        instruction: TypePointer {
+                            result_id: Id(
+                                52,
+                            ),
+                            storage_class: Function,
+                            ty: Id(
+                                6,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        28,
+                    ): IdInfo {
+                        instruction: Variable {
+                            result_type_id: Id(
+                                13,
+                            ),
+                            result_id: Id(
+                                28,
+                            ),
+                            storage_class: UniformConstant,
+                            initializer: None,
+                        },
+                        names: [
+                            Name {
+                                target: Id(
+                                    28,
+                                ),
+                                name: "img2",
+                            },
+                        ],
+                        decorations: [
+                            Decorate {
+                                target: Id(
+                                    28,
+                                ),
+                                decoration: DescriptorSet {
+                                    descriptor_set: 0,
+                                },
+                            },
+                            Decorate {
+                                target: Id(
+                                    28,
+                                ),
+                                decoration: Binding {
+                                    binding_point: 2,
+                                },
+                            },
+                            Decorate {
+                                target: Id(
+                                    28,
+                                ),
+                                decoration: NonReadable,
+                            },
+                        ],
+                        members: [],
+                    },
+                    Id(
+                        64,
+                    ): IdInfo {
+                        instruction: AccessChain {
+                            result_type_id: Id(
+                                52,
+                            ),
+                            result_id: Id(
+                                64,
+                            ),
+                            base: Id(
+                                50,
+                            ),
+                            indexes: [
+                                Id(
+                                    63,
+                                ),
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        83,
+                    ): IdInfo {
+                        instruction: FMul {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                83,
+                            ),
+                            operand1: Id(
+                                80,
+                            ),
+                            operand2: Id(
+                                82,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        53,
+                    ): IdInfo {
+                        instruction: Variable {
+                            result_type_id: Id(
+                                52,
+                            ),
+                            result_id: Id(
+                                53,
+                            ),
+                            storage_class: Function,
+                            initializer: None,
+                        },
+                        names: [
+                            Name {
+                                target: Id(
+                                    53,
+                                ),
+                                name: "i",
+                            },
+                        ],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        91,
+                    ): IdInfo {
+                        instruction: Load {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                91,
+                            ),
+                            pointer: Id(
+                                90,
+                            ),
+                            memory_access: None,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        10,
+                    ): IdInfo {
+                        instruction: Constant {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                10,
+                            ),
+                            value: [
+                                1056964608,
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        111,
+                    ): IdInfo {
+                        instruction: CompositeExtract {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                111,
+                            ),
+                            composite: Id(
+                                109,
+                            ),
+                            indexes: [
+                                1,
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        5,
+                    ): IdInfo {
+                        instruction: Label {
+                            result_id: Id(
+                                5,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        29,
+                    ): IdInfo {
+                        instruction: Load {
+                            result_type_id: Id(
+                                12,
+                            ),
+                            result_id: Id(
+                                29,
+                            ),
+                            pointer: Id(
+                                28,
+                            ),
+                            memory_access: None,
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        79,
+                    ): IdInfo {
+                        instruction: AccessChain {
+                            result_type_id: Id(
+                                52,
+                            ),
+                            result_id: Id(
+                                79,
+                            ),
+                            base: Id(
+                                50,
+                            ),
+                            indexes: [
+                                Id(
+                                    69,
+                                ),
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        76,
+                    ): IdInfo {
+                        instruction: AccessChain {
+                            result_type_id: Id(
+                                52,
+                            ),
+                            result_id: Id(
+                                76,
+                            ),
+                            base: Id(
+                                44,
+                            ),
+                            indexes: [
+                                Id(
+                                    63,
+                                ),
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        93,
+                    ): IdInfo {
+                        instruction: CompositeConstruct {
+                            result_type_id: Id(
+                                7,
+                            ),
+                            result_id: Id(
+                                93,
+                            ),
+                            constituents: [
+                                Id(
+                                    78,
+                                ),
+                                Id(
+                                    92,
+                                ),
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        69,
+                    ): IdInfo {
+                        instruction: Constant {
+                            result_type_id: Id(
+                                62,
+                            ),
+                            result_id: Id(
+                                69,
+                            ),
+                            value: [
+                                1,
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        3,
+                    ): IdInfo {
+                        instruction: TypeFunction {
+                            result_id: Id(
+                                3,
+                            ),
+                            return_type: Id(
+                                2,
+                            ),
+                            parameter_types: [],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        8,
+                    ): IdInfo {
+                        instruction: TypePointer {
+                            result_id: Id(
+                                8,
+                            ),
+                            storage_class: Function,
+                            ty: Id(
+                                7,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        33,
+                    ): IdInfo {
+                        instruction: Variable {
+                            result_type_id: Id(
+                                8,
+                            ),
+                            result_id: Id(
+                                33,
+                            ),
+                            storage_class: Function,
+                            initializer: None,
+                        },
+                        names: [
+                            Name {
+                                target: Id(
+                                    33,
+                                ),
+                                name: "norm_coordinates3",
+                            },
+                        ],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        89,
+                    ): IdInfo {
+                        instruction: FAdd {
+                            result_type_id: Id(
+                                6,
+                            ),
+                            result_id: Id(
+                                89,
+                            ),
+                            operand1: Id(
+                                83,
+                            ),
+                            operand2: Id(
+                                88,
+                            ),
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        109,
+                    ): IdInfo {
+                        instruction: CompositeConstruct {
+                            result_type_id: Id(
+                                108,
+                            ),
+                            result_id: Id(
+                                109,
+                            ),
+                            constituents: [
+                                Id(
+                                    107,
+                                ),
+                                Id(
+                                    107,
+                                ),
+                                Id(
+                                    107,
+                                ),
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                    Id(
+                        70,
+                    ): IdInfo {
+                        instruction: AccessChain {
+                            result_type_id: Id(
+                                52,
+                            ),
+                            result_id: Id(
+                                70,
+                            ),
+                            base: Id(
+                                50,
+                            ),
+                            indexes: [
+                                Id(
+                                    69,
+                                ),
+                            ],
+                        },
+                        names: [],
+                        decorations: [],
+                        members: [],
+                    },
+                },
+                instructions_capability: [
+                    Capability {
+                        capability: Shader,
+                    },
+                    Capability {
+                        capability: ImageQuery,
+                    },
+                ],
+                instructions_extension: [],
+                instructions_ext_inst_import: [
+                    ExtInstImport {
+                        result_id: Id(
+                            1,
+                        ),
+                        name: "GLSL.std.450",
+                    },
+                ],
+                instruction_memory_model: MemoryModel {
+                    addressing_model: Logical,
+                    memory_model: GLSL450,
+                },
+                instructions_entry_point: [
+                    EntryPoint {
+                        execution_model: GLCompute,
+                        entry_point: Id(
+                            4,
+                        ),
+                        name: "main",
+                        interface: [],
+                    },
+                ],
+                instructions_execution_mode: [
+                    ExecutionMode {
+                        entry_point: Id(
+                            4,
+                        ),
+                        mode: LocalSize {
+                            x_size: 1,
+                            y_size: 1,
+                            z_size: 1,
+                        },
+                    },
+                ],
+                instructions_name: [
+                    Name {
+                        target: Id(
+                            4,
+                        ),
+                        name: "main",
+                    },
+                    Name {
+                        target: Id(
+                            9,
+                        ),
+                        name: "norm_coordinates",
+                    },
+                    Name {
+                        target: Id(
+                            14,
+                        ),
+                        name: "img",
+                    },
+                    Name {
+                        target: Id(
+                            21,
+                        ),
+                        name: "norm_coordinates1",
+                    },
+                    Name {
+                        target: Id(
+                            22,
+                        ),
+                        name: "img1",
+                    },
+                    Name {
+                        target: Id(
+                            27,
+                        ),
+                        name: "norm_coordinates2",
+                    },
+                    Name {
+                        target: Id(
+                            28,
+                        ),
+                        name: "img2",
+                    },
+                    Name {
+                        target: Id(
+                            33,
+                        ),
+                        name: "norm_coordinates3",
+                    },
+                    Name {
+                        target: Id(
+                            34,
+                        ),
+                        name: "img3",
+                    },
+                    Name {
+                        target: Id(
+                            39,
+                        ),
+                        name: "c_pre",
+                    },
+                    Name {
+                        target: Id(
+                            44,
+                        ),
+                        name: "c",
+                    },
+                    Name {
+                        target: Id(
+                            50,
+                        ),
+                        name: "z",
+                    },
+                    Name {
+                        target: Id(
+                            53,
+                        ),
+                        name: "i",
+                    },
+                    Name {
+                        target: Id(
+                            106,
+                        ),
+                        name: "to_write",
+                    },
+                    Name {
+                        target: Id(
+                            114,
+                        ),
+                        name: "Camera",
+                    },
+                    MemberName {
+                        ty: Id(
+                            114,
+                        ),
+                        member: 0,
+                        name: "position",
+                    },
+                    MemberName {
+                        ty: Id(
+                            114,
+                        ),
+                        member: 1,
+                        name: "up",
+                    },
+                    MemberName {
+                        ty: Id(
+                            114,
+                        ),
+                        member: 2,
+                        name: "look_at",
+                    },
+                    MemberName {
+                        ty: Id(
+                            114,
+                        ),
+                        member: 3,
+                        name: "t_near",
+                    },
+                    MemberName {
+                        ty: Id(
+                            114,
+                        ),
+                        member: 4,
+                        name: "t_far",
+                    },
+                    MemberName {
+                        ty: Id(
+                            114,
+                        ),
+                        member: 5,
+                        name: "vertical_fov",
+                    },
+                    MemberName {
+                        ty: Id(
+                            114,
+                        ),
+                        member: 6,
+                        name: "size",
+                    },
+                    Name {
+                        target: Id(
+                            116,
+                        ),
+                        name: "camera",
+                    },
+                ],
+                instructions_decoration: [
+                    Decorate {
+                        target: Id(
+                            14,
+                        ),
+                        decoration: DescriptorSet {
+                            descriptor_set: 0,
+                        },
+                    },
+                    Decorate {
+                        target: Id(
+                            14,
+                        ),
+                        decoration: Binding {
+                            binding_point: 0,
+                        },
+                    },
+                    Decorate {
+                        target: Id(
+                            14,
+                        ),
+                        decoration: NonReadable,
+                    },
+                    Decorate {
+                        target: Id(
+                            22,
+                        ),
+                        decoration: DescriptorSet {
+                            descriptor_set: 0,
+                        },
+                    },
+                    Decorate {
+                        target: Id(
+                            22,
+                        ),
+                        decoration: Binding {
+                            binding_point: 1,
+                        },
+                    },
+                    Decorate {
+                        target: Id(
+                            22,
+                        ),
+                        decoration: NonReadable,
+                    },
+                    Decorate {
+                        target: Id(
+                            28,
+                        ),
+                        decoration: DescriptorSet {
+                            descriptor_set: 0,
+                        },
+                    },
+                    Decorate {
+                        target: Id(
+                            28,
+                        ),
+                        decoration: Binding {
+                            binding_point: 2,
+                        },
+                    },
+                    Decorate {
+                        target: Id(
+                            28,
+                        ),
+                        decoration: NonReadable,
+                    },
+                    Decorate {
+                        target: Id(
+                            34,
+                        ),
+                        decoration: DescriptorSet {
+                            descriptor_set: 0,
+                        },
+                    },
+                    Decorate {
+                        target: Id(
+                            34,
+                        ),
+                        decoration: Binding {
+                            binding_point: 3,
+                        },
+                    },
+                    Decorate {
+                        target: Id(
+                            34,
+                        ),
+                        decoration: NonReadable,
+                    },
+                    MemberDecorate {
+                        structure_type: Id(
+                            114,
+                        ),
+                        member: 0,
+                        decoration: Offset {
+                            byte_offset: 0,
+                        },
+                    },
+                    MemberDecorate {
+                        structure_type: Id(
+                            114,
+                        ),
+                        member: 1,
+                        decoration: Offset {
+                            byte_offset: 16,
+                        },
+                    },
+                    MemberDecorate {
+                        structure_type: Id(
+                            114,
+                        ),
+                        member: 2,
+                        decoration: Offset {
+                            byte_offset: 32,
+                        },
+                    },
+                    MemberDecorate {
+                        structure_type: Id(
+                            114,
+                        ),
+                        member: 3,
+                        decoration: Offset {
+                            byte_offset: 44,
+                        },
+                    },
+                    MemberDecorate {
+                        structure_type: Id(
+                            114,
+                        ),
+                        member: 4,
+                        decoration: Offset {
+                            byte_offset: 48,
+                        },
+                    },
+                    MemberDecorate {
+                        structure_type: Id(
+                            114,
+                        ),
+                        member: 5,
+                        decoration: Offset {
+                            byte_offset: 52,
+                        },
+                    },
+                    MemberDecorate {
+                        structure_type: Id(
+                            114,
+                        ),
+                        member: 6,
+                        decoration: Offset {
+                            byte_offset: 56,
+                        },
+                    },
+                    Decorate {
+                        target: Id(
+                            114,
+                        ),
+                        decoration: Block,
+                    },
+                ],
+                instructions_global: [
+                    TypeVoid {
+                        result_id: Id(
+                            2,
+                        ),
+                    },
+                    TypeFunction {
+                        result_id: Id(
+                            3,
+                        ),
+                        return_type: Id(
+                            2,
+                        ),
+                        parameter_types: [],
+                    },
+                    TypeFloat {
+                        result_id: Id(
+                            6,
+                        ),
+                        width: 32,
+                    },
+                    TypeVector {
+                        result_id: Id(
+                            7,
+                        ),
+                        component_type: Id(
+                            6,
+                        ),
+                        component_count: 2,
+                    },
+                    TypePointer {
+                        result_id: Id(
+                            8,
+                        ),
+                        storage_class: Function,
+                        ty: Id(
+                            7,
+                        ),
+                    },
+                    Constant {
+                        result_type_id: Id(
+                            6,
+                        ),
+                        result_id: Id(
+                            10,
+                        ),
+                        value: [
+                            1056964608,
+                        ],
+                    },
+                    ConstantComposite {
+                        result_type_id: Id(
+                            7,
+                        ),
+                        result_id: Id(
+                            11,
+                        ),
+                        constituents: [
+                            Id(
+                                10,
+                            ),
+                            Id(
+                                10,
+                            ),
+                        ],
+                    },
+                    TypeImage {
+                        result_id: Id(
+                            12,
+                        ),
+                        sampled_type: Id(
+                            6,
+                        ),
+                        dim: Dim2D,
+                        depth: 0,
+                        arrayed: 0,
+                        ms: 0,
+                        sampled: 2,
+                        image_format: Unknown,
+                        access_qualifier: None,
+                    },
+                    TypePointer {
+                        result_id: Id(
+                            13,
+                        ),
+                        storage_class: UniformConstant,
+                        ty: Id(
+                            12,
+                        ),
+                    },
+                    Variable {
+                        result_type_id: Id(
+                            13,
+                        ),
+                        result_id: Id(
+                            14,
+                        ),
+                        storage_class: UniformConstant,
+                        initializer: None,
+                    },
+                    TypeInt {
+                        result_id: Id(
+                            16,
+                        ),
+                        width: 32,
+                        signedness: 1,
+                    },
+                    TypeVector {
+                        result_id: Id(
+                            17,
+                        ),
+                        component_type: Id(
+                            16,
+                        ),
+                        component_count: 2,
+                    },
+                    Variable {
+                        result_type_id: Id(
+                            13,
+                        ),
+                        result_id: Id(
+                            22,
+                        ),
+                        storage_class: UniformConstant,
+                        initializer: None,
+                    },
+                    Variable {
+                        result_type_id: Id(
+                            13,
+                        ),
+                        result_id: Id(
+                            28,
+                        ),
+                        storage_class: UniformConstant,
+                        initializer: None,
+                    },
+                    Variable {
+                        result_type_id: Id(
+                            13,
+                        ),
+                        result_id: Id(
+                            34,
+                        ),
+                        storage_class: UniformConstant,
+                        initializer: None,
+                    },
+                    Constant {
+                        result_type_id: Id(
+                            6,
+                        ),
+                        result_id: Id(
+                            42,
+                        ),
+                        value: [
+                            1073741824,
+                        ],
+                    },
+                    Constant {
+                        result_type_id: Id(
+                            6,
+                        ),
+                        result_id: Id(
+                            46,
+                        ),
+                        value: [
+                            1065353216,
+                        ],
+                    },
+                    Constant {
+                        result_type_id: Id(
+                            6,
+                        ),
+                        result_id: Id(
+                            47,
+                        ),
+                        value: [
+                            0,
+                        ],
+                    },
+                    ConstantComposite {
+                        result_type_id: Id(
+                            7,
+                        ),
+                        result_id: Id(
+                            48,
+                        ),
+                        constituents: [
+                            Id(
+                                46,
+                            ),
+                            Id(
+                                47,
+                            ),
+                        ],
+                    },
+                    ConstantComposite {
+                        result_type_id: Id(
+                            7,
+                        ),
+                        result_id: Id(
+                            51,
+                        ),
+                        constituents: [
+                            Id(
+                                47,
+                            ),
+                            Id(
+                                47,
+                            ),
+                        ],
+                    },
+                    TypePointer {
+                        result_id: Id(
+                            52,
+                        ),
+                        storage_class: Function,
+                        ty: Id(
+                            6,
+                        ),
+                    },
+                    TypeBool {
+                        result_id: Id(
+                            60,
+                        ),
+                    },
+                    TypeInt {
+                        result_id: Id(
+                            62,
+                        ),
+                        width: 32,
+                        signedness: 0,
+                    },
+                    Constant {
+                        result_type_id: Id(
+                            62,
+                        ),
+                        result_id: Id(
+                            63,
+                        ),
+                        value: [
+                            0,
+                        ],
+                    },
+                    Constant {
+                        result_type_id: Id(
+                            62,
+                        ),
+                        result_id: Id(
+                            69,
+                        ),
+                        value: [
+                            1,
+                        ],
+                    },
+                    Constant {
+                        result_type_id: Id(
+                            6,
+                        ),
+                        result_id: Id(
+                            96,
+                        ),
+                        value: [
+                            1082130432,
+                        ],
+                    },
+                    Constant {
+                        result_type_id: Id(
+                            6,
+                        ),
+                        result_id: Id(
+                            101,
+                        ),
+                        value: [
+                            1000593162,
+                        ],
+                    },
+                    TypeVector {
+                        result_id: Id(
+                            104,
+                        ),
+                        component_type: Id(
+                            6,
+                        ),
+                        component_count: 4,
+                    },
+                    TypePointer {
+                        result_id: Id(
+                            105,
+                        ),
+                        storage_class: Function,
+                        ty: Id(
+                            104,
+                        ),
+                    },
+                    TypeVector {
+                        result_id: Id(
+                            108,
+                        ),
+                        component_type: Id(
+                            6,
+                        ),
+                        component_count: 3,
+                    },
+                    TypeStruct {
+                        result_id: Id(
+                            114,
+                        ),
+                        member_types: [
+                            Id(
+                                108,
+                            ),
+                            Id(
+                                108,
+                            ),
+                            Id(
+                                108,
+                            ),
+                            Id(
+                                6,
+                            ),
+                            Id(
+                                6,
+                            ),
+                            Id(
+                                6,
+                            ),
+                            Id(
+                                7,
+                            ),
+                        ],
+                    },
+                    TypePointer {
+                        result_id: Id(
+                            115,
+                        ),
+                        storage_class: PushConstant,
+                        ty: Id(
+                            114,
+                        ),
+                    },
+                    Variable {
+                        result_type_id: Id(
+                            115,
+                        ),
+                        result_id: Id(
+                            116,
+                        ),
+                        storage_class: PushConstant,
+                        initializer: None,
+                    },
+                ],
+                functions: {
+                    Id(
+                        4,
+                    ): FunctionInfo {
+                        instructions: [
+                            Function {
+                                result_type_id: Id(
+                                    2,
+                                ),
+                                result_id: Id(
+                                    4,
+                                ),
+                                function_control: FunctionControl {
+                                    inline: false,
+                                    dont_inline: false,
+                                    pure: false,
+                                    constant: false,
+                                    opt_none_intel: false,
+                                },
+                                function_type: Id(
+                                    3,
+                                ),
+                            },
+                            Label {
+                                result_id: Id(
+                                    5,
+                                ),
+                            },
+                            Variable {
+                                result_type_id: Id(
+                                    8,
+                                ),
+                                result_id: Id(
+                                    9,
+                                ),
+                                storage_class: Function,
+                                initializer: None,
+                            },
+                            Variable {
+                                result_type_id: Id(
+                                    8,
+                                ),
+                                result_id: Id(
+                                    21,
+                                ),
+                                storage_class: Function,
+                                initializer: None,
+                            },
+                            Variable {
+                                result_type_id: Id(
+                                    8,
+                                ),
+                                result_id: Id(
+                                    27,
+                                ),
+                                storage_class: Function,
+                                initializer: None,
+                            },
+                            Variable {
+                                result_type_id: Id(
+                                    8,
+                                ),
+                                result_id: Id(
+                                    33,
+                                ),
+                                storage_class: Function,
+                                initializer: None,
+                            },
+                            Variable {
+                                result_type_id: Id(
+                                    8,
+                                ),
+                                result_id: Id(
+                                    39,
+                                ),
+                                storage_class: Function,
+                                initializer: None,
+                            },
+                            Variable {
+                                result_type_id: Id(
+                                    8,
+                                ),
+                                result_id: Id(
+                                    44,
+                                ),
+                                storage_class: Function,
+                                initializer: None,
+                            },
+                            Variable {
+                                result_type_id: Id(
+                                    8,
+                                ),
+                                result_id: Id(
+                                    50,
+                                ),
+                                storage_class: Function,
+                                initializer: None,
+                            },
+                            Variable {
+                                result_type_id: Id(
+                                    52,
+                                ),
+                                result_id: Id(
+                                    53,
+                                ),
+                                storage_class: Function,
+                                initializer: None,
+                            },
+                            Variable {
+                                result_type_id: Id(
+                                    105,
+                                ),
+                                result_id: Id(
+                                    106,
+                                ),
+                                storage_class: Function,
+                                initializer: None,
+                            },
+                            Load {
+                                result_type_id: Id(
+                                    12,
+                                ),
+                                result_id: Id(
+                                    15,
+                                ),
+                                pointer: Id(
+                                    14,
+                                ),
+                                memory_access: None,
+                            },
+                            ImageQuerySize {
+                                result_type_id: Id(
+                                    17,
+                                ),
+                                result_id: Id(
+                                    18,
+                                ),
+                                image: Id(
+                                    15,
+                                ),
+                            },
+                            ConvertSToF {
+                                result_type_id: Id(
+                                    7,
+                                ),
+                                result_id: Id(
+                                    19,
+                                ),
+                                signed_value: Id(
+                                    18,
+                                ),
+                            },
+                            FDiv {
+                                result_type_id: Id(
+                                    7,
+                                ),
+                                result_id: Id(
+                                    20,
+                                ),
+                                operand1: Id(
+                                    11,
+                                ),
+                                operand2: Id(
+                                    19,
+                                ),
+                            },
+                            Store {
+                                pointer: Id(
+                                    9,
+                                ),
+                                object: Id(
+                                    20,
+                                ),
+                                memory_access: None,
+                            },
+                            Load {
+                                result_type_id: Id(
+                                    12,
+                                ),
+                                result_id: Id(
+                                    23,
+                                ),
+                                pointer: Id(
+                                    22,
+                                ),
+                                memory_access: None,
+                            },
+                            ImageQuerySize {
+                                result_type_id: Id(
+                                    17,
+                                ),
+                                result_id: Id(
+                                    24,
+                                ),
+                                image: Id(
+                                    23,
+                                ),
+                            },
+                            ConvertSToF {
+                                result_type_id: Id(
+                                    7,
+                                ),
+                                result_id: Id(
+                                    25,
+                                ),
+                                signed_value: Id(
+                                    24,
+                                ),
+                            },
+                            FDiv {
+                                result_type_id: Id(
+                                    7,
+                                ),
+                                result_id: Id(
+                                    26,
+                                ),
+                                operand1: Id(
+                                    11,
+                                ),
+                                operand2: Id(
+                                    25,
+                                ),
+                            },
+                            Store {
+                                pointer: Id(
+                                    21,
+                                ),
+                                object: Id(
+                                    26,
+                                ),
+                                memory_access: None,
+                            },
+                            Load {
+                                result_type_id: Id(
+                                    12,
+                                ),
+                                result_id: Id(
+                                    29,
+                                ),
+                                pointer: Id(
+                                    28,
+                                ),
+                                memory_access: None,
+                            },
+                            ImageQuerySize {
+                                result_type_id: Id(
+                                    17,
+                                ),
+                                result_id: Id(
+                                    30,
+                                ),
+                                image: Id(
+                                    29,
+                                ),
+                            },
+                            ConvertSToF {
+                                result_type_id: Id(
+                                    7,
+                                ),
+                                result_id: Id(
+                                    31,
+                                ),
+                                signed_value: Id(
+                                    30,
+                                ),
+                            },
+                            FDiv {
+                                result_type_id: Id(
+                                    7,
+                                ),
+                                result_id: Id(
+                                    32,
+                                ),
+                                operand1: Id(
+                                    11,
+                                ),
+                                operand2: Id(
+                                    31,
+                                ),
+                            },
+                            Store {
+                                pointer: Id(
+                                    27,
+                                ),
+                                object: Id(
+                                    32,
+                                ),
+                                memory_access: None,
+                            },
+                            Load {
+                                result_type_id: Id(
+                                    12,
+                                ),
+                                result_id: Id(
+                                    35,
+                                ),
+                                pointer: Id(
+                                    34,
+                                ),
+                                memory_access: None,
+                            },
+                            ImageQuerySize {
+                                result_type_id: Id(
+                                    17,
+                                ),
+                                result_id: Id(
+                                    36,
+                                ),
+                                image: Id(
+                                    35,
+                                ),
+                            },
+                            ConvertSToF {
+                                result_type_id: Id(
+                                    7,
+                                ),
+                                result_id: Id(
+                                    37,
+                                ),
+                                signed_value: Id(
+                                    36,
+                                ),
+                            },
+                            FDiv {
+                                result_type_id: Id(
+                                    7,
+                                ),
+                                result_id: Id(
+                                    38,
+                                ),
+                                operand1: Id(
+                                    11,
+                                ),
+                                operand2: Id(
+                                    37,
+                                ),
+                            },
+                            Store {
+                                pointer: Id(
+                                    33,
+                                ),
+                                object: Id(
+                                    38,
+                                ),
+                                memory_access: None,
+                            },
+                            Load {
+                                result_type_id: Id(
+                                    7,
+                                ),
+                                result_id: Id(
+                                    40,
+                                ),
+                                pointer: Id(
+                                    9,
+                                ),
+                                memory_access: None,
+                            },
+                            FSub {
+                                result_type_id: Id(
+                                    7,
+                                ),
+                                result_id: Id(
+                                    41,
+                                ),
+                                operand1: Id(
+                                    40,
+                                ),
+                                operand2: Id(
+                                    11,
+                                ),
+                            },
+                            VectorTimesScalar {
+                                result_type_id: Id(
+                                    7,
+                                ),
+                                result_id: Id(
+                                    43,
+                                ),
+                                vector: Id(
+                                    41,
+                                ),
+                                scalar: Id(
+                                    42,
+                                ),
+                            },
+                            Store {
+                                pointer: Id(
+                                    39,
+                                ),
+                                object: Id(
+                                    43,
+                                ),
+                                memory_access: None,
+                            },
+                            Load {
+                                result_type_id: Id(
+                                    7,
+                                ),
+                                result_id: Id(
+                                    45,
+                                ),
+                                pointer: Id(
+                                    39,
+                                ),
+                                memory_access: None,
+                            },
+                            FSub {
+                                result_type_id: Id(
+                                    7,
+                                ),
+                                result_id: Id(
+                                    49,
+                                ),
+                                operand1: Id(
+                                    45,
+                                ),
+                                operand2: Id(
+                                    48,
+                                ),
+                            },
+                            Store {
+                                pointer: Id(
+                                    44,
+                                ),
+                                object: Id(
+                                    49,
+                                ),
+                                memory_access: None,
+                            },
+                            Store {
+                                pointer: Id(
+                                    50,
+                                ),
+                                object: Id(
+                                    51,
+                                ),
+                                memory_access: None,
+                            },
+                            Store {
+                                pointer: Id(
+                                    53,
+                                ),
+                                object: Id(
+                                    47,
+                                ),
+                                memory_access: None,
+                            },
+                            Branch {
+                                target_label: Id(
+                                    54,
+                                ),
+                            },
+                            Label {
+                                result_id: Id(
+                                    54,
+                                ),
+                            },
+                            LoopMerge {
+                                merge_block: Id(
+                                    56,
+                                ),
+                                continue_target: Id(
+                                    57,
+                                ),
+                                loop_control: LoopControl {
+                                    unroll: false,
+                                    dont_unroll: false,
+                                    dependency_infinite: false,
+                                    dependency_length: None,
+                                    min_iterations: None,
+                                    max_iterations: None,
+                                    iteration_multiple: None,
+                                    peel_count: None,
+                                    partial_count: None,
+                                    initiation_interval_intel: None,
+                                    max_concurrency_intel: None,
+                                    dependency_array_intel: None,
+                                    pipeline_enable_intel: None,
+                                    loop_coalesce_intel: None,
+                                    max_interleaving_intel: None,
+                                    speculated_iterations_intel: None,
+                                    no_fusion_intel: false,
+                                    loop_count_intel: None,
+                                    max_reinvocation_delay_intel: None,
+                                },
+                            },
+                            Branch {
+                                target_label: Id(
+                                    58,
+                                ),
+                            },
+                            Label {
+                                result_id: Id(
+                                    58,
+                                ),
+                            },
+                            Load {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    59,
+                                ),
+                                pointer: Id(
+                                    53,
+                                ),
+                                memory_access: None,
+                            },
+                            FOrdLessThan {
+                                result_type_id: Id(
+                                    60,
+                                ),
+                                result_id: Id(
+                                    61,
+                                ),
+                                operand1: Id(
+                                    59,
+                                ),
+                                operand2: Id(
+                                    46,
+                                ),
+                            },
+                            BranchConditional {
+                                condition: Id(
+                                    61,
+                                ),
+                                true_label: Id(
+                                    55,
+                                ),
+                                false_label: Id(
+                                    56,
+                                ),
+                                branch_weights: [],
+                            },
+                            Label {
+                                result_id: Id(
+                                    55,
+                                ),
+                            },
+                            AccessChain {
+                                result_type_id: Id(
+                                    52,
+                                ),
+                                result_id: Id(
+                                    64,
+                                ),
+                                base: Id(
+                                    50,
+                                ),
+                                indexes: [
+                                    Id(
+                                        63,
+                                    ),
+                                ],
+                            },
+                            Load {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    65,
+                                ),
+                                pointer: Id(
+                                    64,
+                                ),
+                                memory_access: None,
+                            },
+                            AccessChain {
+                                result_type_id: Id(
+                                    52,
+                                ),
+                                result_id: Id(
+                                    66,
+                                ),
+                                base: Id(
+                                    50,
+                                ),
+                                indexes: [
+                                    Id(
+                                        63,
+                                    ),
+                                ],
+                            },
+                            Load {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    67,
+                                ),
+                                pointer: Id(
+                                    66,
+                                ),
+                                memory_access: None,
+                            },
+                            FMul {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    68,
+                                ),
+                                operand1: Id(
+                                    65,
+                                ),
+                                operand2: Id(
+                                    67,
+                                ),
+                            },
+                            AccessChain {
+                                result_type_id: Id(
+                                    52,
+                                ),
+                                result_id: Id(
+                                    70,
+                                ),
+                                base: Id(
+                                    50,
+                                ),
+                                indexes: [
+                                    Id(
+                                        69,
+                                    ),
+                                ],
+                            },
+                            Load {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    71,
+                                ),
+                                pointer: Id(
+                                    70,
+                                ),
+                                memory_access: None,
+                            },
+                            AccessChain {
+                                result_type_id: Id(
+                                    52,
+                                ),
+                                result_id: Id(
+                                    72,
+                                ),
+                                base: Id(
+                                    50,
+                                ),
+                                indexes: [
+                                    Id(
+                                        69,
+                                    ),
+                                ],
+                            },
+                            Load {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    73,
+                                ),
+                                pointer: Id(
+                                    72,
+                                ),
+                                memory_access: None,
+                            },
+                            FMul {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    74,
+                                ),
+                                operand1: Id(
+                                    71,
+                                ),
+                                operand2: Id(
+                                    73,
+                                ),
+                            },
+                            FSub {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    75,
+                                ),
+                                operand1: Id(
+                                    68,
+                                ),
+                                operand2: Id(
+                                    74,
+                                ),
+                            },
+                            AccessChain {
+                                result_type_id: Id(
+                                    52,
+                                ),
+                                result_id: Id(
+                                    76,
+                                ),
+                                base: Id(
+                                    44,
+                                ),
+                                indexes: [
+                                    Id(
+                                        63,
+                                    ),
+                                ],
+                            },
+                            Load {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    77,
+                                ),
+                                pointer: Id(
+                                    76,
+                                ),
+                                memory_access: None,
+                            },
+                            FAdd {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    78,
+                                ),
+                                operand1: Id(
+                                    75,
+                                ),
+                                operand2: Id(
+                                    77,
+                                ),
+                            },
+                            AccessChain {
+                                result_type_id: Id(
+                                    52,
+                                ),
+                                result_id: Id(
+                                    79,
+                                ),
+                                base: Id(
+                                    50,
+                                ),
+                                indexes: [
+                                    Id(
+                                        69,
+                                    ),
+                                ],
+                            },
+                            Load {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    80,
+                                ),
+                                pointer: Id(
+                                    79,
+                                ),
+                                memory_access: None,
+                            },
+                            AccessChain {
+                                result_type_id: Id(
+                                    52,
+                                ),
+                                result_id: Id(
+                                    81,
+                                ),
+                                base: Id(
+                                    50,
+                                ),
+                                indexes: [
+                                    Id(
+                                        63,
+                                    ),
+                                ],
+                            },
+                            Load {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    82,
+                                ),
+                                pointer: Id(
+                                    81,
+                                ),
+                                memory_access: None,
+                            },
+                            FMul {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    83,
+                                ),
+                                operand1: Id(
+                                    80,
+                                ),
+                                operand2: Id(
+                                    82,
+                                ),
+                            },
+                            AccessChain {
+                                result_type_id: Id(
+                                    52,
+                                ),
+                                result_id: Id(
+                                    84,
+                                ),
+                                base: Id(
+                                    50,
+                                ),
+                                indexes: [
+                                    Id(
+                                        63,
+                                    ),
+                                ],
+                            },
+                            Load {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    85,
+                                ),
+                                pointer: Id(
+                                    84,
+                                ),
+                                memory_access: None,
+                            },
+                            AccessChain {
+                                result_type_id: Id(
+                                    52,
+                                ),
+                                result_id: Id(
+                                    86,
+                                ),
+                                base: Id(
+                                    50,
+                                ),
+                                indexes: [
+                                    Id(
+                                        69,
+                                    ),
+                                ],
+                            },
+                            Load {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    87,
+                                ),
+                                pointer: Id(
+                                    86,
+                                ),
+                                memory_access: None,
+                            },
+                            FMul {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    88,
+                                ),
+                                operand1: Id(
+                                    85,
+                                ),
+                                operand2: Id(
+                                    87,
+                                ),
+                            },
+                            FAdd {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    89,
+                                ),
+                                operand1: Id(
+                                    83,
+                                ),
+                                operand2: Id(
+                                    88,
+                                ),
+                            },
+                            AccessChain {
+                                result_type_id: Id(
+                                    52,
+                                ),
+                                result_id: Id(
+                                    90,
+                                ),
+                                base: Id(
+                                    44,
+                                ),
+                                indexes: [
+                                    Id(
+                                        69,
+                                    ),
+                                ],
+                            },
+                            Load {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    91,
+                                ),
+                                pointer: Id(
+                                    90,
+                                ),
+                                memory_access: None,
+                            },
+                            FAdd {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    92,
+                                ),
+                                operand1: Id(
+                                    89,
+                                ),
+                                operand2: Id(
+                                    91,
+                                ),
+                            },
+                            CompositeConstruct {
+                                result_type_id: Id(
+                                    7,
+                                ),
+                                result_id: Id(
+                                    93,
+                                ),
+                                constituents: [
+                                    Id(
+                                        78,
+                                    ),
+                                    Id(
+                                        92,
+                                    ),
+                                ],
+                            },
+                            Store {
+                                pointer: Id(
+                                    50,
+                                ),
+                                object: Id(
+                                    93,
+                                ),
+                                memory_access: None,
+                            },
+                            Load {
+                                result_type_id: Id(
+                                    7,
+                                ),
+                                result_id: Id(
+                                    94,
+                                ),
+                                pointer: Id(
+                                    50,
+                                ),
+                                memory_access: None,
+                            },
+                            ExtInst {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    95,
+                                ),
+                                set: Id(
+                                    1,
+                                ),
+                                instruction: 66,
+                                operands: [
+                                    Id(
+                                        94,
+                                    ),
+                                ],
+                            },
+                            FOrdGreaterThan {
+                                result_type_id: Id(
+                                    60,
+                                ),
+                                result_id: Id(
+                                    97,
+                                ),
+                                operand1: Id(
+                                    95,
+                                ),
+                                operand2: Id(
+                                    96,
+                                ),
+                            },
+                            SelectionMerge {
+                                merge_block: Id(
+                                    99,
+                                ),
+                                selection_control: SelectionControl {
+                                    flatten: false,
+                                    dont_flatten: false,
+                                },
+                            },
+                            BranchConditional {
+                                condition: Id(
+                                    97,
+                                ),
+                                true_label: Id(
+                                    98,
+                                ),
+                                false_label: Id(
+                                    99,
+                                ),
+                                branch_weights: [],
+                            },
+                            Label {
+                                result_id: Id(
+                                    98,
+                                ),
+                            },
+                            Branch {
+                                target_label: Id(
+                                    56,
+                                ),
+                            },
+                            Label {
+                                result_id: Id(
+                                    99,
+                                ),
+                            },
+                            Branch {
+                                target_label: Id(
+                                    57,
+                                ),
+                            },
+                            Label {
+                                result_id: Id(
+                                    57,
+                                ),
+                            },
+                            Load {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    102,
+                                ),
+                                pointer: Id(
+                                    53,
+                                ),
+                                memory_access: None,
+                            },
+                            FAdd {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    103,
+                                ),
+                                operand1: Id(
+                                    102,
+                                ),
+                                operand2: Id(
+                                    101,
+                                ),
+                            },
+                            Store {
+                                pointer: Id(
+                                    53,
+                                ),
+                                object: Id(
+                                    103,
+                                ),
+                                memory_access: None,
+                            },
+                            Branch {
+                                target_label: Id(
+                                    54,
+                                ),
+                            },
+                            Label {
+                                result_id: Id(
+                                    56,
+                                ),
+                            },
+                            Load {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    107,
+                                ),
+                                pointer: Id(
+                                    53,
+                                ),
+                                memory_access: None,
+                            },
+                            CompositeConstruct {
+                                result_type_id: Id(
+                                    108,
+                                ),
+                                result_id: Id(
+                                    109,
+                                ),
+                                constituents: [
+                                    Id(
+                                        107,
+                                    ),
+                                    Id(
+                                        107,
+                                    ),
+                                    Id(
+                                        107,
+                                    ),
+                                ],
+                            },
+                            CompositeExtract {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    110,
+                                ),
+                                composite: Id(
+                                    109,
+                                ),
+                                indexes: [
+                                    0,
+                                ],
+                            },
+                            CompositeExtract {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    111,
+                                ),
+                                composite: Id(
+                                    109,
+                                ),
+                                indexes: [
+                                    1,
+                                ],
+                            },
+                            CompositeExtract {
+                                result_type_id: Id(
+                                    6,
+                                ),
+                                result_id: Id(
+                                    112,
+                                ),
+                                composite: Id(
+                                    109,
+                                ),
+                                indexes: [
+                                    2,
+                                ],
+                            },
+                            CompositeConstruct {
+                                result_type_id: Id(
+                                    104,
+                                ),
+                                result_id: Id(
+                                    113,
+                                ),
+                                constituents: [
+                                    Id(
+                                        110,
+                                    ),
+                                    Id(
+                                        111,
+                                    ),
+                                    Id(
+                                        112,
+                                    ),
+                                    Id(
+                                        46,
+                                    ),
+                                ],
+                            },
+                            Store {
+                                pointer: Id(
+                                    106,
+                                ),
+                                object: Id(
+                                    113,
+                                ),
+                                memory_access: None,
+                            },
+                            Return,
+                            FunctionEnd,
+                        ],
+                        entry_point: Some(
+                            EntryPoint {
+                                execution_model: GLCompute,
+                                entry_point: Id(
+                                    4,
+                                ),
+                                name: "main",
+                                interface: [],
+                            },
+                        ),
+                        execution_modes: [
+                            ExecutionMode {
+                                entry_point: Id(
+                                    4,
+                                ),
+                                mode: LocalSize {
+                                    x_size: 1,
+                                    y_size: 1,
+                                    z_size: 1,
+                                },
+                            },
+                        ],
+                    },
+                },
+            },
+            specialization_constants: {},
+        },
+        specialization_info: {},
+        spirv: None,
+        entry_point_infos: [
+            (
+                Id(
+                    4,
+                ),
+                EntryPointInfo {
+                    name: "main",
+                    execution_model: GLCompute,
+                    descriptor_binding_requirements: {
+                        (
+                            0,
+                            1,
+                        ): DescriptorBindingRequirements {
+                            descriptor_types: [
+                                StorageImage,
+                            ],
+                            descriptor_count: Some(
+                                1,
+                            ),
+                            image_format: None,
+                            image_multisampled: false,
+                            image_scalar_type: Some(
+                                Float,
+                            ),
+                            image_view_type: Some(
+                                Dim2d,
+                            ),
+                            stages: COMPUTE,
+                            descriptors: {},
+                        },
+                        (
+                            0,
+                            3,
+                        ): DescriptorBindingRequirements {
+                            descriptor_types: [
+                                StorageImage,
+                            ],
+                            descriptor_count: Some(
+                                1,
+                            ),
+                            image_format: None,
+                            image_multisampled: false,
+                            image_scalar_type: Some(
+                                Float,
+                            ),
+                            image_view_type: Some(
+                                Dim2d,
+                            ),
+                            stages: COMPUTE,
+                            descriptors: {},
+                        },
+                        (
+                            0,
+                            2,
+                        ): DescriptorBindingRequirements {
+                            descriptor_types: [
+                                StorageImage,
+                            ],
+                            descriptor_count: Some(
+                                1,
+                            ),
+                            image_format: None,
+                            image_multisampled: false,
+                            image_scalar_type: Some(
+                                Float,
+                            ),
+                            image_view_type: Some(
+                                Dim2d,
+                            ),
+                            stages: COMPUTE,
+                            descriptors: {},
+                        },
+                        (
+                            0,
+                            0,
+                        ): DescriptorBindingRequirements {
+                            descriptor_types: [
+                                StorageImage,
+                            ],
+                            descriptor_count: Some(
+                                1,
+                            ),
+                            image_format: None,
+                            image_multisampled: false,
+                            image_scalar_type: Some(
+                                Float,
+                            ),
+                            image_view_type: Some(
+                                Dim2d,
+                            ),
+                            stages: COMPUTE,
+                            descriptors: {},
+                        },
+                    },
+                    push_constant_requirements: Some(
+                        PushConstantRange {
+                            stages: COMPUTE,
+                            offset: 0,
+                            size: 64,
+                        },
+                    ),
+                    input_interface: ShaderInterface {
+                        elements: [],
+                    },
+                    output_interface: ShaderInterface {
+                        elements: [],
+                    },
+                },
+            ),
+        ],
+    },
+    id: Id(
+        4,
+    ),
+    info_index: 0,
+}

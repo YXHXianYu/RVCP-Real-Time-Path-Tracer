@@ -2,6 +2,7 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 use glam::UVec3;
+use vulkano::buffer::{Buffer, BufferCreateInfo, BufferUsage};
 use vulkano::command_buffer::allocator::{StandardCommandBufferAllocator, StandardCommandBufferAllocatorCreateInfo};
 use vulkano::command_buffer::{AutoCommandBufferBuilder, CommandBufferExecFuture, CommandBufferUsage, PrimaryAutoCommandBuffer};
 use vulkano::descriptor_set::allocator::StandardDescriptorSetAllocator;
@@ -12,7 +13,7 @@ use vulkano::format::Format;
 use vulkano::image::view::ImageView;
 use vulkano::image::{Image, ImageUsage};
 use vulkano::instance::{Instance, InstanceCreateInfo};
-use vulkano::memory::allocator::StandardMemoryAllocator;
+use vulkano::memory::allocator::{AllocationCreateInfo, MemoryTypeFilter, StandardMemoryAllocator};
 use vulkano::pipeline::{compute::ComputePipelineCreateInfo, layout::PipelineDescriptorSetLayoutCreateInfo, ComputePipeline, Pipeline, PipelineBindPoint, PipelineLayout, PipelineShaderStageCreateInfo};
 use vulkano::shader::ShaderModule;
 use vulkano::swapchain::{self, PresentFuture, Surface, Swapchain, SwapchainAcquireFuture, SwapchainCreateInfo, SwapchainPresentInfo};
@@ -25,8 +26,10 @@ use winit::event_loop::EventLoop;
 use winit::window::{Window, WindowBuilder};
 
 use super::camera::Camera;
-use super::config::Config;
+use super::light::PointLight;
+use super::material::Material;
 use super::shader::*;
+use super::shape::Sphere;
 
 // === Runtime Info ===
 
@@ -47,10 +50,37 @@ pub struct RuntimeInfo {
     pub keyboard_is_pressing: HashMap<VirtualKeyCode, bool>,
 
     pub camera: Camera,
+    pub spheres: Vec<Sphere>,
+    pub point_lights: Vec<PointLight>,
 }
 
 impl RuntimeInfo {
     fn new(images_len: u32) -> Self {
+
+        let spheres: Vec<Sphere> = vec![
+            Sphere {
+                center: glam::Vec3::new(0.0, 0.0, 0.0),
+                radius: 1.0,
+                material: Material::matte(),
+            },
+            Sphere {
+                center: glam::Vec3::new(2.0, 0.0, 0.0),
+                radius: 1.0,
+                material: Material::matte(),
+            },
+        ];
+
+        let point_lights: Vec<PointLight> = vec![
+            PointLight {
+                position: glam::Vec3::new(0.0, 5.0, 0.0),
+                energy: glam::Vec3::new(1.0, 1.0, 1.0),
+            },
+            PointLight {
+                position: glam::Vec3::new(0.0, 3.0, 5.0),
+                energy: glam::Vec3::new(1.0, 1.0, 1.0),
+            },
+        ];
+
         Self {
             is_window_resized: false,
             is_recreate_swapchain: false,
@@ -66,6 +96,8 @@ impl RuntimeInfo {
             keyboard_is_pressing: HashMap::new(),
 
             camera: Default::default(),
+            spheres,
+            point_lights,
         }
     }
 }
@@ -97,13 +129,10 @@ pub struct Vk {
     pub images: Vec<Arc<Image>>,
     pub image_format: Format,
     pub command_buffers: Vec<Arc<PrimaryAutoCommandBuffer>>,
-
-    // config
-    pub config: Config,
 }
 
 impl Vk {
-    pub fn new(config: Config) -> (Vk, RuntimeInfo, EventLoop<()>) {
+    pub fn new() -> (Vk, RuntimeInfo, EventLoop<()>) {
         let event_loop = EventLoop::new();
 
         // basic
@@ -127,7 +156,7 @@ impl Vk {
         let max_push_constants_size = physical_device
             .properties()
             .max_push_constants_size;
-        println!("Max push constants size: {}", max_push_constants_size);
+        println!("Max push constants size: {} Bytes", max_push_constants_size);
 
         let queue_family_index = physical_device
             .queue_family_properties()
@@ -170,11 +199,6 @@ impl Vk {
             .0;
         let composite_alpha = surface_caps.supported_composite_alpha.into_iter().next().unwrap();
 
-        // physical_device.surface_formats(&surface, Default::default()).unwrap().iter().for_each(|(format, color_space)| {
-        //     println!("Format: {:?}, Color Space: {:?}", format, color_space);
-        // });
-        // println!("Image Format: {:?}", image_format);
-
         let (swapchain, images) = Swapchain::new(
             device.clone(),
             surface.clone(),
@@ -208,11 +232,14 @@ impl Vk {
             device.clone(),
             ray_tracer_shader::load(device.clone()).unwrap()
         );
-
         
+        // info
         let info = RuntimeInfo::new(images.len() as u32);
 
+        // buffers
+
         let command_buffers = Vk::create_command_buffers(
+            &memory_allocator,
             &descriptor_set_allocator,
             &command_buffer_allocator,
             &queue,
@@ -243,8 +270,6 @@ impl Vk {
                 images,
                 image_format,
                 command_buffers,
-
-                config,
             },
             info,
             event_loop,
@@ -277,6 +302,7 @@ impl Vk {
             info.is_new_push_constants = false;
             
             let new_command_buffers = Vk::create_command_buffers(
+                &self.memory_allocator,
                 &self.descriptor_set_allocator,
                 &self.command_buffer_allocator,
                 &self.queue,
@@ -345,6 +371,7 @@ impl Vk {
     }
 
     fn create_command_buffers(
+        memory_allocator: &Arc<StandardMemoryAllocator>,
         descriptor_set_allocator: &StandardDescriptorSetAllocator,
         command_buffer_allocator: &StandardCommandBufferAllocator,
         queue: &Arc<Queue>,
@@ -358,15 +385,62 @@ impl Vk {
             .map(|image| {
                 let image_view = ImageView::new_default(image.clone()).unwrap();
 
-                // println!("Image view format: {:?}", image_view.format());
+                // push constants
+                let push_constants = info.camera.to_shader();
 
-                let descriptor_set_layout 
-                    = compute_pipeline.layout().set_layouts().get(0).unwrap();
+                // buffers
+                let length_buffer = Buffer::from_iter(
+                    memory_allocator.clone(),
+                    BufferCreateInfo {
+                        usage: BufferUsage::UNIFORM_BUFFER,
+                        ..Default::default()
+                    },
+                    AllocationCreateInfo {
+                        memory_type_filter: MemoryTypeFilter::PREFER_DEVICE
+                            | MemoryTypeFilter::HOST_SEQUENTIAL_WRITE,
+                        ..Default::default()
+                    },
+                    [info.spheres.len() as u32, info.point_lights.len() as u32],
+                ).unwrap();
+                let spheres_buffer = Buffer::from_iter(
+                    memory_allocator.clone(),
+                    BufferCreateInfo {
+                        usage: BufferUsage::UNIFORM_BUFFER,
+                        ..Default::default()
+                    },
+                    AllocationCreateInfo {
+                        memory_type_filter: MemoryTypeFilter::PREFER_DEVICE
+                            | MemoryTypeFilter::HOST_SEQUENTIAL_WRITE,
+                        ..Default::default()
+                    },
+                    info.spheres.iter().map(|sphere| sphere.to_shader())
+                ).unwrap();
+                let point_lights_buffer = Buffer::from_iter(
+                    memory_allocator.clone(),
+                    BufferCreateInfo {
+                        usage: BufferUsage::UNIFORM_BUFFER,
+                        ..Default::default()
+                    },
+                    AllocationCreateInfo {
+                        memory_type_filter: MemoryTypeFilter::PREFER_DEVICE
+                            | MemoryTypeFilter::HOST_SEQUENTIAL_WRITE,
+                        ..Default::default()
+                    },
+                    info.point_lights.iter().map(|point_light| point_light.to_shader())
+                ).unwrap();
                 
-                let descriptor_set = PersistentDescriptorSet::new(
+                // descriptor set
+                let descriptor_set_0_layout 
+                    = compute_pipeline.layout().set_layouts().get(0).unwrap();
+                let descriptor_set_0 = PersistentDescriptorSet::new(
                     descriptor_set_allocator,
-                    descriptor_set_layout.clone(),
-                    [WriteDescriptorSet::image_view(0, image_view.clone())],
+                    descriptor_set_0_layout.clone(),
+                    [
+                        WriteDescriptorSet::image_view(0, image_view.clone()),
+                        WriteDescriptorSet::buffer(1, length_buffer),
+                        WriteDescriptorSet::buffer(2, spheres_buffer),
+                        WriteDescriptorSet::buffer(3, point_lights_buffer),
+                    ],
                     [],
                 ).unwrap();
 
@@ -376,8 +450,6 @@ impl Vk {
                     CommandBufferUsage::MultipleSubmit,
                 ).unwrap();
 
-                let push_constants = info.camera.to_shader();
-
                 builder
                     .bind_pipeline_compute(compute_pipeline.clone())
                     .unwrap()
@@ -385,7 +457,7 @@ impl Vk {
                         PipelineBindPoint::Compute,
                         compute_pipeline.layout().clone(),
                         0,
-                        descriptor_set,
+                        descriptor_set_0,
                     )
                     .unwrap()
                     .push_constants(
@@ -408,17 +480,21 @@ impl Vk {
     ) -> Arc<ComputePipeline> {
         let compute_shader = cs.entry_point("main").unwrap();
         let compute_pipeline_stage = PipelineShaderStageCreateInfo::new(compute_shader.clone());
-
-        // save compute_pipeline_stage to a txt file
-        // std::fs::write("compute_pipeline_stage.txt", format!("{:#?}", compute_pipeline_stage)).unwrap();
-        // std::fs::write("compute_shader_entry_point.txt", format!("{:#?}", compute_shader)).unwrap();
-
         let compute_pipeline_layout = PipelineLayout::new(
             device.clone(),
             PipelineDescriptorSetLayoutCreateInfo::from_stages([&compute_pipeline_stage])
                 .into_pipeline_layout_create_info(device.clone())
                 .unwrap(),
         ).unwrap();
+
+        // save to file
+        // std::fs::write("compute_shader.txt", format!("{:#?}", compute_shader)).unwrap();
+        // std::fs::write("compute_pipeline_stage.txt", format!("{:#?}", compute_pipeline_stage)).unwrap();
+        // std::fs::write("compute_pipeline_layout.txt", format!("{:#?}", compute_pipeline_layout)).unwrap();
+        // std::fs::write(
+        //     "compute_pipeline_layout.set_layouts.txt",
+        //     format!("{:#?}", compute_pipeline_layout.set_layouts())
+        // ).unwrap();
 
         ComputePipeline::new(
             device.clone(),

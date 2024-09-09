@@ -1,6 +1,17 @@
 #version 460
 
+// MARK: Config
+
+#define SPHERE_BUFFER_MAX 100
+#define POINT_LIGHT_BUFFER_MAX 10
+
+// MARK: Material
+
+#define MATERIAL_MATTE 0
+
 layout(local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
+
+// MARK: Camera
 
 layout(push_constant) uniform Camera {
     vec3 position;
@@ -12,7 +23,43 @@ layout(push_constant) uniform Camera {
     vec2 size;
 } camera;
 
+// MARK: Framebuffer (image)
+
 layout(set = 0, binding = 0) uniform writeonly image2D img; // 不能加rgba8，否则会因为格式不兼容而运行时错误
+
+// MARK: Buffer
+
+layout(set = 0, binding = 1) uniform LengthBuffer {
+    uint sphere_buffer;
+    uint point_light_buffer;
+} length_buffer;
+
+// MARK: Sphere
+
+struct Sphere {
+    vec3 center;
+    float radius;
+    uint material;
+};
+
+layout(set = 0, binding = 2) uniform SphereBuffer {
+    Sphere sphere[SPHERE_BUFFER_MAX];
+} spheres;
+
+// MARK: Light
+
+struct PointLight {
+    vec3 position;
+    vec3 energy;
+};
+
+layout(set = 0, binding = 3) uniform PointLightBuffer {
+    PointLight point_light[POINT_LIGHT_BUFFER_MAX];
+} point_lights;
+
+// MARK: Main
+
+
 
 void main() {
     vec2 norm_coordinates = (gl_GlobalInvocationID.xy + vec2(0.5)) / vec2(imageSize(img));
@@ -33,6 +80,10 @@ void main() {
             break;
         }
     }
+
+    uint len = length_buffer.sphere_buffer;
+    float r = spheres.sphere[0].radius;
+    vec3 pos = point_lights.point_light[0].position;
 
     vec4 to_write = vec4(vec3(i), 1.0);
     imageStore(img, ivec2(gl_GlobalInvocationID.xy), to_write);

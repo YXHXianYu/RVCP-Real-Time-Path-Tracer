@@ -1,0 +1,53 @@
+[
+    DescriptorSetLayout {
+        handle: 0x26b4a3cb910,
+        device: 0x26b4a379630 (instance: 0x26b49551de0),
+        id: 1,
+        flags: empty(),
+        bindings: {
+            0: DescriptorSetLayoutBinding {
+                binding_flags: empty(),
+                descriptor_type: StorageImage,
+                descriptor_count: 1,
+                stages: COMPUTE,
+                immutable_samplers: [],
+                _ne: NonExhaustive(
+                    (),
+                ),
+            },
+            1: DescriptorSetLayoutBinding {
+                binding_flags: empty(),
+                descriptor_type: StorageImage,
+                descriptor_count: 1,
+                stages: COMPUTE,
+                immutable_samplers: [],
+                _ne: NonExhaustive(
+                    (),
+                ),
+            },
+            2: DescriptorSetLayoutBinding {
+                binding_flags: empty(),
+                descriptor_type: StorageImage,
+                descriptor_count: 1,
+                stages: COMPUTE,
+                immutable_samplers: [],
+                _ne: NonExhaustive(
+                    (),
+                ),
+            },
+            3: DescriptorSetLayoutBinding {
+                binding_flags: empty(),
+                descriptor_type: StorageImage,
+                descriptor_count: 1,
+                stages: COMPUTE,
+                immutable_samplers: [],
+                _ne: NonExhaustive(
+                    (),
+                ),
+            },
+        },
+        descriptor_counts: {
+            StorageImage: 4,
+        },
+    },
+]

@@ -40,6 +40,11 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
   * Light：光源 —— 通过Buffer传输
   * Material：材质 —— 通过Buffer传输
 
+### 第三步：往shader中导入数据
+
+* **大坑**：vulkano-shaders会对shader代码进行解析。而entry point只会包含 **编译器优化后的代码中 使用到的变量信息**。也就是说，如果你定义了一些binding point，但是main()函数中不会使用到这些binding point，那么你就无法在descriptor point中对其进行绑定！会导致运行时错误！
+  * 所以，以后最好先写shader的雏形，再往里导入数据
+
 ## 笔记
 
 ### Queue & QueueFamily

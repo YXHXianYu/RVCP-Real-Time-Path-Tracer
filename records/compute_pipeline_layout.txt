@@ -1,0 +1,23 @@
+PipelineLayout {
+    handle: 0x26b4f21f2f0,
+    device: 0x26b4a379630 (instance: 0x26b49551de0),
+    id: 1,
+    flags: empty(),
+    set_layouts: [
+        0x26b4a3cb910 (device: 0x26b4a379630),
+    ],
+    push_constant_ranges: [
+        PushConstantRange {
+            stages: COMPUTE,
+            offset: 0,
+            size: 64,
+        },
+    ],
+    push_constant_ranges_disjoint: [
+        PushConstantRange {
+            stages: COMPUTE,
+            offset: 0,
+            size: 64,
+        },
+    ],
+}
