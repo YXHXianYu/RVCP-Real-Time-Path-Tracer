@@ -2,16 +2,16 @@
 
 // MARK: Config
 
+#define SPP 10
+
 #define SPHERE_BUFFER_MAX 100
 #define POINT_LIGHT_BUFFER_MAX 10
 
-// MARK: Material
-
 #define MATERIAL_MATTE 0
 
-layout(local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
+// MARK: Data Structure
 
-// MARK: Camera
+layout(local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
 
 layout(push_constant) uniform Camera {
     vec3 position;
@@ -20,21 +20,14 @@ layout(push_constant) uniform Camera {
     float t_near;
     float t_far;
     float vertical_fov;
-    vec2 size;
 } camera;
-
-// MARK: Framebuffer (image)
 
 layout(set = 0, binding = 0) uniform writeonly image2D img; // 不能加rgba8，否则会因为格式不兼容而运行时错误
 
-// MARK: Buffer
-
 layout(set = 0, binding = 1) uniform LengthBuffer {
-    uint sphere_buffer;
-    uint point_light_buffer;
-} length_buffer;
-
-// MARK: Sphere
+    uint spheres;
+    uint point_lights;
+} lens;
 
 struct Sphere {
     vec3 center;
@@ -46,8 +39,6 @@ layout(set = 0, binding = 2) uniform SphereBuffer {
     Sphere sphere[SPHERE_BUFFER_MAX];
 } spheres;
 
-// MARK: Light
-
 struct PointLight {
     vec3 position;
     vec3 energy;
@@ -57,34 +48,148 @@ layout(set = 0, binding = 3) uniform PointLightBuffer {
     PointLight point_light[POINT_LIGHT_BUFFER_MAX];
 } point_lights;
 
-// MARK: Main
+// MARK: Ray Tracing DataS.
 
+struct Ray {
+    vec3 origin;
+    vec3 direction;
+    float t_min;
+    float t_max;
+};
 
+struct Interaction {
+    float time;
+    vec3 position;
+    vec3 normal;
+    // vec3 tangent;
+    // vec3 bitangent;
+    // vec2 tex_coord;
+    // In Moer-Lite, there are a lot of dxxx, I don't know what it is.
+};
 
-void main() {
-    vec2 norm_coordinates = (gl_GlobalInvocationID.xy + vec2(0.5)) / vec2(imageSize(img));
+// MARK: Func: Sample Ray
+Ray sample_ray(in vec2 uv, in vec2 size) {
+    float h = 2.0 * camera.t_near * tan(camera.vertical_fov / 2.0);
+    float w = h * size.x / size.y;
 
-    vec2 c_pre = (norm_coordinates - vec2(0.5)) * 2.0;
-    // c_pre = c_pre / camera.scale + camera.position;
-    vec2 c = c_pre - vec2(1.0, 0.0);
+    vec3 look_at_dir = normalize(camera.look_at - camera.position);
+    vec3 u = normalize(cross(look_at_dir, camera.up)) * w; // right_dir with length
+    vec3 v = normalize(cross(look_at_dir, u)) * h; // down_dir with length
 
-    vec2 z = vec2(0.0, 0.0);
-    float i;
-    for (i = 0.0; i < 1.0; i += 0.005) {
-        z = vec2(
-            z.x * z.x - z.y * z.y + c.x,
-            z.y * z.x + z.x * z.y + c.y
+    vec3 pos = camera.position + look_at_dir * camera.t_near;
+    vec3 uv_pos = pos + u * (uv.x - 0.5) + v * (uv.y - 0.5);
+
+    float t_coef = length(uv_pos - camera.position) / length(pos - camera.position);
+
+    return Ray (
+        camera.position,
+        normalize(uv_pos - camera.position),
+        camera.t_near * t_coef,
+        camera.t_far * t_coef
+    );
+}
+
+// MARK: Func: Intersection
+bool is_intersect_quadratic_equation(
+    in float a,
+    in float b,
+    in float c,
+    in Ray ray,
+    out Interaction interaction
+) {
+    float delta = b * b - 4.0 * a * c;
+    if (sign(delta) < 0.0) return false;
+    float sqrt_delta = sqrt(delta);
+    float t0 = (-b + sqrt_delta) / (2.0 * a);
+    float t1 = (-b - sqrt_delta) / (2.0 * a);
+    bool is_intersect = false;
+
+    if (t0 >= ray.t_min && t0 <= ray.t_max) {
+        interaction = Interaction(
+            t0,
+            ray.origin + ray.direction * t0,
+            vec3(0.0)
         );
+        return true;
+    }
 
-        if (length(z) > 4.0) {
-            break;
+    if (t1 >= ray.t_min && t1 <= ray.t_max) {
+        interaction = Interaction(
+            t1,
+            ray.origin + ray.direction * t1,
+            vec3(0.0)
+        );
+        return true;
+    }
+
+    return false;
+}
+
+bool is_intersect_ray_sphere(
+    in Ray ray,
+    in Sphere sphere,
+    out Interaction interaction
+) {
+    vec3 co = ray.origin - sphere.center;
+    float a = dot(ray.direction, ray.direction);
+    float b = 2.0 * dot(ray.direction, co);
+    float c = dot(co, co) - sphere.radius * sphere.radius;
+
+    if (is_intersect_quadratic_equation(a, b, c, ray, interaction)) {
+        interaction.normal = normalize(interaction.position - sphere.center);
+        return true;
+    } else {
+        return false;
+    }
+
+}
+
+// MARK: Func: Trace Ray
+vec3 trace_ray(
+    Ray ray // ray is not `in`. This is because t_min will be modified
+) {
+    Interaction inter;
+    inter.time = ray.t_max + 1.0;
+    for (uint i = 0; i < lens.spheres; i++) {
+        Interaction new_inter;
+        if (is_intersect_ray_sphere(ray, spheres.sphere[i], new_inter)) {
+            if (new_inter.time < ray.t_max) {
+                ray.t_max = new_inter.time;
+                inter = new_inter;
+            }
         }
     }
 
-    uint len = length_buffer.sphere_buffer;
+    if (inter.time > ray.t_max) {
+        return vec3(0.0);
+    }
+
+    return vec3(1.0);
+}
+
+// MARK: Main
+
+void main() {
+    // TODO: SPP
+
+    // 1. Sample Ray
+    vec2 window_size = vec2(imageSize(img));
+    vec2 uv = (gl_GlobalInvocationID.xy + vec2(0.5)) / window_size;
+    Ray ray = sample_ray(uv, window_size);
+
+    uint len = lens.spheres;
     float r = spheres.sphere[0].radius;
     vec3 pos = point_lights.point_light[0].position;
 
-    vec4 to_write = vec4(vec3(i), 1.0);
-    imageStore(img, ivec2(gl_GlobalInvocationID.xy), to_write);
+    // vec3 color = vec3(0.0);
+    // for (uint i = 0; i < SPP; i++) {
+    //     color += trace_ray(ray);
+    // }
+    // color /= float(SPP);
+
+    vec3 color = trace_ray(ray);
+
+    // vec3 color = vec3(ray.direction.x, ray.direction.y, 0.0);
+
+    imageStore(img, ivec2(gl_GlobalInvocationID.xy), vec4(color, 1.0));
 }

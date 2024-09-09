@@ -1,6 +1,7 @@
-use glam::{Vec2, Vec3};
-use vulkano::padded::Padded;
-use super::shader::ray_tracer_shader;
+use glam::Vec3;
+use vulkano::{buffer::BufferContents, padded::Padded};
+
+use super::prelude::*;
 
 pub struct Camera {
     pub position: Vec3,
@@ -11,21 +12,19 @@ pub struct Camera {
     pub vertical_fov: f32,
     // pub time_start: f32, // what is this for?
     // pub time_end: f32,
-    pub size: Vec2,
+    // pub size: Vec2,
 }
 
-impl Default for Camera {
-    fn default() -> Self {
-        Self {
-            position: Vec3::new(0.0, 3.0, 15.0),
-            up: Vec3::new(0.0, 1.0, 0.0),
-            look_at: Vec3::new(0.0, 0.0, 0.0),
-            t_near: 0.1,
-            t_far: 10000.0,
-            vertical_fov: 45.0,
-            size: Vec2::new(800.0, 600.0),
-        }
-    }
+#[derive(BufferContents)]
+#[repr(C)]
+pub struct AlignedCamera {
+    pub position: [f32; 4],
+    pub up: [f32; 4],
+    pub look_at: [f32; 3],
+    pub t_near: f32,
+    pub t_far: f32,
+    pub vertical_fov: f32,
+    pub _padding: [u32; 2],
 }
 
 impl Camera {
@@ -37,7 +36,6 @@ impl Camera {
             t_near: self.t_near,
             t_far: self.t_far,
             vertical_fov: self.vertical_fov,
-            size: self.size.to_array(),
         }
     }
 }

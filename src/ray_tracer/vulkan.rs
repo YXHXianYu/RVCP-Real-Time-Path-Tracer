@@ -25,11 +25,8 @@ use winit::event::VirtualKeyCode;
 use winit::event_loop::EventLoop;
 use winit::window::{Window, WindowBuilder};
 
-use super::camera::Camera;
-use super::light::PointLight;
-use super::material::Material;
+use super::scene::Scene;
 use super::shader::*;
-use super::shape::Sphere;
 
 // === Runtime Info ===
 
@@ -49,38 +46,11 @@ pub struct RuntimeInfo {
     pub last_tick_time: std::time::Instant,
     pub keyboard_is_pressing: HashMap<VirtualKeyCode, bool>,
 
-    pub camera: Camera,
-    pub spheres: Vec<Sphere>,
-    pub point_lights: Vec<PointLight>,
+    pub scene: Scene,
 }
 
 impl RuntimeInfo {
-    fn new(images_len: u32) -> Self {
-
-        let spheres: Vec<Sphere> = vec![
-            Sphere {
-                center: glam::Vec3::new(0.0, 0.0, 0.0),
-                radius: 1.0,
-                material: Material::matte(),
-            },
-            Sphere {
-                center: glam::Vec3::new(2.0, 0.0, 0.0),
-                radius: 1.0,
-                material: Material::matte(),
-            },
-        ];
-
-        let point_lights: Vec<PointLight> = vec![
-            PointLight {
-                position: glam::Vec3::new(0.0, 5.0, 0.0),
-                energy: glam::Vec3::new(1.0, 1.0, 1.0),
-            },
-            PointLight {
-                position: glam::Vec3::new(0.0, 3.0, 5.0),
-                energy: glam::Vec3::new(1.0, 1.0, 1.0),
-            },
-        ];
-
+    fn new(images_len: u32, scene: Scene) -> Self {
         Self {
             is_window_resized: false,
             is_recreate_swapchain: false,
@@ -95,9 +65,7 @@ impl RuntimeInfo {
             last_tick_time: std::time::Instant::now(),
             keyboard_is_pressing: HashMap::new(),
 
-            camera: Default::default(),
-            spheres,
-            point_lights,
+            scene,
         }
     }
 }
@@ -234,7 +202,10 @@ impl Vk {
         );
         
         // info
-        let info = RuntimeInfo::new(images.len() as u32);
+        let info = RuntimeInfo::new(
+            images.len() as u32,
+            Scene::default()
+        );
 
         // buffers
 
@@ -386,7 +357,7 @@ impl Vk {
                 let image_view = ImageView::new_default(image.clone()).unwrap();
 
                 // push constants
-                let push_constants = info.camera.to_shader();
+                let push_constants = info.scene.camera.to_shader();
 
                 // buffers
                 let length_buffer = Buffer::from_iter(
@@ -400,7 +371,7 @@ impl Vk {
                             | MemoryTypeFilter::HOST_SEQUENTIAL_WRITE,
                         ..Default::default()
                     },
-                    [info.spheres.len() as u32, info.point_lights.len() as u32],
+                    [info.scene.spheres.len() as u32, info.scene.point_lights.len() as u32],
                 ).unwrap();
                 let spheres_buffer = Buffer::from_iter(
                     memory_allocator.clone(),
@@ -413,7 +384,7 @@ impl Vk {
                             | MemoryTypeFilter::HOST_SEQUENTIAL_WRITE,
                         ..Default::default()
                     },
-                    info.spheres.iter().map(|sphere| sphere.to_shader())
+                    info.scene.spheres.iter().map(|sphere| sphere.aligned()).collect::<Vec<_>>().into_iter()
                 ).unwrap();
                 let point_lights_buffer = Buffer::from_iter(
                     memory_allocator.clone(),
@@ -426,7 +397,7 @@ impl Vk {
                             | MemoryTypeFilter::HOST_SEQUENTIAL_WRITE,
                         ..Default::default()
                     },
-                    info.point_lights.iter().map(|point_light| point_light.to_shader())
+                    info.scene.point_lights.iter().map(|point_light| point_light.aligned()).collect::<Vec<_>>().into_iter()
                 ).unwrap();
                 
                 // descriptor set

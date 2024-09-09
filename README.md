@@ -4,6 +4,44 @@ My Vulkan Learning Repo.
 
 The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
 
+## TODO Lists
+
+* 内存的性能测试：修改Shader中struct的内存布局，查看性能是否有提升。
+
+  * 旧的
+
+    ```glsl
+    layout(push_constant) uniform Camera {
+        vec3 position;
+        vec3 up;
+        vec3 look_at;
+        float t_near;
+        float t_far;
+        float vertical_fov;
+        vec2 size;
+    } camera;
+    ```
+
+  * 新的
+
+    ```
+    layout(push_constant) uniform Camera {
+        vec3 position;
+        float t_near;
+        vec3 up;
+        float t_far;
+        vec3 look_at;
+        float vertical_fov;
+        vec2 size;
+    } camera;
+    ```
+
+  * 理论上，空间开销降低了，因为内存中减少了大量Padding；但是，目前不清楚时间开销是否会降低
+
+* 优化vec2 sample_ray(vec2)
+
+  * 目前是完全按照数学推导写的，存在很大的优化空间
+
 ## Preview
 
 * Fractal (Refer to https://vulkano.rs/05-images/04-mandelbrot.html)
@@ -24,12 +62,13 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
 
 ### 第二步：设计Compute Shader光线追踪数据结构
 
+* 按照MoerLite实现
 * CPU端
 * GPU端
   * 输入Buffer：Shapes、Material、Light
   * 输出Buffer：画布
   * PushConstants
-    * 摄像机数据：按照MoerLite实现
+    * 摄像机数据
       * Transform（Position、Up、LookAt）, t_near, t_far, vertical_f........
 * 光线追踪流程
   * Camera：相机生成光线（Moer-Lite在一个像素点处进行多次采用，我们这里进行简化，直接根据像素中心点采样）—— 通过PushConstants传递数据，光线生成在shader中硬编码
@@ -42,8 +81,24 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
 
 ### 第三步：往shader中导入数据
 
-* **大坑**：vulkano-shaders会对shader代码进行解析。而entry point只会包含 **编译器优化后的代码中 使用到的变量信息**。也就是说，如果你定义了一些binding point，但是main()函数中不会使用到这些binding point，那么你就无法在descriptor point中对其进行绑定！会导致运行时错误！
+* **大坑**：vulkano-shaders会对shader代码进行解析。而entry point只会包含 **编译器优化后的代码中 使用到的变量信息**。也就是说，如果你定义了一些binding point，但是main()函数中不会使用到这些binding point对应的变量，那么你就无法在descriptor point中对其进行绑定！会导致运行时错误！
   * 所以，以后最好先写shader的雏形，再往里导入数据
+
+### 第四步：写光追！
+
+* sample_ray
+  * 输入
+    * ![image-20240909164420661](./README/image-20240909164420661.png)
+  * 输出 RGB = vec3(direction.x, direction.y, 0.0)
+    * ![image-20240909164435232](./README/image-20240909164435232.png)
+  * 正确的
+* 无视材质渲染球体
+  * **大坑！**：Vulkan内存对齐，除了struct内存对齐，一个数组的两个相邻变量也要对齐！惊了！
+    * push_constants，只需要对齐内部，不需要struct末尾的padding
+    * buffer，需要对齐内部和相邻元素，**需要struct末尾的padding**
+  * 搞定！
+    * ![image-20240909194736983](./README/image-20240909194736983.png)
+  * 
 
 ## 笔记
 
