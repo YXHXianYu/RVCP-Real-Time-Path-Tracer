@@ -36,6 +36,7 @@ pub struct RuntimeInfo {
     pub is_window_resized: bool,
     pub is_recreate_swapchain: bool,
     pub is_new_push_constants: bool,
+    pub is_new_scene: bool,
 
     pub fences: FencesType,
     pub previous_idx: u32,
@@ -55,6 +56,7 @@ impl RuntimeInfo {
             is_window_resized: false,
             is_recreate_swapchain: false,
             is_new_push_constants: false,
+            is_new_scene: false,
 
             fences: vec![None; images_len as usize],
             previous_idx: 0,
@@ -97,6 +99,9 @@ pub struct Vk {
     pub images: Vec<Arc<Image>>,
     pub image_format: Format,
     pub command_buffers: Vec<Arc<PrimaryAutoCommandBuffer>>,
+
+    // buffers
+    pub descriptor_set_0s: Vec<Arc<PersistentDescriptorSet>>,
 }
 
 impl Vk {
@@ -209,13 +214,19 @@ impl Vk {
 
         // buffers
 
-        let command_buffers = Vk::create_command_buffers(
+        let descriptor_set_0s = Vk::create_descriptor_set_0s(
             &memory_allocator,
             &descriptor_set_allocator,
+            &compute_pipeline,
+            &images,
+            &info,
+        );
+
+        let command_buffers = Vk::create_command_buffers(
+            &descriptor_set_0s,
             &command_buffer_allocator,
             &queue,
             &compute_pipeline,
-            &images,
             &info,
             UVec3::new(window_size.width / 8, window_size.height / 8, 1),
         );
@@ -241,6 +252,8 @@ impl Vk {
                 images,
                 image_format,
                 command_buffers,
+
+                descriptor_set_0s,
             },
             info,
             event_loop,
@@ -266,6 +279,22 @@ impl Vk {
                 .unwrap();
             self.swapchain = new_swapchain;
             self.images = new_images;
+
+            info.is_new_scene = true; // Because images are changed
+            // TODO: optimize
+        }
+
+        if info.is_new_scene {
+            info.is_new_scene = false;
+
+            let new_descriptor_set_0s = Vk::create_descriptor_set_0s(
+                &self.memory_allocator,
+                &self.descriptor_set_allocator,
+                &self.compute_pipeline,
+                &self.images,
+                info,
+            );
+            self.descriptor_set_0s = new_descriptor_set_0s;
         }
 
         if info.is_window_resized || info.is_new_push_constants {
@@ -273,12 +302,10 @@ impl Vk {
             info.is_new_push_constants = false;
             
             let new_command_buffers = Vk::create_command_buffers(
-                &self.memory_allocator,
-                &self.descriptor_set_allocator,
+                &self.descriptor_set_0s,
                 &self.command_buffer_allocator,
                 &self.queue,
                 &self.compute_pipeline,
-                &self.images,
                 info,
                 UVec3::new(self.window_size.width / 8, self.window_size.height / 8, 1),
             );
@@ -342,22 +369,60 @@ impl Vk {
     }
 
     fn create_command_buffers(
-        memory_allocator: &Arc<StandardMemoryAllocator>,
-        descriptor_set_allocator: &StandardDescriptorSetAllocator,
+        descriptor_set_0s: &Vec<Arc<PersistentDescriptorSet>>,
         command_buffer_allocator: &StandardCommandBufferAllocator,
         queue: &Arc<Queue>,
         compute_pipeline: &Arc<ComputePipeline>,
-        images: &Vec<Arc<Image>>,
         info: &RuntimeInfo,
         work_group: UVec3,
     ) -> Vec<Arc<PrimaryAutoCommandBuffer>> {
+        descriptor_set_0s
+            .iter()
+            .map(|descriptor_set_0| {
+                // push constants
+                let push_constants = info.scene.camera.to_shader();
+
+                let mut builder = AutoCommandBufferBuilder::primary(
+                    command_buffer_allocator,
+                    queue.queue_family_index(),
+                    CommandBufferUsage::MultipleSubmit,
+                ).unwrap();
+
+                builder
+                    .bind_pipeline_compute(compute_pipeline.clone())
+                    .unwrap()
+                    .bind_descriptor_sets(
+                        PipelineBindPoint::Compute,
+                        compute_pipeline.layout().clone(),
+                        0,
+                        descriptor_set_0.clone(),
+                    )
+                    .unwrap()
+                    .push_constants(
+                        compute_pipeline.layout().clone(),
+                        0,
+                        push_constants,
+                    )
+                    .unwrap()
+                    .dispatch(work_group.to_array())
+                    .unwrap();
+
+                builder.build().unwrap()
+            })
+            .collect::<Vec<_>>()
+    }
+
+    fn create_descriptor_set_0s(
+        memory_allocator: &Arc<StandardMemoryAllocator>,
+        descriptor_set_allocator: &StandardDescriptorSetAllocator,
+        compute_pipeline: &Arc<ComputePipeline>,
+        images: &Vec<Arc<Image>>,
+        info: &RuntimeInfo,
+    ) -> Vec<Arc<PersistentDescriptorSet>> {
         images
             .iter()
             .map(|image| {
                 let image_view = ImageView::new_default(image.clone()).unwrap();
-
-                // push constants
-                let push_constants = info.scene.camera.to_shader();
 
                 // buffers
                 let length_buffer = Buffer::from_iter(
@@ -399,11 +464,25 @@ impl Vk {
                     },
                     info.scene.point_lights.iter().map(|point_light| point_light.aligned()).collect::<Vec<_>>().into_iter()
                 ).unwrap();
+                let materials_buffer = Buffer::from_iter(
+                    memory_allocator.clone(),
+                    BufferCreateInfo {
+                        usage: BufferUsage::UNIFORM_BUFFER,
+                        ..Default::default()
+                    },
+                    AllocationCreateInfo {
+                        memory_type_filter: MemoryTypeFilter::PREFER_DEVICE
+                            | MemoryTypeFilter::HOST_SEQUENTIAL_WRITE,
+                        ..Default::default()
+                    },
+                    info.scene.materials.iter().map(|material| material.aligned()).collect::<Vec<_>>().into_iter()
+                ).unwrap();
                 
                 // descriptor set
                 let descriptor_set_0_layout 
                     = compute_pipeline.layout().set_layouts().get(0).unwrap();
-                let descriptor_set_0 = PersistentDescriptorSet::new(
+                
+                PersistentDescriptorSet::new(
                     descriptor_set_allocator,
                     descriptor_set_0_layout.clone(),
                     [
@@ -411,36 +490,10 @@ impl Vk {
                         WriteDescriptorSet::buffer(1, length_buffer),
                         WriteDescriptorSet::buffer(2, spheres_buffer),
                         WriteDescriptorSet::buffer(3, point_lights_buffer),
+                        WriteDescriptorSet::buffer(4, materials_buffer),
                     ],
                     [],
-                ).unwrap();
-
-                let mut builder = AutoCommandBufferBuilder::primary(
-                    command_buffer_allocator,
-                    queue.queue_family_index(),
-                    CommandBufferUsage::MultipleSubmit,
-                ).unwrap();
-
-                builder
-                    .bind_pipeline_compute(compute_pipeline.clone())
-                    .unwrap()
-                    .bind_descriptor_sets(
-                        PipelineBindPoint::Compute,
-                        compute_pipeline.layout().clone(),
-                        0,
-                        descriptor_set_0,
-                    )
-                    .unwrap()
-                    .push_constants(
-                        compute_pipeline.layout().clone(),
-                        0,
-                        push_constants,
-                    )
-                    .unwrap()
-                    .dispatch(work_group.to_array())
-                    .unwrap();
-
-                builder.build().unwrap()
+                ).unwrap()
             })
             .collect::<Vec<_>>()
     }

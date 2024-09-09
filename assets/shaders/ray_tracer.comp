@@ -11,7 +11,13 @@
 
 // MARK: Data Structure
 
-layout(local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
+layout(
+    local_size_x = 8,
+    local_size_y = 8,
+    local_size_z = 1
+) in;
+
+// MARK: * Camera
 
 layout(push_constant) uniform Camera {
     vec3 position;
@@ -22,12 +28,16 @@ layout(push_constant) uniform Camera {
     float vertical_fov;
 } camera;
 
+// MARK: * Img & Lens
+
 layout(set = 0, binding = 0) uniform writeonly image2D img; // 不能加rgba8，否则会因为格式不兼容而运行时错误
 
 layout(set = 0, binding = 1) uniform LengthBuffer {
     uint spheres;
     uint point_lights;
 } lens;
+
+// MARK: * Sphere
 
 struct Sphere {
     vec3 center;
@@ -39,6 +49,8 @@ layout(set = 0, binding = 2) uniform SphereBuffer {
     Sphere sphere[SPHERE_BUFFER_MAX];
 } spheres;
 
+// MARK: * Point Light
+
 struct PointLight {
     vec3 position;
     vec3 energy;
@@ -47,6 +59,20 @@ struct PointLight {
 layout(set = 0, binding = 3) uniform PointLightBuffer {
     PointLight point_light[POINT_LIGHT_BUFFER_MAX];
 } point_lights;
+
+// MARK: * Material
+
+// albedo at index 0, because of aligement requirements
+struct Material {
+    vec3 albedo;
+    uint ty;
+    float fuzz;
+    float index_of_refraction;
+};
+
+layout(set = 0, binding = 4) uniform MaterialBuffer {
+    Material material[SPHERE_BUFFER_MAX];
+} materials;
 
 // MARK: Ray Tracing DataS.
 
@@ -178,6 +204,7 @@ void main() {
     uint len = lens.spheres;
     float r = spheres.sphere[0].radius;
     vec3 pos = point_lights.point_light[0].position;
+    float a = materials.material[0].index_of_refraction;
 
     vec3 color = vec3(0.0);
     for (uint i = 0; i < SPP; i++) {

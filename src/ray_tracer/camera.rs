@@ -3,6 +3,7 @@ use vulkano::{buffer::BufferContents, padded::Padded};
 
 use super::prelude::*;
 
+#[derive(Debug, Clone, Copy)]
 pub struct Camera {
     pub position: Vec3,
     pub up: Vec3,
@@ -15,7 +16,7 @@ pub struct Camera {
     // pub size: Vec2,
 }
 
-#[derive(BufferContents)]
+#[derive(Debug, Clone, Copy, BufferContents)]
 #[repr(C)]
 pub struct AlignedCamera {
     pub position: [f32; 4],

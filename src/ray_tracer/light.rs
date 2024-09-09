@@ -8,7 +8,7 @@ pub struct PointLight {
     pub energy: glam::Vec3,
 }
 
-#[derive(BufferContents)]
+#[derive(Debug, Clone, Copy, BufferContents)]
 #[repr(C)]
 pub struct AlignedPointLight {
     pub position: [f32; 4],

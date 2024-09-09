@@ -92,13 +92,14 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
   * 输出 RGB = vec3(direction.x, direction.y, 0.0)
     * ![image-20240909164435232](./README/image-20240909164435232.png)
   * 正确的
-* 无视材质渲染球体
+* 无视材质情况下的渲染球体
   * **大坑！**：Vulkan内存对齐，除了struct内存对齐，一个数组的两个相邻变量也要对齐！惊了！
     * push_constants，只需要对齐内部，不需要struct末尾的padding
     * buffer，需要对齐内部和相邻元素，**需要struct末尾的padding**
+    * [Vulkan Alignment Requirements 文档](https://vulkan-tutorial.com/resources/vulkan_tutorial_en.pdf#page=183&zoom=100,178,658)
   * 搞定！
     * ![image-20240909194736983](./README/image-20240909194736983.png)
-  * 
+* Lambertian
 
 ## 笔记
 
