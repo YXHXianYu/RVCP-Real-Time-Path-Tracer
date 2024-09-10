@@ -41,6 +41,16 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
 * 优化vec2 sample_ray(vec2)
 
   * 目前是完全按照数学推导写的，存在很大的优化空间
+  
+* 重构vulkan部分
+
+  * 优化窗口缩放时额外的buffer重建开销
+  * 代码整理
+
+* 路径追踪优化
+
+  * 路径重用
+
 
 ## Preview
 
@@ -50,6 +60,9 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
 ## 笔记：二阶段
 
 * 实现一个基于Compute Shader的Ray Tracing
+* 整体框架参考Moer-Lite
+  * 材质部分参考Ray Tracing In One Weekend
+
 
 ### 第一步：实现一个能在屏幕上绘制颜色的Compute Shader
 
@@ -99,7 +112,9 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
     * [Vulkan Alignment Requirements 文档](https://vulkan-tutorial.com/resources/vulkan_tutorial_en.pdf#page=183&zoom=100,178,658)
   * 搞定！
     * ![image-20240909194736983](./README/image-20240909194736983.png)
-* Lambertian
+* 材质采样
+  * 
+
 
 ## 笔记
 
