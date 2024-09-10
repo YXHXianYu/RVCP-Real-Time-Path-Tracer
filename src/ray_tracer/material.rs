@@ -48,6 +48,7 @@ impl Material {
     }
 
     pub fn new_metal(albedo: Vec3, fuzz: f32) -> Self {
+        assert!(fuzz <= 1.0);
         Self {
             albedo,
             ty: MaterialType::Metal,

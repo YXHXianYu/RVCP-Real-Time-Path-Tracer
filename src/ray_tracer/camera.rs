@@ -1,5 +1,5 @@
 use glam::Vec3;
-use vulkano::{buffer::BufferContents, padded::Padded};
+use vulkano::buffer::BufferContents;
 
 use super::prelude::*;
 
@@ -29,14 +29,15 @@ pub struct AlignedCamera {
 }
 
 impl Camera {
-    pub fn to_shader(&self) -> ray_tracer_shader::Camera {
-        ray_tracer_shader::Camera {
-            position: Padded::from(self.position.to_array()),
-            up: Padded::from(self.up.to_array()),
+    pub fn aligned(&self) -> AlignedCamera {
+        AlignedCamera {
+            position: vec3_to_f32_4(self.position),
+            up: vec3_to_f32_4(self.up),
             look_at: self.look_at.to_array(),
             t_near: self.t_near,
             t_far: self.t_far,
             vertical_fov: self.vertical_fov,
+            _padding: [0; 2],
         }
     }
 }

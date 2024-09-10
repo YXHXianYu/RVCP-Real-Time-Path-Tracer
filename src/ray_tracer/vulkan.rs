@@ -2,7 +2,7 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 use glam::UVec3;
-use vulkano::buffer::{Buffer, BufferCreateInfo, BufferUsage};
+use vulkano::buffer::{Buffer, BufferContents, BufferCreateInfo, BufferUsage};
 use vulkano::command_buffer::allocator::{StandardCommandBufferAllocator, StandardCommandBufferAllocatorCreateInfo};
 use vulkano::command_buffer::{AutoCommandBufferBuilder, CommandBufferExecFuture, CommandBufferUsage, PrimaryAutoCommandBuffer};
 use vulkano::descriptor_set::allocator::StandardDescriptorSetAllocator;
@@ -25,6 +25,7 @@ use winit::event::VirtualKeyCode;
 use winit::event_loop::EventLoop;
 use winit::window::{Window, WindowBuilder};
 
+use super::camera::AlignedCamera;
 use super::scene::Scene;
 use super::shader::*;
 
@@ -102,6 +103,24 @@ pub struct Vk {
 
     // buffers
     pub descriptor_set_0s: Vec<Arc<PersistentDescriptorSet>>,
+}
+
+#[derive(Debug, Clone, Copy, BufferContents)]
+#[repr(C)]
+struct PushConstant {
+    camera: AlignedCamera,
+    time: f32,
+    // _padding: [u32; 3],
+}
+
+impl PushConstant {
+    fn new(camera: AlignedCamera, time: f32) -> Self {
+        Self {
+            camera,
+            time,
+            // _padding: [0; 3],
+        }
+    }
 }
 
 impl Vk {
@@ -300,7 +319,7 @@ impl Vk {
 
         if info.is_window_resized || info.is_new_push_constants {
             info.is_window_resized = false;
-            info.is_new_push_constants = false;
+            info.is_new_push_constants = true;
             
             let new_command_buffers = Vk::create_command_buffers(
                 &self.descriptor_set_0s,
@@ -381,7 +400,11 @@ impl Vk {
             .iter()
             .map(|descriptor_set_0| {
                 // push constants
-                let push_constants = info.scene.camera.to_shader();
+                let push_constants = PushConstant::new(
+                    info.scene.camera.aligned(),
+                    (std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_secs_f64() % 1000.0) as f32,
+                );
+                // println!("Time: {}", push_constants.time);
 
                 let mut builder = AutoCommandBufferBuilder::primary(
                     command_buffer_allocator,

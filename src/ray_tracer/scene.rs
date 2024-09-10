@@ -12,7 +12,7 @@ pub struct Scene {
 impl Default for Scene {
     fn default() -> Self {
         let camera = Camera {
-            position: Vec3::new(0.0, 1.0, 5.0),
+            position: Vec3::new(0.0, 1.0, 3.0),
             up: Vec3::new(0.0, 1.0, 0.0),
             look_at: Vec3::new(0.0, 0.0, 0.0),
             t_near: 0.1,

@@ -54,6 +54,9 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
 
 ## Preview
 
+* Simple Ray Tracing（SPP=10，MaxBounces=50，FPS=1200）
+  * ![image-20240910230428333](./README/image-20240910230428333.png)
+
 * Fractal (Refer to https://vulkano.rs/05-images/04-mandelbrot.html)
   * ![fractal](./README/fractal.png)
 
@@ -105,6 +108,7 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
   * 输出 RGB = vec3(direction.x, direction.y, 0.0)
     * ![image-20240909164435232](./README/image-20240909164435232.png)
   * 正确的
+  
 * 无视材质情况下的渲染球体
   * **大坑！**：Vulkan内存对齐，除了struct内存对齐，一个数组的两个相邻变量也要对齐！惊了！
     * push_constants，只需要对齐内部，不需要struct末尾的padding
@@ -112,8 +116,71 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
     * [Vulkan Alignment Requirements 文档](https://vulkan-tutorial.com/resources/vulkan_tutorial_en.pdf#page=183&zoom=100,178,658)
   * 搞定！
     * ![image-20240909194736983](./README/image-20240909194736983.png)
+  
 * 材质采样
-  * 
+
+  * 小坑：蒙特卡洛路径追踪，需要随机数。而UNIX时间不能使用float表示，否则末几位会变成0
+
+* 遇到一个奇怪的问题
+
+  * ```glsl
+    float g_rand_seed = 19260817.0;
+    void srand(float time, vec2 uv) {
+        g_rand_seed = fract(sin(time) * 43758.5453 + sin(uv.x) * 22578.5453 + sin(uv.y) * 114514.1919);
+    }
+    float rand() {
+        g_rand_seed = fract(sin(g_rand_seed) * 43758.5453);
+        return g_rand_seed;
+    }
+    vec3 rand3() {
+        return vec3(rand(), rand(), rand());
+    }
+    
+    // advanced random
+    vec3 random_in_unit_sphere() {
+        vec3 p;
+        int max_attempts = 100;
+        int attempts = 0;
+        do {
+            p = 2.0 * rand3() - vec3(1.0);
+            attempts += 1;
+            // if (attempts > max_attempts) {
+            //     return vec3(1.0);
+            // }
+        } while (dot(p, p) >= 1.0);
+        return normalize(p);
+    }
+    ```
+
+  * 上面这段代码，一直执行random_in_unit_sphere()就会崩溃
+
+  * 但是如果把中间关于attemps的if的注释去掉，就不会崩溃
+
+  * 【为什么？】
+
+    * 解决了！
+    * ![d0e3f631f659ae4a63bb99398b9a1cd](./README/d0e3f631f659ae4a63bb99398b9a1cd.png)
+    * 就float有精度限制，是4byte，所以这个随机数，本质上是建立了一系列4byte -> 4byte的映射。而不同的常数，表示了不同的映射。这个常数表示的映射，会让大部分种子，最后陷入一个长度=18的循环节，所以就寄了
+  
+* GLSL的Reflect问题
+
+  * 入射光
+    * ![image-20240911003601833](./README/image-20240911003601833.png)
+
+  * 法线
+    * ![image-20240911003609518](./README/image-20240911003609518.png)
+
+  * 反射（错误图像）
+    * ![image-20240911003619295](./README/image-20240911003619295.png)
+
+  * ~~在最后一张反射图中：① 边缘是错误的，红色应该在右边，绿色应该在上面；② 但是中心是正确的！蓝色就应该在正前方~~
+  * ~~原因：光线打到球面边缘时，是从法线反方向的半球面处射入的，所以反射方向相反；而光线打到球面中心时，是从法线正方形射入的，所以反射方向正确！~~
+  * ~~所以，反射光线需要特判，改到normal方向的半球上~~
+  * 【为什么？？？】
+    * ![image-20240911010713970](./README/image-20240911010713970.png)
+    * 漏了219行
+    * 草！太难蚌了！我这段求交代码是从CGPC2024的题目里复制出来的！笑死！
+
 
 
 ## 笔记
