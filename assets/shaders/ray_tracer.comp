@@ -215,7 +215,6 @@ bool is_intersect_with_quadratic_equation(
     float sqrt_delta = sqrt(delta);
     float t0 = (-b + sqrt_delta) / (2.0 * a);
     float t1 = (-b - sqrt_delta) / (2.0 * a);
-    bool is_intersect = false;
     if (t0 > t1) { float tmp = t0; t0 = t1; t1 = tmp; }
 
     if (ray.t_min <= t0 && t0 <= ray.t_max) {
@@ -252,7 +251,6 @@ bool is_intersect_with_sphere(
     float c = dot(co, co) - sphere.radius * sphere.radius;
 
     if (is_intersect_with_quadratic_equation(a, b, c, ray, interaction)) {
-        // interaction.normal = normalize(interaction.position - sphere.center);
         interaction.normal = normalize(interaction.position - sphere.center);
         interaction.material_id = sphere.material;
         return true;
@@ -269,7 +267,7 @@ Interaction get_intersection_with_scene(
     for (uint i = 0; i < lens.spheres; i++) {
         Interaction new_inter;
         if (is_intersect_with_sphere(ray, spheres.sphere[i], new_inter)) {
-            if (new_inter.time < ray.t_max) {
+            if (new_inter.time <= ray.t_max) {
                 ray.t_max = new_inter.time;
                 inter = new_inter;
             }
@@ -290,6 +288,8 @@ void lambertian_scatter(
     out Ray new_ray
 ) {
     vec3 direction = normalize(inter.normal + random_in_unit_sphere_surface()); // BRDF Sampling here
+    // vec3 direction = random_in_unit_hemisphere_surface(inter.normal); // BRDF Sampling here
+
     if (direction.x < EPS && direction.y < EPS && direction.z < EPS) { direction = inter.normal; }
 
     // return
@@ -314,19 +314,19 @@ void metal_scatter(
     // |reflected ray| == |ray.direction|
     // I don't prove it, but I proved the reflected ray is normalized when the input ray is normalized
     vec3 reflected = reflect(ray.direction, inter.normal);
-    vec3 direction = normalize(reflected + material.fuzz * random_in_unit_sphere_surface());
+    if (dot(reflected, inter.normal) < 0.0) { reflected = -reflected; }
+    vec3 direction;
+    do {
+        direction = normalize(reflected + material.fuzz * random_in_unit_sphere_surface());
+    } while (dot(direction, inter.normal) < 0.0);
 
-    if (dot(direction, inter.normal) > 0.0) {
-        attenuation = material.albedo;
-        new_ray = Ray(
-            inter.position,
-            direction,
-            RAY_T_MIN,
-            RAY_T_MAX
-        );
-    } else {
-        attenuation = vec3(0.0);
-    }
+    attenuation = material.albedo;
+    new_ray = Ray(
+        inter.position,
+        direction,
+        RAY_T_MIN,
+        RAY_T_MAX
+    );
 }
 
 // MARK: * Dielectric

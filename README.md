@@ -180,7 +180,13 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
     * ![image-20240911010713970](./README/image-20240911010713970.png)
     * 漏了219行
     * 草！太难蚌了！我这段求交代码是从CGPC2024的题目里复制出来的！笑死！
+  
+* 球体底部法线不正确
 
+  * ![image-20240911101400058](./README/image-20240911101400058.png)
+  * 【待解决，不知道为什么】
+    * ![image-20240911101459460](./README/image-20240911101459460.png)
+    * 目前通过这个hack，把reflected投影到法线半球
 
 
 ## 笔记
