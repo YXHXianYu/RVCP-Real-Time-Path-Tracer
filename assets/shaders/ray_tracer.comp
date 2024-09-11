@@ -8,7 +8,7 @@
 #define MAX_BOUNCES 30
 #define RAY_T_MIN 0.01
 #define RAY_T_MAX 1000.0
-// #define RR_PROBABILITY 0.0 // TODO
+#define RR_PROBABILITY 1.0 // FIXME: High artifacts
 
 #define SPHERE_BUFFER_MAX 100
 #define POINT_LIGHT_BUFFER_MAX 10
@@ -121,28 +121,6 @@ float length2(in vec3 v) {
 
 // all random function's range is [0, 1)
 
-// specific seed random (input float)
-float rand_v1(float seed) {
-    return fract(sin(seed) * 43758.5453);
-}
-vec2 rand2_v1(float seed) {
-    return vec2(rand_v1(seed), rand_v1(seed + 1.0));
-}
-vec3 rand3_v1(float seed) {
-    return vec3(rand_v1(seed), rand_v1(seed + 1.0), rand_v1(seed + 2.0));
-}
-
-// specific seed random (input vec2)
-float rand_v2(vec2 seed) {
-    return fract(sin(dot(seed, vec2(12.9898, 78.233))) * 43758.5453);
-}
-vec2 rand2_v2(vec2 seed) {
-    return vec2(rand_v2(seed), rand_v2(seed + vec2(1.0)));
-}
-vec3 rand3_v2(vec2 seed) {
-    return vec3(rand_v2(seed), rand_v2(seed + vec2(1.0)), rand_v2(seed + vec2(2.0)));
-}
-
 // default random
 // g_rand_seed should be near 1-100; And this constant should be useless, just a default value
 float g_rand_seed = 19.260817;
@@ -162,6 +140,30 @@ vec2 rand2() {
 }
 vec3 rand3() {
     return vec3(rand(), rand(), rand());
+}
+
+// MARK: * Random with Seed
+
+// specific seed random (input float)
+float rand_v1(float seed) {
+    return _rand(seed);
+}
+vec2 rand2_v1(float seed) {
+    return vec2(rand_v1(seed), rand_v1(seed + 1.0));
+}
+vec3 rand3_v1(float seed) {
+    return vec3(rand_v1(seed), rand_v1(seed + 1.0), rand_v1(seed + 2.0));
+}
+
+// specific seed random (input vec2)
+float rand_v2(vec2 seed) {
+    return _rand(dot(seed, vec2(12.9898, 78.233)));
+}
+vec2 rand2_v2(vec2 seed) {
+    return vec2(rand_v2(seed), rand_v2(seed + vec2(1.0)));
+}
+vec3 rand3_v2(vec2 seed) {
+    return vec3(rand_v2(seed), rand_v2(seed + vec2(1.0)), rand_v2(seed + vec2(2.0)));
 }
 
 // advanced random
@@ -289,6 +291,10 @@ Interaction get_intersection_with_scene(
 }
 
 // MARK: Func: Material Scatter
+
+// PlaceHolder
+// PlaceHolder
+// PlaceHolder
 
 // MARK: * Lambertian
 
@@ -457,6 +463,12 @@ vec3 trace_ray(
         } else if (material.ty == MATERIAL_METAL) {
             // color += attenuation * sample_infinite_light(ray);
             
+        }
+
+        if (rand() >= RR_PROBABILITY) {
+            break;
+        } else {
+            attenuation /= RR_PROBABILITY;
         }
     }
 
