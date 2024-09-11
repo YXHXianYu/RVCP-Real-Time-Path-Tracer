@@ -13,7 +13,7 @@ pub struct Material {
     ty: MaterialType,
     albedo: Vec3,
     fuzz: f32,
-    index_of_refraction: f32,
+    refraction_ratio: f32,
 }
 
 #[derive(Debug, Clone, Copy, BufferContents)]
@@ -22,7 +22,7 @@ pub struct AlignedMaterial {
     albedo: [f32; 3],
     ty: u32,
     fuzz: f32,
-    index_of_refraction: f32,
+    refraction_ratio: f32,
     _padding: [u32; 2],
 }
 
@@ -33,7 +33,7 @@ impl Material {
             albedo: self.albedo.to_array(),
             ty: self.ty as u32,
             fuzz: self.fuzz,
-            index_of_refraction: self.index_of_refraction,
+            refraction_ratio: self.refraction_ratio,
             _padding: [0; 2],
         }
     }
@@ -43,7 +43,7 @@ impl Material {
             albedo,
             ty: MaterialType::Lambertian,
             fuzz: 0.0,
-            index_of_refraction: 0.0,
+            refraction_ratio: 0.0,
         }
     }
 
@@ -53,16 +53,16 @@ impl Material {
             albedo,
             ty: MaterialType::Metal,
             fuzz,
-            index_of_refraction: 0.0,
+            refraction_ratio: 0.0,
         }
     }
 
-    pub fn new_dielectric(index_of_refraction: f32) -> Self {
+    pub fn new_dielectric(refraction_ratio: f32) -> Self {
         Self {
             albedo: Vec3::new(1.0, 1.0, 1.0),
             ty: MaterialType::Dielectric,
             fuzz: 0.0,
-            index_of_refraction,
+            refraction_ratio,
         }
     }
 }

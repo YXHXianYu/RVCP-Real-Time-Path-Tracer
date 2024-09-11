@@ -4,10 +4,11 @@
 
 #define EPS 0.001
 
-#define SPP 10
-#define MAX_BOUNCES 50
+#define SPP 20
+#define MAX_BOUNCES 30
 #define RAY_T_MIN 0.01
 #define RAY_T_MAX 1000.0
+// #define RR_PROBABILITY 0.0 // TODO
 
 #define SPHERE_BUFFER_MAX 100
 #define POINT_LIGHT_BUFFER_MAX 10
@@ -82,7 +83,7 @@ struct Material {
     vec3 albedo;
     uint ty;
     float fuzz;
-    float index_of_refraction;
+    float refraction_ratio;
 };
 
 layout(set = 0, binding = 4) uniform MaterialBuffer {
@@ -107,9 +108,14 @@ struct Interaction {
     // vec2 tex_coord;
     // In Moer-Lite, there are a lot of dxxx, I don't know what it is.
     uint material_id;
+    bool is_normal_outward;
 };
 
 // MARK: Func: Utils
+
+float length2(in vec3 v) {
+    return dot(v, v);
+}
 
 // MARK: Func: Random
 
@@ -222,7 +228,8 @@ bool is_intersect_with_quadratic_equation(
             t0,
             ray.origin + ray.direction * t0,
             vec3(0.0),
-            0
+            0,
+            true
         );
         return true;
     }
@@ -232,7 +239,8 @@ bool is_intersect_with_quadratic_equation(
             t1,
             ray.origin + ray.direction * t1,
             vec3(0.0),
-            0
+            0,
+            true
         );
         return true;
     }
@@ -253,6 +261,10 @@ bool is_intersect_with_sphere(
     if (is_intersect_with_quadratic_equation(a, b, c, ray, interaction)) {
         interaction.normal = normalize(interaction.position - sphere.center);
         interaction.material_id = sphere.material;
+        if (length2(ray.origin - sphere.center) < sphere.radius * sphere.radius) {
+            interaction.normal = -interaction.normal;
+            interaction.is_normal_outward = false;
+        }
         return true;
     } else {
         return false;
@@ -331,6 +343,15 @@ void metal_scatter(
 
 // MARK: * Dielectric
 
+float fresnel_schlick(
+    in float cosine,
+    in float refraction_ratio
+) {
+    float r0 = (1.0 - refraction_ratio) / (1.0 + refraction_ratio);
+    r0 = r0 * r0;
+    return r0 + (1.0 - r0) * pow(1.0 - cosine, 5.0);
+}
+
 void dielectric_scatter(
     in Material material,
     in Ray ray,
@@ -338,7 +359,27 @@ void dielectric_scatter(
     out vec3 attenuation, // color
     out Ray new_ray
 ) {
-    lambertian_scatter(material, ray, inter, attenuation, new_ray);
+    float refraction_ratio = inter.is_normal_outward ? (1.0 / material.refraction_ratio) : material.refraction_ratio;
+
+    float cos_theta = dot(-ray.direction, inter.normal);
+    float sin_theta = sqrt(1.0 - cos_theta * cos_theta);
+
+    bool is_refracted = refraction_ratio * sin_theta <= 1.0;
+
+    vec3 refracted;
+    if (is_refracted && (rand() >= fresnel_schlick(cos_theta, refraction_ratio))) {
+        refracted = refract(ray.direction, inter.normal, refraction_ratio);
+    } else {
+        refracted = reflect(ray.direction, inter.normal);
+    }
+
+    attenuation = vec3(1.0);
+    new_ray = Ray(
+        inter.position,
+        refracted,
+        RAY_T_MIN,
+        RAY_T_MAX
+    );
 }
 
 // MARK: * Material
@@ -438,7 +479,7 @@ void main() {
     uint len = lens.spheres;
     float r = spheres.sphere[0].radius;
     vec3 pos = point_lights.point_light[0].position;
-    float a = materials.material[0].index_of_refraction;
+    float a = materials.material[0].refraction_ratio;
 
     vec3 color = vec3(0.0);
     for (uint i = 0; i < SPP; i++) {
