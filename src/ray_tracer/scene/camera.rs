@@ -1,7 +1,7 @@
 use glam::Vec3;
 use vulkano::buffer::BufferContents;
 
-use super::prelude::*;
+use crate::ray_tracer::prelude::*;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Camera {
@@ -19,13 +19,13 @@ pub struct Camera {
 #[derive(Debug, Clone, Copy, BufferContents)]
 #[repr(C)]
 pub struct AlignedCamera {
-    pub position: [f32; 4],
-    pub up: [f32; 4],
-    pub look_at: [f32; 3],
-    pub t_near: f32,
-    pub t_far: f32,
-    pub vertical_fov: f32,
-    pub _padding: [u32; 2],
+    position: [f32; 4],
+    up: [f32; 4],
+    look_at: [f32; 3],
+    t_near: f32,
+    t_far: f32,
+    vertical_fov: f32,
+    _padding: [u32; 2],
 }
 
 impl Camera {

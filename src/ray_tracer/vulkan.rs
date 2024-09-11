@@ -25,8 +25,9 @@ use winit::event::VirtualKeyCode;
 use winit::event_loop::EventLoop;
 use winit::window::{Window, WindowBuilder};
 
-use super::camera::AlignedCamera;
-use super::scene::Scene;
+use crate::ray_tracer::scene::MaterialType;
+
+use super::scene::{AlignedCamera, Scene};
 use super::shader::*;
 
 // === Runtime Info ===
@@ -110,7 +111,6 @@ pub struct Vk {
 struct PushConstant {
     camera: AlignedCamera,
     time: f32,
-    // _padding: [u32; 3],
 }
 
 impl PushConstant {
@@ -118,7 +118,6 @@ impl PushConstant {
         Self {
             camera,
             time,
-            // _padding: [0; 3],
         }
     }
 }
@@ -145,10 +144,22 @@ impl Vk {
             .next()
             .unwrap();
 
-        let max_push_constants_size = physical_device
-            .properties()
-            .max_push_constants_size;
-        println!("Max push constants size: {} Bytes", max_push_constants_size);
+        // let max_push_constants_size = physical_device
+        //     .properties()
+        //     .max_push_constants_size;
+        // println!("Max push constants size: {} Bytes", max_push_constants_size);
+
+        // let max_uniform_buffer = physical_device
+        //     .properties()
+        //     .max_per_stage_descriptor_uniform_buffers;
+        // let max_storage_buffer = physical_device
+        //     .properties()
+        //     .max_per_stage_descriptor_storage_buffers;
+        // let max_bound_descriptor_sets = physical_device
+        //     .properties()
+        //     .max_bound_descriptor_sets;
+        // println!("Max uniform buffer: {}; Max storage buffer: {}; Max bound descriptor sets: {}",
+        //     max_uniform_buffer, max_storage_buffer, max_bound_descriptor_sets);
 
         let queue_family_index = physical_device
             .queue_family_properties()
@@ -443,11 +454,25 @@ impl Vk {
         images: &Vec<Arc<Image>>,
         info: &RuntimeInfo,
     ) -> Vec<Arc<PersistentDescriptorSet>> {
+        println!("Creating descriptor set 0s.");
         images
             .iter()
             .map(|image| {
                 let image_view = ImageView::new_default(image.clone()).unwrap();
 
+                let luminous_sphere_id = info.scene.spheres
+                        .iter()
+                        .enumerate()
+                        .filter(|(_, sphere)| info.scene.materials[sphere.material_id as usize].ty == MaterialType::Light)
+                        .map(|(id, _)| id as u32)
+                        .collect::<Vec<_>>();
+                let luminous_face_id = info.scene.mesh.faces
+                        .iter()
+                        .enumerate()
+                        .filter(|(_, face)| info.scene.materials[face.material_id as usize].ty == MaterialType::Light)
+                        .map(|(id, _)| id as u32)
+                        .collect::<Vec<_>>();
+                
                 // buffers
                 let length_buffer = Buffer::from_iter(
                     memory_allocator.clone(),
@@ -460,33 +485,14 @@ impl Vk {
                             | MemoryTypeFilter::HOST_SEQUENTIAL_WRITE,
                         ..Default::default()
                     },
-                    [info.scene.spheres.len() as u32, info.scene.point_lights.len() as u32],
-                ).unwrap();
-                let spheres_buffer = Buffer::from_iter(
-                    memory_allocator.clone(),
-                    BufferCreateInfo {
-                        usage: BufferUsage::UNIFORM_BUFFER,
-                        ..Default::default()
-                    },
-                    AllocationCreateInfo {
-                        memory_type_filter: MemoryTypeFilter::PREFER_DEVICE
-                            | MemoryTypeFilter::HOST_SEQUENTIAL_WRITE,
-                        ..Default::default()
-                    },
-                    info.scene.spheres.iter().map(|sphere| sphere.aligned()).collect::<Vec<_>>().into_iter()
-                ).unwrap();
-                let point_lights_buffer = Buffer::from_iter(
-                    memory_allocator.clone(),
-                    BufferCreateInfo {
-                        usage: BufferUsage::UNIFORM_BUFFER,
-                        ..Default::default()
-                    },
-                    AllocationCreateInfo {
-                        memory_type_filter: MemoryTypeFilter::PREFER_DEVICE
-                            | MemoryTypeFilter::HOST_SEQUENTIAL_WRITE,
-                        ..Default::default()
-                    },
-                    info.scene.point_lights.iter().map(|point_light| point_light.aligned()).collect::<Vec<_>>().into_iter()
+                    [
+                        info.scene.materials.len() as u32,
+                        info.scene.spheres.len() as u32,
+                        info.scene.mesh.vertices.len() as u32,
+                        info.scene.mesh.faces.len() as u32,
+                        luminous_sphere_id.len() as u32,
+                        luminous_face_id.len() as u32,
+                    ],
                 ).unwrap();
                 let materials_buffer = Buffer::from_iter(
                     memory_allocator.clone(),
@@ -501,6 +507,72 @@ impl Vk {
                     },
                     info.scene.materials.iter().map(|material| material.aligned()).collect::<Vec<_>>().into_iter()
                 ).unwrap();
+                let spheres_buffer = Buffer::from_iter(
+                    memory_allocator.clone(),
+                    BufferCreateInfo {
+                        usage: BufferUsage::UNIFORM_BUFFER,
+                        ..Default::default()
+                    },
+                    AllocationCreateInfo {
+                        memory_type_filter: MemoryTypeFilter::PREFER_DEVICE
+                            | MemoryTypeFilter::HOST_SEQUENTIAL_WRITE,
+                        ..Default::default()
+                    },
+                    info.scene.spheres.iter().map(|sphere| sphere.aligned()).collect::<Vec<_>>().into_iter()
+                ).unwrap();
+                let mesh_vertices_buffer = Buffer::from_iter(
+                    memory_allocator.clone(),
+                    BufferCreateInfo {
+                        usage: BufferUsage::STORAGE_BUFFER,
+                        ..Default::default()
+                    },
+                    AllocationCreateInfo {
+                        memory_type_filter: MemoryTypeFilter::PREFER_DEVICE
+                            | MemoryTypeFilter::HOST_SEQUENTIAL_WRITE,
+                        ..Default::default()
+                    },
+                    info.scene.mesh.vertices.iter().map(|vertex| vertex.aligned()).collect::<Vec<_>>().into_iter()
+                ).unwrap();
+                let mesh_indices_buffer = Buffer::from_iter(
+                    memory_allocator.clone(),
+                    BufferCreateInfo {
+                        usage: BufferUsage::STORAGE_BUFFER,
+                        ..Default::default()
+                    },
+                    AllocationCreateInfo {
+                        memory_type_filter: MemoryTypeFilter::PREFER_DEVICE
+                            | MemoryTypeFilter::HOST_SEQUENTIAL_WRITE,
+                        ..Default::default()
+                    },
+                    info.scene.mesh.faces.iter().map(|face| face.aligned()).collect::<Vec<_>>().into_iter()
+                ).unwrap();
+                let luminous_sphere_id_buffer = Buffer::from_iter(
+                    memory_allocator.clone(),
+                    BufferCreateInfo {
+                        usage: BufferUsage::UNIFORM_BUFFER,
+                        ..Default::default()
+                    },
+                    AllocationCreateInfo {
+                        memory_type_filter: MemoryTypeFilter::PREFER_DEVICE
+                            | MemoryTypeFilter::HOST_SEQUENTIAL_WRITE,
+                        ..Default::default()
+                    },
+                    luminous_sphere_id
+                ).unwrap();
+                let luminous_face_id_buffer = Buffer::from_iter(
+                    memory_allocator.clone(),
+                    BufferCreateInfo {
+                        usage: BufferUsage::UNIFORM_BUFFER,
+                        ..Default::default()
+                    },
+                    AllocationCreateInfo {
+                        memory_type_filter: MemoryTypeFilter::PREFER_DEVICE
+                            | MemoryTypeFilter::HOST_SEQUENTIAL_WRITE,
+                        ..Default::default()
+                    },
+                    luminous_face_id
+                ).unwrap();
+                
                 
                 // descriptor set
                 let descriptor_set_0_layout 
@@ -512,9 +584,12 @@ impl Vk {
                     [
                         WriteDescriptorSet::image_view(0, image_view.clone()),
                         WriteDescriptorSet::buffer(1, length_buffer),
-                        WriteDescriptorSet::buffer(2, spheres_buffer),
-                        WriteDescriptorSet::buffer(3, point_lights_buffer),
-                        WriteDescriptorSet::buffer(4, materials_buffer),
+                        WriteDescriptorSet::buffer(2, materials_buffer),
+                        WriteDescriptorSet::buffer(3, spheres_buffer),
+                        WriteDescriptorSet::buffer(4, mesh_vertices_buffer), // Storage buffer
+                        WriteDescriptorSet::buffer(5, mesh_indices_buffer),  // Storage buffer
+                        WriteDescriptorSet::buffer(6, luminous_sphere_id_buffer),
+                        WriteDescriptorSet::buffer(7, luminous_face_id_buffer),
                     ],
                     [],
                 ).unwrap()

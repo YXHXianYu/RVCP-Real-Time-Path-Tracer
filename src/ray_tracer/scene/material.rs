@@ -1,19 +1,20 @@
 use glam::Vec3;
 use vulkano::buffer::BufferContents;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum MaterialType {
     Lambertian = 0,
     Metal,
     Dielectric,
+    Light,
 }
 
 #[derive(Debug, Clone, Copy)]
 pub struct Material {
-    ty: MaterialType,
-    albedo: Vec3,
-    fuzz: f32,
-    refraction_ratio: f32,
+    pub ty: MaterialType,
+    pub albedo: Vec3,
+    pub fuzz: f32,
+    pub refraction_ratio: f32,
 }
 
 #[derive(Debug, Clone, Copy, BufferContents)]
@@ -63,6 +64,15 @@ impl Material {
             ty: MaterialType::Dielectric,
             fuzz: 0.0,
             refraction_ratio,
+        }
+    }
+
+    pub fn new_light(luminance: Vec3) -> Self {
+        Self {
+            albedo: luminance,
+            ty: MaterialType::Light,
+            fuzz: 0.0,
+            refraction_ratio: 0.0,
         }
     }
 }

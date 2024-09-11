@@ -11,9 +11,9 @@ pub struct PointLight {
 #[derive(Debug, Clone, Copy, BufferContents)]
 #[repr(C)]
 pub struct AlignedPointLight {
-    pub position: [f32; 4],
-    pub energy: [f32; 3],
-    pub _padding: [u32; 1],
+    position: [f32; 4],
+    energy: [f32; 3],
+    _padding: [u32; 1],
 }
 
 

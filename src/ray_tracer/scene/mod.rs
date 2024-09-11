@@ -1,12 +1,21 @@
-use glam::Vec3;
 
-use super::{camera::Camera, light::PointLight, material::Material, shape::Sphere};
+mod camera;
+mod material;
+mod sphere;
+mod mesh;
+
+pub use camera::*;
+pub use material::*;
+pub use sphere::*;
+pub use mesh::*;
+
+use glam::{UVec3, Vec3};
 
 pub struct Scene {
     pub camera: Camera,
-    pub spheres: Vec<Sphere>,
-    pub point_lights: Vec<PointLight>,
     pub materials: Vec<Material>,
+    pub spheres: Vec<Sphere>,
+    pub mesh: Mesh,
 }
 
 impl Default for Scene {
@@ -29,7 +38,7 @@ impl Default for Scene {
             Material::new_metal(Vec3::new(0.5, 0.4, 0.9), 0.3),
             Material::new_dielectric(1.3),
             Material::new_dielectric(2.5),
-            Material::new_metal(Vec3::new(0.75, 0.68, 0.44), 0.0),
+            Material::new_light(Vec3::new(1.0, 1.0, 1.0)),
         ];
 
         let spheres: Vec<Sphere> = vec![
@@ -69,33 +78,43 @@ impl Default for Scene {
                 material_id: 6,
             },
             Sphere {
-                center: Vec3::new(-1.0, 0.25, 1.0),
-                radius: 0.25,
+                center: Vec3::new(2.0, 1.0, 0.0),
+                radius: 1.0,
                 material_id: 7,
             },
             Sphere {
-                center: Vec3::new(2.0, 1.0, 0.0),
-                radius: 1.0,
+                center: Vec3::new(-1.0, 0.25, 1.0),
+                radius: 0.25,
                 material_id: 8,
             },
         ];
 
-        let point_lights: Vec<PointLight> = vec![
-            PointLight {
-                position: Vec3::new(0.0, 5.0, 0.0),
-                energy: Vec3::new(1.0, 1.0, 1.0),
-            },
-            PointLight {
-                position: Vec3::new(0.0, 3.0, 5.0),
-                energy: Vec3::new(1.0, 1.0, 1.0),
-            },
-        ];
+        let mesh = Mesh{
+            vertices: vec![
+                Vertex { position: Vec3::new(-10.0, 10.0, -10.0), normal: Vec3::new(0.0, -1.0, 0.0) },
+                Vertex { position: Vec3::new(-10.0, 10.0, 10.0), normal: Vec3::new(0.0, -1.0, 0.0) },
+                Vertex { position: Vec3::new(10.0, 10.0, 10.0), normal: Vec3::new(0.0, -1.0, 0.0) },
+                Vertex { position: Vec3::new(10.0, 10.0, -10.0), normal: Vec3::new(0.0, -1.0, 0.0) },
+                
+                Vertex { position: Vec3::new(-1.0, 9.9, -1.0), normal: Vec3::new(0.0, 1.0, 0.0) },
+                Vertex { position: Vec3::new(-1.0, 9.9, 1.0), normal: Vec3::new(0.0, 1.0, 0.0) },
+                Vertex { position: Vec3::new(1.0, 9.9, 1.0), normal: Vec3::new(0.0, 1.0, 0.0) },
+                Vertex { position: Vec3::new(1.0, 9.9, -1.0), normal: Vec3::new(0.0, 1.0, 0.0) },
+            ],
+            faces: vec![
+                Face { vertices: UVec3::new(0, 1, 2), material_id: 0 },
+                Face { vertices: UVec3::new(0, 2, 3), material_id: 0 },
+
+                Face { vertices: UVec3::new(4, 5, 6), material_id: 8 },
+                Face { vertices: UVec3::new(4, 6, 7), material_id: 8 },
+            ],
+        };
 
         Self {
             camera,
+            materials,
             spheres,
-            point_lights,
-            materials
+            mesh,
         }
     }
 }

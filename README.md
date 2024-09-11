@@ -188,6 +188,13 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
     * ![image-20240911101459460](./README/image-20240911101459460.png)
     * 目前通过这个hack，把reflected投影到法线半球
 
+* 重构数据
+
+  * 球 —— Done
+  * 三角面片
+  * 自动构建 发光球体id的Buffer
+  * 自动构建 发光三角面片id的Buffer
+
 
 ## 笔记
 

@@ -10,12 +10,17 @@
 #define RAY_T_MAX 1000.0
 #define RR_PROBABILITY 1.0 // FIXME: High artifacts
 
-#define SPHERE_BUFFER_MAX 100
-#define POINT_LIGHT_BUFFER_MAX 10
+#define MAX_LEN_MATERIAL_BUFFER 100
+#define MAX_LEN_SPHERE_BUFFER 100
+#define MAX_LEN_VERTEX_BUFFER 1000
+#define MAX_LEN_FACE_BUFFER 1000
+#define MAX_LEN_LUMINOUS_SPHERE_ID_BUFFER 100
+#define MAX_LEN_LUMINOUS_FACE_ID_BUFFER 100
 
 #define MATERIAL_LAMBERTIAN 0
 #define MATERIAL_METAL 1
 #define MATERIAL_DIELECTRIC 2
+#define MATERIAL_LIGHT 3
 
 // MARK: Scene D.S.
 
@@ -49,32 +54,19 @@ float u_time = push_constant_data.time;
 layout(set = 0, binding = 0) uniform writeonly image2D img; // 不能加rgba8，否则会因为格式不兼容而运行时错误
 
 layout(set = 0, binding = 1) uniform LengthBuffer {
-    uint spheres;
-    uint point_lights;
+    uint materials_len;
+    uint spheres_len;
+    uint vertices_len;
+    uint faces_len;
+    uint luminous_sphere_id_len;
+    uint luminous_face_id_len;
 } lens;
-
-// MARK: * Sphere
-
-struct Sphere {
-    vec3 center;
-    float radius;
-    uint material;
-};
-
-layout(set = 0, binding = 2) uniform SphereBuffer {
-    Sphere sphere[SPHERE_BUFFER_MAX];
-} spheres;
-
-// MARK: * Point Light
-
-struct PointLight {
-    vec3 position;
-    vec3 energy;
-};
-
-layout(set = 0, binding = 3) uniform PointLightBuffer {
-    PointLight point_light[POINT_LIGHT_BUFFER_MAX];
-} point_lights;
+uint materials_len = lens.materials_len;
+uint spheres_len = lens.spheres_len;
+uint vertices_len = lens.vertices_len;
+uint faces_len = lens.faces_len;
+uint luminous_sphere_id_len = lens.luminous_sphere_id_len;
+uint luminous_face_id_len = lens.luminous_face_id_len;
 
 // MARK: * Material
 
@@ -86,9 +78,56 @@ struct Material {
     float refraction_ratio;
 };
 
-layout(set = 0, binding = 4) uniform MaterialBuffer {
-    Material material[SPHERE_BUFFER_MAX];
+layout(set = 0, binding = 2) uniform MaterialBuffer {
+    Material v[MAX_LEN_MATERIAL_BUFFER];
 } materials;
+
+// MARK: * Sphere
+
+struct Sphere {
+    vec3 center;
+    float radius;
+    uint material_id;
+};
+
+layout(set = 0, binding = 3) uniform SphereBuffer {
+    Sphere v[MAX_LEN_SPHERE_BUFFER];
+} spheres;
+
+// MARK: * Vertices
+
+struct Vertex {
+    vec3 position;
+    vec3 normal;
+};
+
+layout(set = 0, binding = 4) buffer VertexBuffer {
+    Vertex v[MAX_LEN_VERTEX_BUFFER];
+} vertices;
+
+// MARK: * Faces
+
+struct Face {
+    uvec3 indices;
+    uint material_id;
+};
+
+layout(set = 0, binding = 5) buffer FaceBuffer {
+    Face v[MAX_LEN_FACE_BUFFER];
+} faces;
+
+// MARK: * Luminous Sphere Id
+
+layout(set = 0, binding = 6) uniform LuminousSphereIdBuffer {
+    uint v[MAX_LEN_LUMINOUS_SPHERE_ID_BUFFER];
+} luminous_sphere_id;
+
+// MARK: * Luminous Face Id
+
+layout(set = 0, binding = 7) uniform LuminousFaceIdBuffer {
+    uint v[MAX_LEN_LUMINOUS_FACE_ID_BUFFER];
+} luminous_face_id;
+
 
 // MARK: Ray Tracing D.S.
 
@@ -262,7 +301,7 @@ bool is_intersect_with_sphere(
 
     if (is_intersect_with_quadratic_equation(a, b, c, ray, interaction)) {
         interaction.normal = normalize(interaction.position - sphere.center);
-        interaction.material_id = sphere.material;
+        interaction.material_id = sphere.material_id;
         if (length2(ray.origin - sphere.center) < sphere.radius * sphere.radius) {
             interaction.normal = -interaction.normal;
             interaction.is_normal_outward = false;
@@ -278,9 +317,9 @@ Interaction get_intersection_with_scene(
 ) {
     Interaction inter;
     inter.time = ray.t_max + 1.0;
-    for (uint i = 0; i < lens.spheres; i++) {
+    for (uint i = 0; i < spheres_len; i++) {
         Interaction new_inter;
-        if (is_intersect_with_sphere(ray, spheres.sphere[i], new_inter)) {
+        if (is_intersect_with_sphere(ray, spheres.v[i], new_inter)) {
             if (new_inter.time <= ray.t_max) {
                 ray.t_max = new_inter.time;
                 inter = new_inter;
@@ -431,6 +470,10 @@ vec3 trace_ray(
         // 1. get intersection
         Interaction inter = get_intersection_with_scene(ray);
 
+        // Option: Material id only rendering
+        // color += float(inter.material_id) / 8.;
+        // break;
+
         // miss
         if (inter.time > ray.t_max) {
             color += attenuation * sample_infinite_light(ray);
@@ -439,7 +482,16 @@ vec3 trace_ray(
         }
 
         // 2. attenuation & new ray
-        Material material = materials.material[inter.material_id];
+        Material material = materials.v[inter.material_id];
+
+        // direct light
+        if (material.ty == MATERIAL_LIGHT) {
+            color += attenuation * material.albedo;
+            path_reuse_count += 1;
+            break;
+        }
+
+        // scatter
         vec3 new_attenuation = vec3(0.0, 0.0, 0.0);
         Ray new_ray;
         material_scatter(material, ray, inter, new_attenuation, new_ray);
@@ -488,10 +540,11 @@ void main() {
 
     Ray ray = sample_ray(uv, window_size);
 
-    uint len = lens.spheres;
-    float r = spheres.sphere[0].radius;
-    vec3 pos = point_lights.point_light[0].position;
-    float a = materials.material[0].refraction_ratio;
+    vec3 p1 = vertices.v[0].position;
+    vec3 p2 = faces.v[0].indices;
+    uint p3 = luminous_sphere_id.v[0];
+    uint p4 = luminous_face_id.v[0];
+    vec3 p5 = materials.v[0].albedo;
 
     vec3 color = vec3(0.0);
     for (uint i = 0; i < SPP; i++) {
