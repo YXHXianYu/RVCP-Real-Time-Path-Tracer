@@ -23,8 +23,13 @@ impl Default for Scene {
         let materials = vec![
             Material::new_lambertian(Vec3::new(1.0, 1.0, 1.0)),
             Material::new_lambertian(Vec3::new(0.8, 0.3, 0.3)),
-            Material::new_metal(Vec3::new(0.8, 0.8, 0.8), 0.2),
+            Material::new_lambertian(Vec3::new(0.3, 0.7, 0.3)),
+            Material::new_metal(Vec3::new(0.8, 0.8, 0.8), 0.3),
+            Material::new_metal(Vec3::new(0.5, 0.4, 0.9), 0.3),
+            Material::new_metal(Vec3::new(1.0, 1.0, 1.0), 0.0),
+            Material::new_dielectric(1.0),
             Material::new_dielectric(1.5),
+            Material::new_dielectric(2.0),
         ];
 
         let spheres: Vec<Sphere> = vec![
@@ -34,19 +39,44 @@ impl Default for Scene {
                 material_id: 0,
             },
             Sphere {
-                center: Vec3::new(-2.0, 1.0, 0.0),
-                radius: 1.0,
-                material_id: 2,
-            },
-            Sphere {
                 center: Vec3::new(0.0, 1.0, 0.0),
                 radius: 1.0,
                 material_id: 1,
             },
             Sphere {
-                center: Vec3::new(2.0, 1.0, 0.0),
+                center: Vec3::new(-1.5, 0.5, 2.0),
+                radius: 0.5,
+                material_id: 2,
+            },
+            Sphere {
+                center: Vec3::new(-2.0, 1.0, 0.0),
                 radius: 1.0,
                 material_id: 3,
+            },
+            Sphere {
+                center: Vec3::new(0.5, 0.25, 1.5),
+                radius: 0.25,
+                material_id: 4,
+            },
+            Sphere {
+                center: Vec3::new(1.5, 0.25, 1.75),
+                radius: 0.25,
+                material_id: 5,
+            },
+            Sphere {
+                center: Vec3::new(2.0, 1.0, 0.0),
+                radius: 1.0,
+                material_id: 6,
+            },
+            Sphere {
+                center: Vec3::new(1.25, 0.25, 1.25),
+                radius: 0.25,
+                material_id: 7,
+            },
+            Sphere {
+                center: Vec3::new(-1.0, 0.25, 1.0),
+                radius: 0.25,
+                material_id: 8,
             },
         ];
 

@@ -4,10 +4,10 @@
 
 #define EPS 0.001
 
-#define SPP 15
+#define SPP 10
 #define MAX_BOUNCES 50
 #define RAY_T_MIN 0.01
-#define RAY_T_MAX 10000.0
+#define RAY_T_MAX 1000.0
 
 #define SPHERE_BUFFER_MAX 100
 #define POINT_LIGHT_BUFFER_MAX 10
