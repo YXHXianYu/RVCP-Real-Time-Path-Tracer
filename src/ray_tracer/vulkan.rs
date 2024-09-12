@@ -48,6 +48,8 @@ pub struct RuntimeInfo {
 
     pub last_tick_time: std::time::Instant,
     pub keyboard_is_pressing: HashMap<VirtualKeyCode, bool>,
+    pub mouse_last_position: (f32, f32),
+    pub mouse_cur_position: (f32, f32),
 
     pub scene: Scene,
 }
@@ -68,6 +70,8 @@ impl RuntimeInfo {
 
             last_tick_time: std::time::Instant::now(),
             keyboard_is_pressing: HashMap::new(),
+            mouse_last_position: (-1.0, -1.0),
+            mouse_cur_position: (0.0, 0.0),
 
             scene,
         }
@@ -330,7 +334,7 @@ impl Vk {
 
         if info.is_window_resized || info.is_new_push_constants {
             info.is_window_resized = false;
-            info.is_new_push_constants = true;
+            info.is_new_push_constants = true; // create command buffers every frame
             
             let new_command_buffers = Vk::create_command_buffers(
                 &self.descriptor_set_0s,

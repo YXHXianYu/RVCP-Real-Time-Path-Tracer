@@ -4,6 +4,7 @@ use std::collections::HashMap;
 use winit::event::{ElementState, Event, KeyboardInput, VirtualKeyCode, WindowEvent};
 use winit::event_loop::{ControlFlow, EventLoop};
 
+use super::scene::Camera;
 use super::vulkan::{RuntimeInfo, Vk};
 
 /**
@@ -52,7 +53,14 @@ fn main_loop(mut vk: Vk, mut info: RuntimeInfo, event_loop: EventLoop<()>) {
             } => {
                 let is_pressed = state == ElementState::Pressed;
                 info.keyboard_is_pressing.insert(key, is_pressed);
-            }
+            },
+            // 捕获鼠标位移差值
+            Event::WindowEvent {
+                event: WindowEvent::CursorMoved { position, .. },
+                ..
+            } => {
+                info.mouse_cur_position = position.into();
+            },
             Event::MainEventsCleared => {
                 info.fps_frame_count += 1;
                 let now = std::time::Instant::now();
@@ -65,9 +73,8 @@ fn main_loop(mut vk: Vk, mut info: RuntimeInfo, event_loop: EventLoop<()>) {
                 let delta_time = (std::time::Instant::now() - info.last_tick_time).as_secs_f64() as f32;
                 info.last_tick_time = now; // for other events
 
-                update_keyboard_state(
-                    &mut info.keyboard_is_pressing,
-                    &mut info.is_new_push_constants,
+                update_camera_state(
+                    &mut info,
                     delta_time,
                 );
 
@@ -78,36 +85,46 @@ fn main_loop(mut vk: Vk, mut info: RuntimeInfo, event_loop: EventLoop<()>) {
     });
 }
 
-#[allow(unused_variables)]
-fn update_keyboard_state(
-    keyboard_is_pressing: &mut HashMap<VirtualKeyCode, bool>,
-    is_new_push_constants: &mut bool,
+fn update_camera_state(
+    info: &mut RuntimeInfo,
     delta_time: f32,
 ) {
-    // macro_rules! f {
-    //     ($key:expr, $stmt:stmt) => {
-    //         if keyboard_is_pressing.get(&$key).is_some_and(|x| *x) {
-    //             *is_new_push_constants = true;
-    //             $stmt
-    //         }
-    //     };
-    // }
+    macro_rules! f {
+        ($key:expr, $stmt:stmt) => {
+            if info.keyboard_is_pressing.get(&$key).is_some_and(|x| *x) {
+                info.is_new_push_constants = true;
+                $stmt
+            }
+        };
+    }
 
-    // let g = |x: f32| {
-    //     x.powf(1.2).max(1.0)
-    // };
+    let camera = &mut info.scene.camera;
+    let move_v = camera.move_speed * delta_time;
+    let rotate_v = camera.rotate_speed * delta_time;
 
-    // let h = |x| {
-    //     1.0_f32 / x
-    // };
+    println!("camera_right: {:?}", camera.right);
 
-    // let pos_v = h(config.camera_scale.abs()) * config.camera_move_speed * delta_time;
-    // let scale_v = g(config.camera_scale.abs()) * config.camera_move_speed * delta_time;
+    f!(VirtualKeyCode::A, { camera.position -= camera.right * move_v; });
+    f!(VirtualKeyCode::D, { camera.position += camera.right * move_v; });
+    f!(VirtualKeyCode::S, { camera.position -= camera.forward * move_v; });
+    f!(VirtualKeyCode::W, { camera.position += camera.forward * move_v; });
+    f!(VirtualKeyCode::Q, { camera.position -= camera.up * move_v; });
+    f!(VirtualKeyCode::E, { camera.position += camera.up * move_v; });
 
-    // f!(VirtualKeyCode::A, config.camera_position[0] -= pos_v);
-    // f!(VirtualKeyCode::D, config.camera_position[0] += pos_v);
-    // f!(VirtualKeyCode::W, config.camera_position[1] -= pos_v);
-    // f!(VirtualKeyCode::S, config.camera_position[1] += pos_v);
-    // f!(VirtualKeyCode::Q, config.camera_scale -= scale_v);
-    // f!(VirtualKeyCode::E, config.camera_scale += scale_v);
+    if info.mouse_last_position.0 >= 0.0 {
+        let dx = info.mouse_cur_position.0 - info.mouse_last_position.0;
+        let dy = info.mouse_cur_position.1 - info.mouse_last_position.1;
+        camera.yaw += dx * rotate_v;
+        camera.pitch -= dy * rotate_v;
+        camera.pitch = camera.pitch.clamp(-89.0, 89.0);
+
+        camera.forward = glam::Vec3::new(
+            camera.yaw.to_radians().cos() * camera.pitch.to_radians().cos(),
+            camera.pitch.to_radians().sin(),
+            camera.yaw.to_radians().sin() * camera.pitch.to_radians().cos(),
+        ).normalize();
+        camera.right = camera.forward.cross(glam::Vec3::Y).normalize();
+    }
+    info.mouse_last_position = info.mouse_cur_position;
+
 }

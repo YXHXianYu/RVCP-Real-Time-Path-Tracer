@@ -1,4 +1,3 @@
-use glam::uvec3;
 use vulkano::buffer::BufferContents;
 
 use crate::ray_tracer::prelude::*;

@@ -20,14 +20,17 @@ pub struct Scene {
 
 impl Default for Scene {
     fn default() -> Self {
-        let camera = Camera {
-            position: Vec3::new(0.0, 1.0, 3.0),
-            up: Vec3::new(0.0, 1.0, 0.0),
-            look_at: Vec3::new(0.0, 0.0, 0.0),
-            t_near: 0.1,
-            t_far: 10000.0,
-            vertical_fov: 90.0,
-        };
+        let camera = Camera::new(
+            Vec3::new(0.0, 1.0, 3.0),
+            Vec3::new(0.0, 1.0, 0.0),
+            Vec3::new(0.0, 0.0, 0.0),
+            0.1,
+            10000.0,
+            90.0,
+
+            0.1,
+            0.1,
+        );
         
         let materials = vec![
             Material::new_lambertian(Vec3::new(1.0, 1.0, 1.0)),
@@ -89,17 +92,20 @@ impl Default for Scene {
             },
         ];
 
+        let roof_height = 3.0;
+        let roof_width = 5.0;
+        let roof_light_width = 0.5;
         let mesh = Mesh{
             vertices: vec![
-                Vertex { position: Vec3::new(-10.0, 10.0, -10.0), normal: Vec3::new(0.0, -1.0, 0.0) },
-                Vertex { position: Vec3::new(-10.0, 10.0, 10.0), normal: Vec3::new(0.0, -1.0, 0.0) },
-                Vertex { position: Vec3::new(10.0, 10.0, 10.0), normal: Vec3::new(0.0, -1.0, 0.0) },
-                Vertex { position: Vec3::new(10.0, 10.0, -10.0), normal: Vec3::new(0.0, -1.0, 0.0) },
+                Vertex { position: Vec3::new(-roof_width, roof_height, -roof_width), normal: Vec3::new(0.0, -1.0, 0.0) },
+                Vertex { position: Vec3::new(-roof_width, roof_height, roof_width), normal: Vec3::new(0.0, -1.0, 0.0) },
+                Vertex { position: Vec3::new(roof_width, roof_height, roof_width), normal: Vec3::new(0.0, -1.0, 0.0) },
+                Vertex { position: Vec3::new(roof_width, roof_height, -roof_width), normal: Vec3::new(0.0, -1.0, 0.0) },
                 
-                Vertex { position: Vec3::new(-1.0, 9.9, -1.0), normal: Vec3::new(0.0, 1.0, 0.0) },
-                Vertex { position: Vec3::new(-1.0, 9.9, 1.0), normal: Vec3::new(0.0, 1.0, 0.0) },
-                Vertex { position: Vec3::new(1.0, 9.9, 1.0), normal: Vec3::new(0.0, 1.0, 0.0) },
-                Vertex { position: Vec3::new(1.0, 9.9, -1.0), normal: Vec3::new(0.0, 1.0, 0.0) },
+                Vertex { position: Vec3::new(-roof_light_width, roof_height - 0.01, -roof_light_width), normal: Vec3::new(0.0, 1.0, 0.0) },
+                Vertex { position: Vec3::new(-roof_light_width, roof_height - 0.01, roof_light_width), normal: Vec3::new(0.0, 1.0, 0.0) },
+                Vertex { position: Vec3::new(roof_light_width, roof_height - 0.01, roof_light_width), normal: Vec3::new(0.0, 1.0, 0.0) },
+                Vertex { position: Vec3::new(roof_light_width, roof_height - 0.01, -roof_light_width), normal: Vec3::new(0.0, 1.0, 0.0) },
             ],
             faces: vec![
                 Face { vertices: UVec3::new(0, 1, 2), material_id: 0 },
