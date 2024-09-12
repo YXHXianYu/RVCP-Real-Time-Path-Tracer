@@ -22,14 +22,13 @@ impl Default for Scene {
     fn default() -> Self {
         let camera = Camera::new(
             Vec3::new(0.0, 1.0, 3.0),
-            Vec3::new(0.0, 1.0, 0.0),
             Vec3::new(0.0, 0.0, 0.0),
             0.1,
-            10000.0,
+            1000.0,
             90.0,
 
-            0.1,
-            0.1,
+            3.0,
+            4.0,
         );
         
         let materials = vec![

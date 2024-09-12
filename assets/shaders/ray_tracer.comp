@@ -4,7 +4,7 @@
 
 #define EPS 0.001
 
-#define SPP 20
+#define SPP 10
 #define MAX_BOUNCES 30
 #define RAY_T_MIN 0.01
 #define RAY_T_MAX 1000.0
@@ -37,7 +37,7 @@ layout(
 struct Camera {
     vec3 position;
     vec3 up;
-    vec3 look_at;
+    vec3 forward;
     float t_near;
     float t_far;
     float vertical_fov;
@@ -234,11 +234,10 @@ Ray sample_ray(in vec2 uv, in vec2 size) {
     float h = 2.0 * u_camera.t_near * tan(u_camera.vertical_fov / 2.0);
     float w = h * size.x / size.y;
 
-    vec3 look_at_dir = normalize(u_camera.look_at - u_camera.position);
-    vec3 u = normalize(cross(look_at_dir, u_camera.up)) * w; // right_dir with length
-    vec3 v = normalize(cross(look_at_dir, u)) * h; // down_dir with length
+    vec3 u = normalize(cross(u_camera.forward, u_camera.up)) * w; // right_dir with length
+    vec3 v = normalize(cross(u_camera.forward, u)) * h; // down_dir with length
 
-    vec3 pos = u_camera.position + look_at_dir * u_camera.t_near;
+    vec3 pos = u_camera.position + u_camera.forward * u_camera.t_near;
     vec3 uv_pos = pos + u * (uv.x - 0.5) + v * (uv.y - 0.5);
 
     float t_coef = length(uv_pos - u_camera.position) / length(pos - u_camera.position);

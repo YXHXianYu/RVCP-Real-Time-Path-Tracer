@@ -50,6 +50,7 @@ pub struct RuntimeInfo {
     pub keyboard_is_pressing: HashMap<VirtualKeyCode, bool>,
     pub mouse_last_position: (f32, f32),
     pub mouse_cur_position: (f32, f32),
+    pub is_mouse_right_button_pressing: bool,
 
     pub scene: Scene,
 }
@@ -72,6 +73,7 @@ impl RuntimeInfo {
             keyboard_is_pressing: HashMap::new(),
             mouse_last_position: (-1.0, -1.0),
             mouse_cur_position: (0.0, 0.0),
+            is_mouse_right_button_pressing: false,
 
             scene,
         }

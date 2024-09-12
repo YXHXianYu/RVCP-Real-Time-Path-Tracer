@@ -1,10 +1,10 @@
 
-use std::collections::HashMap;
-
+use glam::Vec3;
+use winit::dpi::LogicalPosition;
 use winit::event::{ElementState, Event, KeyboardInput, VirtualKeyCode, WindowEvent};
 use winit::event_loop::{ControlFlow, EventLoop};
+use winit::window::CursorGrabMode;
 
-use super::scene::Camera;
 use super::vulkan::{RuntimeInfo, Vk};
 
 /**
@@ -61,6 +61,15 @@ fn main_loop(mut vk: Vk, mut info: RuntimeInfo, event_loop: EventLoop<()>) {
             } => {
                 info.mouse_cur_position = position.into();
             },
+            // 捕获鼠标右键是否按下
+            Event::WindowEvent {
+                event: WindowEvent::MouseInput { state, button, .. },
+                ..
+            } => {
+                if button == winit::event::MouseButton::Right {
+                    info.is_mouse_right_button_pressing = state == ElementState::Pressed;
+                }
+            },
             Event::MainEventsCleared => {
                 info.fps_frame_count += 1;
                 let now = std::time::Instant::now();
@@ -75,6 +84,7 @@ fn main_loop(mut vk: Vk, mut info: RuntimeInfo, event_loop: EventLoop<()>) {
 
                 update_camera_state(
                     &mut info,
+                    &mut vk,
                     delta_time,
                 );
 
@@ -87,6 +97,7 @@ fn main_loop(mut vk: Vk, mut info: RuntimeInfo, event_loop: EventLoop<()>) {
 
 fn update_camera_state(
     info: &mut RuntimeInfo,
+    vk: &mut Vk,
     delta_time: f32,
 ) {
     macro_rules! f {
@@ -102,29 +113,46 @@ fn update_camera_state(
     let move_v = camera.move_speed * delta_time;
     let rotate_v = camera.rotate_speed * delta_time;
 
-    println!("camera_right: {:?}", camera.right);
-
     f!(VirtualKeyCode::A, { camera.position -= camera.right * move_v; });
     f!(VirtualKeyCode::D, { camera.position += camera.right * move_v; });
     f!(VirtualKeyCode::S, { camera.position -= camera.forward * move_v; });
     f!(VirtualKeyCode::W, { camera.position += camera.forward * move_v; });
-    f!(VirtualKeyCode::Q, { camera.position -= camera.up * move_v; });
-    f!(VirtualKeyCode::E, { camera.position += camera.up * move_v; });
+    f!(VirtualKeyCode::Q, { camera.position -= Vec3::Y * move_v; });
+    f!(VirtualKeyCode::E, { camera.position += Vec3::Y * move_v; });
 
-    if info.mouse_last_position.0 >= 0.0 {
-        let dx = info.mouse_cur_position.0 - info.mouse_last_position.0;
-        let dy = info.mouse_cur_position.1 - info.mouse_last_position.1;
+    let window_center = (vk.window_size.width / 2, vk.window_size.height / 2);
+    // println!("mouse_pos: {:?}; window_center: {:?}", info.mouse_cur_position, window_center);
+
+    if info.is_mouse_right_button_pressing {
+        info.is_new_push_constants = true;
+
+        let dx = info.mouse_cur_position.0 - window_center.0 as f32;
+        let dy = info.mouse_cur_position.1 - window_center.1 as f32;
         camera.yaw += dx * rotate_v;
         camera.pitch -= dy * rotate_v;
         camera.pitch = camera.pitch.clamp(-89.0, 89.0);
 
-        camera.forward = glam::Vec3::new(
-            camera.yaw.to_radians().cos() * camera.pitch.to_radians().cos(),
-            camera.pitch.to_radians().sin(),
-            camera.yaw.to_radians().sin() * camera.pitch.to_radians().cos(),
+        let yaw_rad = camera.yaw.to_radians();
+        let pitch_rad = camera.pitch.to_radians();
+        camera.forward = Vec3::new(
+            yaw_rad.cos() * pitch_rad.cos(),
+            pitch_rad.sin(),
+            yaw_rad.sin() * pitch_rad.cos(),
         ).normalize();
-        camera.right = camera.forward.cross(glam::Vec3::Y).normalize();
+        camera.right = camera.forward.cross(Vec3::Y).normalize();
+        camera.up = camera.right.cross(camera.forward).normalize();
     }
-    info.mouse_last_position = info.mouse_cur_position;
+
+    if info.is_mouse_right_button_pressing {
+        // 隐藏且锁定鼠标
+        vk.window.set_cursor_position(LogicalPosition::new(
+            window_center.0,
+            window_center.1
+        )).unwrap();
+        vk.window.set_cursor_visible(false);
+    } else {
+        // 显示且解锁鼠标
+        vk.window.set_cursor_visible(true);
+    }
 
 }
