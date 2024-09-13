@@ -200,8 +200,7 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
 
   * ![image-20240911221415109](./README/image-20240911221415109.png)
   * 二维情况下，计算了一下，这两个采样感觉是等价的。因为旋转角是一个线性关系（金神提供的思路）
-  * 三维情况下，感觉也是等价的。
-  * 但为什么我跑出来的图，结果不一致呢？
+  * 三维情况下，感觉也是等价的。但为什么我跑出来的图，结果不一致呢？
   * ![273332a33ab4564b9fc9ab7d092df06](./README/273332a33ab4564b9fc9ab7d092df06.png)
   * ![f252923f7766b099e0b37a1029fba0f](./README/f252923f7766b099e0b37a1029fba0f.png)
   * 复习一下
@@ -210,28 +209,30 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
         * ![image-20240911234644666](./README/image-20240911234644666.png)
         * 如何修正：通过加权实现，赤道部分多采一些。（下图中的f就是PDF，根据PDF得出权值）
           * ![image-20240911235100765](./README/image-20240911235100765.png)
-
+  
         * 结论：![image-20240911235147890](./README/image-20240911235147890.png)
-
+  
       * 拒绝采样法（the rejection method）
-
+  
   * **证明两个采样不等！**
     * **思路：求出单位 $dcos\theta$ 对应的球面面积 $dA$ 即可**
     * 方案B：https://forum.taichi-lang.cn/t/s1-07-importance-sampling/2047/2
     * 方案A：（实际上是方案B的子步骤）
       * ![image-20240912101837625](./README/image-20240912101837625.png)
-
+  
     * 和金神讨论了一晚上，第二天早上终于解决了！
-
+  
   * 复习BRDF
     * https://www.cnblogs.com/jerrycg/p/4932031.html
-
+  
 * 摄像机移动
 
 *  Debug，修复能量不守恒等各种问题
 
   * 参考：https://cnblogs.com/jerrycg/p/4924761.html，讲PBR，有公式
-  * 
+  * 为什么我的场景比别人暗？
+  * 调了一个晚上。。。原来是别人light亮度 > vec3(1.0)。。。啊啊啊好合理阿！为什么要假设light亮度最大只能为vec3呢？
+  * 【光线追踪有好多种写法，我这次参考了Moer-Lite、Ray Tracing In One Weekend（简称RTIOW）、GAMES101的作业7，每个人的写法都不一样。效果最好的RTIOW，但是光线弹射时根本没有考虑cos项。究竟哪种才是真正符合物理的？】
 
 
 ## 笔记

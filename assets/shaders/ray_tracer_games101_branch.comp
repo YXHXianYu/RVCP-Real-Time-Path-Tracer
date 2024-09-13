@@ -5,8 +5,8 @@
 #define EPS 0.001
 #define PI 3.1415926
 
-#define SPP 5
-#define MAX_BOUNCES 3
+#define SPP 50
+#define MAX_BOUNCES 5
 #define ATTENUATION_STOP_EPS 0.01
 #define RAY_T_MIN 0.01
 #define RAY_T_MAX 1000.0
@@ -15,10 +15,8 @@
 #define IS_ENABLE_PATH_REUSE 1
 
 #define MAX_LEN_MATERIAL_BUFFER 100
-#define MAX_LEN_SPHERE_BUFFER 100
 #define MAX_LEN_VERTEX_BUFFER 1000
 #define MAX_LEN_FACE_BUFFER 1000
-#define MAX_LEN_LUMINOUS_SPHERE_ID_BUFFER 100
 #define MAX_LEN_LUMINOUS_FACE_ID_BUFFER 100
 
 #define MATERIAL_LAMBERTIAN 0
@@ -66,10 +64,8 @@ layout(set = 0, binding = 1) uniform LengthBuffer {
     uint luminous_face_id_len;
 } lens;
 uint materials_len = lens.materials_len;
-uint spheres_len = lens.spheres_len;
 uint vertices_len = lens.vertices_len;
 uint faces_len = lens.faces_len;
-uint luminous_sphere_id_len = lens.luminous_sphere_id_len;
 uint luminous_face_id_len = lens.luminous_face_id_len;
 
 // MARK: * Material
@@ -85,18 +81,6 @@ struct Material {
 layout(set = 0, binding = 2) uniform MaterialBuffer {
     Material v[MAX_LEN_MATERIAL_BUFFER];
 } materials;
-
-// MARK: * Sphere
-
-struct Sphere {
-    vec3 center;
-    float radius;
-    uint material_id;
-};
-
-layout(set = 0, binding = 3) uniform SphereBuffer {
-    Sphere v[MAX_LEN_SPHERE_BUFFER];
-} spheres;
 
 // MARK: * Vertices
 
@@ -119,12 +103,6 @@ struct Face {
 layout(set = 0, binding = 5) buffer FaceBuffer {
     Face v[MAX_LEN_FACE_BUFFER];
 } faces;
-
-// MARK: * Luminous Sphere Id
-
-layout(set = 0, binding = 6) uniform LuminousSphereIdBuffer {
-    uint v[MAX_LEN_LUMINOUS_SPHERE_ID_BUFFER];
-} luminous_sphere_id;
 
 // MARK: * Luminous Face Id
 
@@ -296,30 +274,6 @@ bool is_intersect_with_quadratic_equation(
     return false;
 }
 
-// MARK: * Sphere
-bool is_intersect_with_sphere(
-    in Ray ray,
-    in Sphere sphere,
-    out Intersection interaction
-) {
-    vec3 co = ray.origin - sphere.center;
-    float a = dot(ray.direction, ray.direction);
-    float b = 2.0 * dot(ray.direction, co);
-    float c = dot(co, co) - sphere.radius * sphere.radius;
-
-    if (is_intersect_with_quadratic_equation(a, b, c, ray, interaction)) {
-        interaction.normal = normalize(interaction.position - sphere.center);
-        interaction.material_id = sphere.material_id;
-        if (length2(ray.origin - sphere.center) < sphere.radius * sphere.radius) {
-            interaction.normal = -interaction.normal;
-            interaction.is_normal_outward = false;
-        }
-        return true;
-    } else {
-        return false;
-    }
-}
-
 // MARK: * Triangle Mesh
 bool is_intersect_with_face(
     in Ray ray,
@@ -371,15 +325,6 @@ Intersection get_intersection_with_scene(
 ) {
     Intersection inter;
     inter.time = ray.t_max + 1.0;
-    for (uint i = 0; i < spheres_len; i++) {
-        Intersection new_inter;
-        if (is_intersect_with_sphere(ray, spheres.v[i], new_inter)) {
-            if (new_inter.time <= ray.t_max) {
-                ray.t_max = new_inter.time;
-                inter = new_inter;
-            }
-        }
-    }
     for (uint i = 0; i < faces_len; i++) {
         Intersection new_inter;
         if (is_intersect_with_face(ray, faces.v[i], new_inter)) {
@@ -394,10 +339,6 @@ Intersection get_intersection_with_scene(
 
 // MARK: * Get Lighting Area
 
-float get_sphere_area(in Sphere sphere) {
-    return 4.0 * PI * sphere.radius * sphere.radius;
-}
-
 float get_face_area(in Face face) {
     vec3 v0 = vertices.v[face.indices.x].position;
     vec3 v1 = vertices.v[face.indices.y].position;
@@ -406,29 +347,6 @@ float get_face_area(in Face face) {
 }
 
 // MARK: * Sample in Shapes
-
-void sample_in_sphere(
-    in Sphere sphere,
-    out Intersection inter,
-    out float pdf
-) {
-    float theta = 2.0 * PI * rand();
-    float phi = acos(2.0 * rand() - 1.0);
-    vec3 direction = normalize(vec3(
-        sin(phi) * cos(theta),
-        sin(phi) * sin(theta),
-        cos(phi)
-    ));
-    // vec3 direction = random_in_unit_sphere_surface();
-    inter = Intersection(
-        0.0,
-        sphere.center + direction * sphere.radius,
-        direction,
-        sphere.material_id,
-        true
-    );
-    pdf = 1.0 / get_sphere_area(sphere);
-}
 
 void sample_in_face(
     in Face face,
@@ -699,22 +617,12 @@ void sample_light_games101(
 ) {
     // area
     float emit_area_sum = 0;
-    for (uint i = 0; i < luminous_sphere_id_len; i++) {
-        emit_area_sum += get_sphere_area(spheres.v[luminous_sphere_id.v[i]]);
-    }
     for (uint i = 0; i < luminous_face_id_len; i++) {
         emit_area_sum += get_face_area(faces.v[luminous_face_id.v[i]]);
     }
     // sample
     float p = rand() * emit_area_sum;
     emit_area_sum = 0.0;
-    for (uint i = 0; i < luminous_sphere_id_len; i++) {
-        emit_area_sum += get_sphere_area(spheres.v[luminous_sphere_id.v[i]]);
-        if (p <= emit_area_sum + EPS) {
-            sample_in_sphere(spheres.v[luminous_sphere_id.v[i]], inter, pdf_light);
-            return;
-        }
-    }
     for (uint i = 0; i < luminous_face_id_len; i++) {
         emit_area_sum += get_face_area(faces.v[luminous_face_id.v[i]]);
         if (p <= emit_area_sum + EPS) {
@@ -809,13 +717,14 @@ void main() {
 
     vec3 p1 = vertices.v[0].position;
     vec3 p2 = faces.v[0].indices;
-    uint p3 = luminous_sphere_id.v[0];
+    // uint p3 = luminous_sphere_id.v[0];
     uint p4 = luminous_face_id.v[0];
     vec3 p5 = materials.v[0].albedo;
 
     vec3 color = vec3(0.0);
     for (uint i = 0; i < SPP; i++) {
-        color += ray_trace(ray);
+        // color += ray_trace(ray);
+        color += ray_trace_games101(ray);
     }
     color /= float(SPP);
 

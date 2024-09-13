@@ -25,7 +25,7 @@ use winit::event::VirtualKeyCode;
 use winit::event_loop::EventLoop;
 use winit::window::{Window, WindowBuilder};
 
-use crate::ray_tracer::scene::MaterialType;
+use crate::ray_tracer_games101_branch::scene::MaterialType;
 
 use super::scene::{AlignedCamera, Scene};
 use super::shader::*;
@@ -589,10 +589,10 @@ impl Vk {
                         WriteDescriptorSet::image_view(0, image_view.clone()),
                         WriteDescriptorSet::buffer(1, length_buffer),
                         WriteDescriptorSet::buffer(2, materials_buffer),
-                        // WriteDescriptorSet::buffer(3, spheres_buffer),
+                        WriteDescriptorSet::buffer(3, spheres_buffer),
                         WriteDescriptorSet::buffer(4, mesh_vertices_buffer), // Storage buffer
                         WriteDescriptorSet::buffer(5, mesh_indices_buffer),  // Storage buffer
-                        // WriteDescriptorSet::buffer(6, luminous_sphere_id_buffer),
+                        WriteDescriptorSet::buffer(6, luminous_sphere_id_buffer),
                         WriteDescriptorSet::buffer(7, luminous_face_id_buffer),
                     ],
                     [],

@@ -1,7 +1,7 @@
 use glam::Vec3;
 use vulkano::buffer::BufferContents;
 
-use crate::ray_tracer::prelude::*;
+use crate::ray_tracer_games101_branch::prelude::*;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Camera {

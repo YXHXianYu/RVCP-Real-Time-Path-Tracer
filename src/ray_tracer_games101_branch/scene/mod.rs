@@ -43,62 +43,17 @@ impl Default for Scene {
             // Material::new_light(8.0 * Vec3::new(0.747 + 0.058, 0.747 + 0.258, 0.747) +
             //                     15.6 * Vec3::new(0.740 + 0.287, 0.740 + 0.160, 0.740) +
             //                     18.4 * Vec3::new(0.737 + 0.642, 0.737 + 0.159, 0.737)),
-            Material::new_light(Vec3::new(1.0, 1.0, 1.0)),
+            Material::new_light(Vec3::new(3.0, 3.0, 3.0)),
             Material::new_lambertian(Vec3::new(1.0, 0.0, 0.0)), // red
             Material::new_lambertian(Vec3::new(0.0, 1.0, 0.0)), // green
         ];
 
         let spheres: Vec<Sphere> = vec![
-            // Sphere {
-            //     center: Vec3::new(0.0, -1000.0, 0.0),
-            //     radius: 1000.0,
-            //     material_id: 0,
-            // },
-            Sphere {
-                center: Vec3::new(0.0, 1.0, 0.0),
-                radius: 1.0,
-                material_id: 1,
-            },
-            Sphere {
-                center: Vec3::new(-1.5, 0.5, 2.0),
-                radius: 0.5,
-                material_id: 2,
-            },
-            Sphere {
-                center: Vec3::new(-2.0, 1.0, 0.0),
-                radius: 1.0,
-                material_id: 3,
-            },
-            Sphere {
-                center: Vec3::new(0.0, 0.25, 1.75),
-                radius: 0.25,
-                material_id: 4,
-            },
-            Sphere {
-                center: Vec3::new(1.5, 0.25, 1.75),
-                radius: 0.25,
-                material_id: 5,
-            },
-            Sphere {
-                center: Vec3::new(1.25, 0.25, 1.25),
-                radius: 0.25,
-                material_id: 6,
-            },
-            Sphere {
-                center: Vec3::new(2.0, 1.0, 0.0),
-                radius: 1.0,
-                material_id: 7,
-            },
-            Sphere {
-                center: Vec3::new(-1.0, 0.25, 1.0),
-                radius: 0.25,
-                material_id: 8,
-            },
         ];
 
-        let roof_height = 5.0;
-        let roof_width = 5.0;
-        let roof_light_width = 5.0;
+        let roof_height = 100.0;
+        let roof_width = 100.0;
+        let roof_light_width = 100.0;
         // let roof_width = 0.01;
         // let roof_light_width = 0.01;
         let mesh = Mesh{
