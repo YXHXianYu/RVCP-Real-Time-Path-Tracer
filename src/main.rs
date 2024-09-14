@@ -8,5 +8,5 @@ fn main() {
     // examples::examples();
     // mandelbrot::run();
     ray_tracer_games101_branch::run(); // dead
-    ray_tracer::run();
+    // ray_tracer::run();
 }

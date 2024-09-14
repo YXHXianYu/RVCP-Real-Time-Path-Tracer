@@ -108,7 +108,7 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
   * 输出 RGB = vec3(direction.x, direction.y, 0.0)
     * ![image-20240909164435232](./README/image-20240909164435232.png)
   * 正确的
-  
+
 * 无视材质情况下的渲染球体
   * **大坑！**：Vulkan内存对齐，除了struct内存对齐，一个数组的两个相邻变量也要对齐！惊了！
     * push_constants，只需要对齐内部，不需要struct末尾的padding
@@ -116,7 +116,7 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
     * [Vulkan Alignment Requirements 文档](https://vulkan-tutorial.com/resources/vulkan_tutorial_en.pdf#page=183&zoom=100,178,658)
   * 搞定！
     * ![image-20240909194736983](./README/image-20240909194736983.png)
-  
+
 * 材质采样
 
   * 小坑：蒙特卡洛路径追踪，需要随机数。而UNIX时间不能使用float表示，否则末几位会变成0
@@ -161,7 +161,7 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
     * 解决了！
     * ![d0e3f631f659ae4a63bb99398b9a1cd](./README/d0e3f631f659ae4a63bb99398b9a1cd.png)
     * 就float有精度限制，是4byte，所以这个随机数，本质上是建立了一系列4byte -> 4byte的映射。而不同的常数，表示了不同的映射。这个常数表示的映射，会让大部分种子，最后陷入一个长度=18的循环节，所以就寄了
-  
+
 * GLSL的Reflect问题
 
   * 入射光
@@ -180,7 +180,7 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
     * ![image-20240911010713970](./README/image-20240911010713970.png)
     * 漏了219行
     * 草！太难蚌了！我这段求交代码是从CGPC2024的题目里复制出来的！笑死！
-  
+
 * 球体底部法线不正确
 
   * ![image-20240911101400058](./README/image-20240911101400058.png)
@@ -209,30 +209,43 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
         * ![image-20240911234644666](./README/image-20240911234644666.png)
         * 如何修正：通过加权实现，赤道部分多采一些。（下图中的f就是PDF，根据PDF得出权值）
           * ![image-20240911235100765](./README/image-20240911235100765.png)
-  
+
         * 结论：![image-20240911235147890](./README/image-20240911235147890.png)
-  
+
       * 拒绝采样法（the rejection method）
-  
+
   * **证明两个采样不等！**
     * **思路：求出单位 $dcos\theta$ 对应的球面面积 $dA$ 即可**
     * 方案B：https://forum.taichi-lang.cn/t/s1-07-importance-sampling/2047/2
     * 方案A：（实际上是方案B的子步骤）
       * ![image-20240912101837625](./README/image-20240912101837625.png)
-  
+
     * 和金神讨论了一晚上，第二天早上终于解决了！
-  
+
   * 复习BRDF
     * https://www.cnblogs.com/jerrycg/p/4932031.html
-  
+
 * 摄像机移动
 
-*  Debug，修复能量不守恒等各种问题
+* Debug，修复能量不守恒等各种问题
 
   * 参考：https://cnblogs.com/jerrycg/p/4924761.html，讲PBR，有公式
   * 为什么我的场景比别人暗？
   * 调了一个晚上。。。原来是别人light亮度 > vec3(1.0)。。。啊啊啊好合理阿！为什么要假设light亮度最大只能为vec3呢？
   * 【光线追踪有好多种写法，我这次参考了Moer-Lite、Ray Tracing In One Weekend（简称RTIOW）、GAMES101的作业7，每个人的写法都不一样。效果最好的RTIOW，但是光线弹射时根本没有考虑cos项。究竟哪种才是真正符合物理的？】
+
+### 五：复刻games101路径追踪器
+
+* 花了两天，终于成功了！
+* 坑：pdf_light算错，大小和正确的差了两倍；gamma矫正；etc
+  * bug太难调了···
+  * 最后是控制变量法，先把两个渲染器输出调成一摸一样的（比较rgb），然后再一个一个加入对结果产生贡献的项，然后找到计算错误的项
+* 总算有一个可以说得上非常物理正确的路径追踪器了！爽到！
+* ![image-20240914173216578](./README/image-20240914173216578.png)
+  * SPP=50，分辨率1024*1024 => FPS = 2
+* **总结**
+  * 如果启用俄罗斯轮盘赌后，噪点突然增大非常多，那么通常就是代码写错了，导致variance太大
+  * 同理，如果简单材质下，高SPP噪点还是特别特别多，那么也大概率是代码写错了
 
 
 ## 笔记

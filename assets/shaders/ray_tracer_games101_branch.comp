@@ -5,12 +5,12 @@
 #define EPS 0.001
 #define PI 3.1415926
 
-#define SPP 50
-#define MAX_BOUNCES 5
+#define SPP 15
+#define MAX_BOUNCES 20
 #define ATTENUATION_STOP_EPS 0.01
 #define RAY_T_MIN 0.01
-#define RAY_T_MAX 1000.0
-#define RR_PROBABILITY 1.0 // FIXME: High artifacts
+#define RAY_T_MAX 10000.0
+#define RR_PROBABILITY 0.6 // FIXME: High artifacts
 
 #define IS_ENABLE_PATH_REUSE 1
 
@@ -234,46 +234,6 @@ Ray sample_ray(in vec2 uv, in vec2 size) {
     );
 }
 
-// MARK: Func: Intersection
-bool is_intersect_with_quadratic_equation(
-    in float a,
-    in float b,
-    in float c,
-    in Ray ray,
-    out Intersection interaction
-) {
-    float delta = b * b - 4.0 * a * c;
-    if (sign(delta) < 0.0) return false;
-    float sqrt_delta = sqrt(delta);
-    float t0 = (-b + sqrt_delta) / (2.0 * a);
-    float t1 = (-b - sqrt_delta) / (2.0 * a);
-    if (t0 > t1) { float tmp = t0; t0 = t1; t1 = tmp; }
-
-    if (ray.t_min <= t0 && t0 <= ray.t_max) {
-        interaction = Intersection(
-            t0,
-            ray.origin + ray.direction * t0,
-            vec3(0.0),
-            0,
-            true
-        );
-        return true;
-    }
-
-    if (ray.t_min <= t1 && t1 <= ray.t_max) {
-        interaction = Intersection(
-            t1,
-            ray.origin + ray.direction * t1,
-            vec3(0.0),
-            0,
-            true
-        );
-        return true;
-    }
-
-    return false;
-}
-
 // MARK: * Triangle Mesh
 bool is_intersect_with_face(
     in Ray ray,
@@ -350,8 +310,7 @@ float get_face_area(in Face face) {
 
 void sample_in_face(
     in Face face,
-    out Intersection inter,
-    out float pdf
+    out Intersection inter
 ) {
     vec3 v0 = vertices.v[face.indices.x].position;
     vec3 v1 = vertices.v[face.indices.y].position;
@@ -363,11 +322,10 @@ void sample_in_face(
     inter = Intersection(
         0.0,
         (1.0 - x) * v0 + (x * (1.0 - y)) * v1 + (x * y) * v2, // MARK: = I dont get it =
-        vertices.v[face.indices.x].normal,
+        normalize(vertices.v[face.indices.x].normal),
         face.material_id,
         true
     );
-    pdf = 1.0 / get_face_area(face);
 }
 // MARK: Func: Material Scatter
 
@@ -385,7 +343,7 @@ vec3 lambertian_brdf_eval(
 ) {
     float cos_theta = dot(normal, wi);
     if (cos_theta > 0.0) {
-        return clamp(material.albedo, vec3(0.0), vec3(1.0)) / PI;
+        return material.albedo / PI;
     } else {
         return vec3(0.0);
     }
@@ -406,211 +364,6 @@ float lambertian_brdf_pdf(
     return dot(wi, normal) > 0.0 ? 0.5 / PI : 0.0;
 }
 
-void lambertian_scatter(
-    in Material material,
-    in Ray ray,
-    in Intersection inter,
-    out vec3 attenuation, // color
-    out Ray new_ray
-) {
-    vec3 direction = normalize(inter.normal + random_in_unit_sphere_surface()); // BRDF Sampling here
-    // vec3 direction = random_in_unit_hemisphere_surface(normalize(inter.normal)); // BRDF Sampling here
-
-    if (abs(direction.x) < EPS && abs(direction.y) < EPS && abs(direction.z) < EPS) { direction = inter.normal; }
-
-    // return
-    attenuation = material.albedo;
-    // TODO: cosine term
-    // attenuation = material.albedo * dot(direction, inter.normal) * 2.0;
-    new_ray = Ray(
-        inter.position,
-        direction,
-        RAY_T_MIN,
-        RAY_T_MAX
-    );
-}
-
-// MARK: * Metal
-
-void metal_scatter(
-    in Material material,
-    in Ray ray,
-    in Intersection inter,
-    out vec3 attenuation, // color
-    out Ray new_ray
-) {
-    // |reflected ray| == |ray.direction|
-    // I don't prove it, but I proved the reflected ray is normalized when the input ray is normalized
-    vec3 reflected = reflect(ray.direction, inter.normal);
-    if (dot(reflected, inter.normal) < 0.0) { reflected = -reflected; }
-    vec3 direction;
-    do {
-        direction = normalize(reflected + material.fuzz * random_in_unit_sphere_surface()); // This is Importance Sampling
-    } while (dot(direction, inter.normal) < 0.0);
-
-    attenuation = material.albedo;
-    new_ray = Ray(
-        inter.position,
-        direction,
-        RAY_T_MIN,
-        RAY_T_MAX
-    );
-}
-
-// MARK: * Dielectric
-
-float fresnel_schlick(
-    in float cosine,
-    in float refraction_ratio
-) {
-    float r0 = (1.0 - refraction_ratio) / (1.0 + refraction_ratio);
-    r0 = r0 * r0;
-    return r0 + (1.0 - r0) * pow(1.0 - cosine, 5.0);
-}
-
-void dielectric_scatter(
-    in Material material,
-    in Ray ray,
-    in Intersection inter,
-    out vec3 attenuation, // color
-    out Ray new_ray
-) {
-    float refraction_ratio = inter.is_normal_outward ? (1.0 / material.refraction_ratio) : material.refraction_ratio;
-
-    float cos_theta = dot(-ray.direction, inter.normal);
-    float sin_theta = sqrt(1.0 - cos_theta * cos_theta);
-
-    bool is_refracted = refraction_ratio * sin_theta <= 1.0;
-
-    vec3 refracted;
-    if (is_refracted && (rand() >= fresnel_schlick(cos_theta, refraction_ratio))) {
-        refracted = refract(ray.direction, inter.normal, refraction_ratio);
-    } else {
-        refracted = reflect(ray.direction, inter.normal);
-    }
-
-    attenuation = vec3(1.0);
-    new_ray = Ray(
-        inter.position,
-        refracted,
-        RAY_T_MIN,
-        RAY_T_MAX
-    );
-}
-
-// MARK: * Material
-
-void material_scatter(
-    in Material material,
-    in Ray ray,
-    in Intersection inter,
-    out vec3 attenuation, // color
-    out Ray new_ray
-) {
-    if (material.ty == MATERIAL_LAMBERTIAN) { // diffuse
-        lambertian_scatter(material, ray, inter, attenuation, new_ray);
-
-    } else if (material.ty == MATERIAL_METAL) { // glossy
-        metal_scatter(material, ray, inter, attenuation, new_ray);
-
-    } else if (material.ty == MATERIAL_DIELECTRIC) { // specular / refractive
-        dielectric_scatter(material, ray, inter, attenuation, new_ray);
-
-    }
-}
-
-// MARK: Func: Path Reuse
-
-
-
-// MARK: Func: Ray Trace
-
-vec3 sample_infinite_light(
-    in Ray ray
-) {
-    // float a = 0.5 * (ray.direction.y + 1.0);
-    // return mix(vec3(1.0), vec3(0.5, 0.7, 1.0), a);
-    return vec3(0.0);
-}
-
-vec3 ray_trace(
-    in Ray ray // ray is not `in`. This is because t_min will be modified
-) {
-    vec3 color = vec3(0.0);
-    vec3 attenuation = vec3(1.0);
-    uint left_bounces = MAX_BOUNCES;
-    uint path_reuse_count = 0;
-    while(left_bounces > 0) {
-        left_bounces -= 1;
-
-        // 1. get intersection
-        Intersection inter = get_intersection_with_scene(ray);
-
-        // Option: Material id only rendering
-        // color += float(inter.material_id) / 8.;
-        // break;
-
-        // miss
-        if (inter.time > ray.t_max) {
-            color += attenuation * sample_infinite_light(ray);
-            path_reuse_count += 1;
-            break;
-        }
-
-        // get material
-        Material material = materials.v[inter.material_id];
-
-        // path reuse
-        if (IS_ENABLE_PATH_REUSE == 1) {
-            // 3. sample lights (if diffuse or glossy)
-            if (material.ty == MATERIAL_LAMBERTIAN) {
-                // color += attenuation * sample_infinite_light(ray);
-                // path_reuse_count += 1;
-
-            } else if (material.ty == MATERIAL_METAL) {
-                // color += attenuation * sample_infinite_light(ray);
-            
-            }
-
-        }
-
-        // hit light directly
-        if (material.ty == MATERIAL_LIGHT) {
-            color += attenuation * material.albedo;
-            path_reuse_count += 1;
-            break;
-        }
-
-        // scatter
-        vec3 new_attenuation = vec3(0.0, 0.0, 0.0);
-        Ray new_ray;
-        material_scatter(material, ray, inter, new_attenuation, new_ray);
-        attenuation *= new_attenuation;
-        ray = new_ray;
-        ray.origin += ray.direction * RAY_T_MIN; // make sure ray won't hit its origin
-
-        // surface is black
-        if (attenuation.r < EPS && attenuation.g < EPS && attenuation.b < EPS) {
-            path_reuse_count += 1;
-            break;
-        }
-
-        // russian roulette
-        if (rand() >= RR_PROBABILITY) {
-            break;
-        } else {
-            attenuation /= RR_PROBABILITY;
-        }
-    }
-
-    // path reuse
-    if (path_reuse_count > 0) { // make sure energy conservation
-        color /= float(path_reuse_count);
-    }
-
-    return color;
-}
-
 void sample_light_games101(
     out Intersection inter,
     out float pdf_light
@@ -622,11 +375,12 @@ void sample_light_games101(
     }
     // sample
     float p = rand() * emit_area_sum;
+    pdf_light = 1.0 / emit_area_sum;
     emit_area_sum = 0.0;
     for (uint i = 0; i < luminous_face_id_len; i++) {
         emit_area_sum += get_face_area(faces.v[luminous_face_id.v[i]]);
-        if (p <= emit_area_sum + EPS) {
-            sample_in_face(faces.v[luminous_face_id.v[i]], inter, pdf_light);
+        if (p <= emit_area_sum) {
+            sample_in_face(faces.v[luminous_face_id.v[i]], inter);
             return;
         }
     }
@@ -638,7 +392,8 @@ vec3 ray_trace_games101(
     vec3 color = vec3(0.0);
     vec3 attenuation = vec3(1.0);
 
-    for (uint i = 0; i < MAX_BOUNCES; i++) {
+    uint depth = 0;
+    for (depth = 0; depth < MAX_BOUNCES; depth++) {
 
         if (
             attenuation.r < ATTENUATION_STOP_EPS
@@ -649,12 +404,10 @@ vec3 ray_trace_games101(
         Intersection inter_p = get_intersection_with_scene(ray);
         Material material_p = materials.v[inter_p.material_id];
 
-        if (inter_p.time > ray.t_max) {
-            // color += attenuation * sample_infinite_light(ray);
-            break;
-        }
+        if (inter_p.time > ray.t_max) { color += vec3(0.1); break; }
         if (material_p.ty == MATERIAL_LIGHT) {
-            color += attenuation * material_p.albedo;
+            if (depth == 0)
+                color += attenuation * material_p.albedo;
             break;
         }
 
@@ -678,21 +431,27 @@ vec3 ray_trace_games101(
 
         if (abs(dist - dist_blocked) < EPS) {
             color += attenuation
-                * material_x.albedo
-                * lambertian_brdf_eval(material_x, ws, wo, inter_x.normal)
-                * dot(inter_p.normal, ws)
-                * dot(inter_x.normal, -ws)
-                / (pow(dist, 2.0) * pdf_light);
+                     * material_x.albedo
+                     * lambertian_brdf_eval(material_p, ws, wo, inter_p.normal)
+                     * dot(inter_p.normal, ws)
+                     * dot(inter_x.normal, -ws)
+                     / (
+                        pow(dist, 2.0)
+                        * pdf_light
+                    );
         }
 
         // 3. BRDF sampling
         if (rand() > RR_PROBABILITY) { break; }
-        attenuation /= RR_PROBABILITY;
 
         vec3 wi = lambertian_brdf_sample(inter_p.normal);
-        attenuation *= lambertian_brdf_eval(material_p, wi, wo, inter_p.normal)
-            * dot(wi, inter_p.normal)
-            / max(0.1, lambertian_brdf_pdf(wi, wo, inter_p.normal));
+        attenuation *= 1.0
+            * lambertian_brdf_eval(material_p, wi, wo, inter_p.normal)
+            * dot(inter_p.normal, wi)
+            / (
+                max(0.1, lambertian_brdf_pdf(wi, wo, inter_p.normal))
+                * RR_PROBABILITY
+            );
 
         ray = Ray(
             inter_p.position + wi * EPS,
@@ -708,25 +467,18 @@ vec3 ray_trace_games101(
 // MARK: Main
 
 void main() {
-
     vec2 window_size = vec2(imageSize(img));
     vec2 uv = (gl_GlobalInvocationID.xy + vec2(0.5)) / window_size;
     srand(u_time, uv);
 
     Ray ray = sample_ray(uv, window_size);
 
-    vec3 p1 = vertices.v[0].position;
-    vec3 p2 = faces.v[0].indices;
-    // uint p3 = luminous_sphere_id.v[0];
-    uint p4 = luminous_face_id.v[0];
-    vec3 p5 = materials.v[0].albedo;
-
     vec3 color = vec3(0.0);
     for (uint i = 0; i < SPP; i++) {
-        // color += ray_trace(ray);
-        color += ray_trace_games101(ray);
+        color += ray_trace_games101(ray) / float(SPP);
     }
-    color /= float(SPP);
+
+    color = pow(clamp(color, 0.0, 1.0), vec3(0.6));
 
     imageStore(img, ivec2(gl_GlobalInvocationID.xy), vec4(color, 1.0));
 }

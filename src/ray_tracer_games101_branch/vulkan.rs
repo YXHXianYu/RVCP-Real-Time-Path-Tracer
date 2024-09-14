@@ -511,19 +511,6 @@ impl Vk {
                     },
                     info.scene.materials.iter().map(|material| material.aligned()).collect::<Vec<_>>().into_iter()
                 ).unwrap();
-                let spheres_buffer = Buffer::from_iter(
-                    memory_allocator.clone(),
-                    BufferCreateInfo {
-                        usage: BufferUsage::UNIFORM_BUFFER,
-                        ..Default::default()
-                    },
-                    AllocationCreateInfo {
-                        memory_type_filter: MemoryTypeFilter::PREFER_DEVICE
-                            | MemoryTypeFilter::HOST_SEQUENTIAL_WRITE,
-                        ..Default::default()
-                    },
-                    info.scene.spheres.iter().map(|sphere| sphere.aligned()).collect::<Vec<_>>().into_iter()
-                ).unwrap();
                 let mesh_vertices_buffer = Buffer::from_iter(
                     memory_allocator.clone(),
                     BufferCreateInfo {
@@ -549,19 +536,6 @@ impl Vk {
                         ..Default::default()
                     },
                     info.scene.mesh.faces.iter().map(|face| face.aligned()).collect::<Vec<_>>().into_iter()
-                ).unwrap();
-                let luminous_sphere_id_buffer = Buffer::from_iter(
-                    memory_allocator.clone(),
-                    BufferCreateInfo {
-                        usage: BufferUsage::UNIFORM_BUFFER,
-                        ..Default::default()
-                    },
-                    AllocationCreateInfo {
-                        memory_type_filter: MemoryTypeFilter::PREFER_DEVICE
-                            | MemoryTypeFilter::HOST_SEQUENTIAL_WRITE,
-                        ..Default::default()
-                    },
-                    luminous_sphere_id
                 ).unwrap();
                 let luminous_face_id_buffer = Buffer::from_iter(
                     memory_allocator.clone(),
@@ -589,10 +563,8 @@ impl Vk {
                         WriteDescriptorSet::image_view(0, image_view.clone()),
                         WriteDescriptorSet::buffer(1, length_buffer),
                         WriteDescriptorSet::buffer(2, materials_buffer),
-                        WriteDescriptorSet::buffer(3, spheres_buffer),
                         WriteDescriptorSet::buffer(4, mesh_vertices_buffer), // Storage buffer
                         WriteDescriptorSet::buffer(5, mesh_indices_buffer),  // Storage buffer
-                        WriteDescriptorSet::buffer(6, luminous_sphere_id_buffer),
                         WriteDescriptorSet::buffer(7, luminous_face_id_buffer),
                     ],
                     [],
