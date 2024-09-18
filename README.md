@@ -1,8 +1,16 @@
-# VulkanLearning
+# RVCP Real-time Path Tracer
 
-My Vulkan Learning Repo.
+* A Real-time Path Tracer based on the following
+  * Rust
+  * Vulkano
+  * Compute Shader (Compute Pipeline)
+  * PBR Path Tracer (GAMES101 Homework 7)
 
-The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
+***
+
+# Notes
+
+> 给我自己看的
 
 ## TODO Lists
 
@@ -246,6 +254,11 @@ The target is to build a real-time ray tracer using ~~vulkan~~ **vulkano**.
 * **总结**
   * 如果启用俄罗斯轮盘赌后，噪点突然增大非常多，那么通常就是代码写错了，导致variance太大
   * 同理，如果简单材质下，高SPP噪点还是特别特别多，那么也大概率是代码写错了
+
+### 六：优化
+
+* 如何求任意一个采样的pdf？比如normal + random_in_sphere_surface
+* 
 
 
 ## 笔记
