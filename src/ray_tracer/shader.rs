@@ -9,7 +9,7 @@ pub mod mandelbrot_shader {
 pub mod ray_tracer_shader {
     vulkano_shaders::shader!{
         ty: "compute",
-        path: "assets/shaders/ray_tracer.comp"
+        path: "assets/shaders/ray_tracer_games101_branch.comp"
     }
 }
 

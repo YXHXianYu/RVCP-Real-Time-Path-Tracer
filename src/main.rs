@@ -1,12 +1,9 @@
 
-mod examples;
-mod mandelbrot;
-mod ray_tracer_games101_branch;
+// mod examples;
+// mod mandelbrot;
+// mod ray_tracer_deprecated;
 mod ray_tracer;
 
 fn main() {
-    // examples::examples();
-    // mandelbrot::run();
-    ray_tracer_games101_branch::run(); // dead
-    // ray_tracer::run();
+    ray_tracer::run();
 }

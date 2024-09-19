@@ -1,6 +1,6 @@
 use vulkano::buffer::BufferContents;
 
-use crate::ray_tracer::prelude::*;
+use super::super::prelude::*;
 
 // MARK: Vertex
 

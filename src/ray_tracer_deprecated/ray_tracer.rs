@@ -1,6 +1,6 @@
 
 use glam::Vec3;
-use winit::dpi::{LogicalPosition, PhysicalSize};
+use winit::dpi::LogicalPosition;
 use winit::event::{ElementState, Event, KeyboardInput, VirtualKeyCode, WindowEvent};
 use winit::event_loop::{ControlFlow, EventLoop};
 
@@ -23,12 +23,6 @@ pub fn run() {
 fn main_loop(mut vk: Vk, mut info: RuntimeInfo, event_loop: EventLoop<()>) {
 
     const TIME_INTERVAL: std::time::Duration = std::time::Duration::from_secs(1);
-
-    // vk.window.set_inner_size(PhysicalSize::new(256, 256));
-    vk.window.set_inner_size(PhysicalSize::new(384, 384));
-    // vk.window.set_inner_size(PhysicalSize::new(512, 512));
-    // vk.window.set_inner_size(PhysicalSize::new(1024, 1024));
-    vk.window_size = vk.window.inner_size();
 
     event_loop.run(move |event, _, control_flow| {
         match event {
